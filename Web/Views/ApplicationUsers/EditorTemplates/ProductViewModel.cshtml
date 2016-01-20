@@ -1,0 +1,23 @@
+﻿@model Web.Models.ProductViewModel
+
+<tr>
+    <td>
+        @Html.HiddenFor(model => model.Id)
+        @Html.DisplayFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+    </td>
+    <td>
+        @Html.DisplayFor(model => model.Price, new { htmlAttributes = new { @class = "form-control" } })
+    </td>
+    <td>
+        @Html.DisplayFor(model => model.Count, new {htmlAttributes = new {@class = "form-control"}})
+    </td>
+    <td>
+        @Html.DisplayFor(model => model.WCategory, new { htmlAttributes = new { @class = "form-control" } })
+    </td>
+    <td>
+        @Model.ShippingType
+    </td>
+    <td>
+        @Model.PaymentType
+    </td>
+</tr>

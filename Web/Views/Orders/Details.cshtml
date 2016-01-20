@@ -1,0 +1,41 @@
+﻿@model Web.Models.CreateOrderViewModel
+
+@{
+    ViewBag.Title = "Деталі замовлення";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h2>Замовлення</h2>
+<div class="form-horizontal">
+
+    <hr />
+    @Html.HiddenFor(model => model.Id)
+
+    <dl class="dl-horizontal">
+        <dt>@Html.LabelFor(model => model.User, htmlAttributes: new { @class = "" })</dt>
+        <dd>@Html.DisplayFor(model => model.User)</dd>
+
+        <dt>@Html.LabelFor(model => model.Date, htmlAttributes: new {@class = ""})</dt>
+        <dd>@Html.DisplayFor(model => model.Date)</dd>
+
+        <dt>@Html.LabelFor(model => model.AdresShipping)</dt>
+        <dd>@Model.AdresShipping</dd>
+
+        <dt>@Html.LabelFor(model => model.ShippingType, htmlAttributes: new {@class = ""})</dt>
+        <dd>@Html.DisplayFor(model => model.ShippingType)</dd>
+
+        <dt>@Html.LabelFor(model => model.PaymentTypesId, htmlAttributes: new { @class = "" })</dt>
+        <dd>@Html.DisplayFor(model => model.PaymentType)</dd>
+    </dl>
+
+    <div id="productsList">
+        @{
+            Html.RenderPartial("_ProductsList", Model.Products, new ViewDataDictionary { TemplateInfo = new TemplateInfo { HtmlFieldPrefix = "Products" } });
+        }
+    </div>
+
+</div>
+
+<p>
+    @Html.ActionLink("Редагувати", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Назад", "Index")
+</p>

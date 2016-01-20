@@ -1,0 +1,111 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title – приложение ECommerce</title>
+    @Styles.Render("~/Content/css")
+    @Styles.Render("~/Content/themes/base/css")
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryval")
+    @RenderSection("headerscripts", required: false)
+</head>
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                @Html.ActionLink("E-Commerce", "Index", "Products", new { area = "" }, new { @class = "navbar-brand" })
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <li>@Html.ActionLink("Товари", "Index", "Products")</li>
+                        if (User.IsInRole("Менеджер"))
+                        {
+                            <li>@Html.ActionLink("Клієнти", "Index", "ApplicationUsers")</li>
+                            <li>
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Документи <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    <li>@Html.ActionLink("Замовлення", "Index", "Orders")</li>
+                                    <li>@Html.ActionLink("Квитанції", "Index", "Orders")</li>
+                                </ul>
+                            </li>
+                            <li>@Html.ActionLink("Маркетинг", "Index", "Products")</li>
+                            <li>@Html.ActionLink("Логістика", "Index", "Products")</li>
+                            <li>
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Аналіз <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    <li>@Html.ActionLink("Клієнти", "Index", "ApplicationUsers")</li>
+                                    <li>@Html.ActionLink("Продаж товарів", "SalesProducts", "Products")</li>
+                                    <li>@Html.ActionLink("Графіки", "GraphView", "Products")</li>
+                                </ul>
+                            </li>
+                        }
+                        if (User.IsInRole("Адміністратор"))
+                        {
+                            <li>@Html.ActionLink("Адмiн-панель", "Edit", "ApplicationRoles")</li>
+                        }
+                    }
+                </ul>
+                @Html.Partial("_LoginPartial")
+            </div>
+        </div>
+    </div>
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year – MACStudio</p>
+        </footer>
+    </div>
+
+    
+    
+    @Scripts.Render("~/bundles/jqueryui")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+    <script type="text/javascript">
+        $(function () {
+            //if (!Modernizr.inputtypes.date)
+            //    {
+            //        $(function() {
+            //            $("input[type='date']")
+            //                .datepicker({ dateFormat: 'dd/mm/yy' })
+            //                //.get(0).setAttribute("type", "text");
+            //        });
+            $.datepicker.regional['ru'] = {
+                closeText: 'Закрыть',
+                prevText: 'Пред',
+                nextText: 'След',
+                currentText: 'Сегодня',
+                monthNames: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь',
+                'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'],
+                monthNamesShort: ['Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн',
+                'Июл', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек'],
+                dayNames: ['воскресенье', 'понедельник', 'вторник', 'среда', 'четверг', 'пятница', 'суббота'],
+                dayNamesShort: ['вск', 'пнд', 'втр', 'срд', 'чтв', 'птн', 'сбт'],
+                dayNamesMin: ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'],
+                weekHeader: 'Не',
+                dateFormat: 'dd.mm.yy',
+                firstDay: 1,
+                isRTL: false,
+                showMonthAfterYear: false,
+                yearSuffix: ''
+            };
+            $.datepicker.setDefaults($.datepicker.regional['ru']);
+            $("#accordion").accordion({
+                collapsible: true
+            });
+            //    }
+        });
+    </script>
+</body>
+</html>

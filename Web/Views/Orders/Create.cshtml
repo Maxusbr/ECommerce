@@ -1,0 +1,112 @@
+﻿@using Web.Models
+@model Web.Models.CreateOrderViewModel
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Нове замовлення</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>Замовлення</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.Id)
+        @Html.HiddenFor(model => model.ShopId)
+        @Html.HiddenFor(model => model.UserId)
+        <div class="form-group">
+            @Html.LabelFor(model => model.Date, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.JQueryUI().DatepickerFor(model => model.Date)
+                @Html.ValidationMessageFor(model => model.Date, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        @Html.ValidationMessageFor(model => model.AdresShipping, "", new { @class = "text-danger" })
+        <div id="createAdress" style="display: none;">
+            @Html.Partial("Partials/_CreateAdress", Model.AdresShipping, new ViewDataDictionary { TemplateInfo = new TemplateInfo { HtmlFieldPrefix = "AdresShipping" } })
+            <input type="button" id="hideMap" value="Сховати" class="hideMap btn btn-primary" />
+        </div>
+        <div id="textAdress">
+            <div class="form-group">
+                @Html.LabelFor(model => model.AdresShipping, htmlAttributes: new {@class = "control-label col-md-2"})
+                <div class="col-md-10">
+                    @if (string.IsNullOrEmpty(Model.AdresShipping?.FullAdress))
+                    {
+                        @: Нет <input type="button" id="showMap" value="Додадти" class="addAdress btn btn-default"/>
+                    }
+                    else
+                    {
+                        @Model.AdresShipping
+                        <input type="button" id="showMap" value="Змінити" class="addAdress btn btn-default"/>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.ShippingTypeId, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.ShippingTypeId, new SelectList(Model.ShippingTypes, "Id", "Type"), new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.PaymentTypesId, htmlAttributes: new {@class = "control-label col-md-2"})
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.PaymentTypesId, new SelectList(Model.PaymentTypes, "Id", "Type"), new {@class = "form-control"})
+            </div>
+        </div>
+
+        <div id="productsList">
+            @{
+                Html.RenderPartial("_ProductsList", Model.Products, new ViewDataDictionary { TemplateInfo = new TemplateInfo { HtmlFieldPrefix = "Products" } });
+            }
+        </div>
+
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Замовити" class="btn btn-primary" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Назад", "Index")
+</div>
+@section Scripts{
+    <script>
+        //jQuery.validator.addMethod('numericlessthan', function (value, element, params) {
+        //    var otherValue = $(params.element).val();
+
+        //    return isNaN(value) && isNaN(otherValue) || (params.allowequality === 'True' ? parseFloat(value) <= parseFloat(otherValue) : parseFloat(value) < parseFloat(otherValue));
+        //}, '');
+
+        //jQuery.validator.unobtrusive.adapters.add('numericlessthan', ['other', 'allowequality'], function (options) {
+        //    var prefix = options.element.name.substr(0, options.element.name.lastIndexOf('.') + 1),
+        //    other = options.params.other,
+        //    fullOtherName = appendModelPrefix(other, prefix),
+        //    element = $(options.form).find(':input[name=' + fullOtherName + ']')[0];
+
+        //    options.rules['numericlessthan'] = { allowequality: options.params.allowequality, element: element };
+        //    if (options.message) {
+        //        options.messages['numericlessthan'] = options.message;
+        //    }
+        //});
+
+        //function appendModelPrefix(value, prefix) {
+        //    if (value.indexOf('*.') === 0) {
+        //        value = value.replace('*.', prefix);
+        //    }
+        //    return value;
+        //}
+        //$(document).ready(function () {
+            
+        //});
+
+    </script>
+}

@@ -1,0 +1,149 @@
+﻿@model Web.Models.IndexViewModel
+@{
+    ViewBag.Title = "Управління";
+}
+
+<h2>@ViewBag.Title.</h2>
+
+<p class="text-success">@ViewBag.StatusMessage</p>
+<hr />
+<h3>Зміна параметрів облікового запису</h3>
+
+<div>
+    <dl class="dl-horizontal">
+        <dt>Пароль:</dt>
+        <dd>
+            [
+            @if (Model.HasPassword)
+            {
+                @Html.ActionLink("Змінити пароль", "ChangePassword")
+            }
+            else
+            {
+                @Html.ActionLink("Створити", "SetPassword")
+            }
+            ]
+        </dd>
+        @*<dt>Внешние имена входа:</dt>
+            <dd>
+                @Model.Logins.Count [
+                @Html.ActionLink("Управление", "ManageLogins") ]
+            </dd>
+
+                Номера телефонов можно использовать в качестве второго проверочного фактора для системы двухфакторной проверки подлинности.
+
+                 В <a href="http://go.microsoft.com/fwlink/?LinkId=403804">этой статье</a>
+                    вы можете узнать, как настроить для этого приложения ASP.NET двухфакторную проверку подлинности с использованием SMS.
+
+                 Настроив двухфакторную проверку подлинности, раскомментируйте следующий блок.
+        *@
+
+        <dt>Номер телефону:</dt>
+        <dd>
+            @(Model.PhoneNumber ?? "Нет") [
+            @if (Model.PhoneNumber != null)
+            {
+                @Html.ActionLink("Змінити", "AddPhoneNumber")
+                @: &nbsp;|&nbsp;
+                @Html.ActionLink("Видалити", "RemovePhoneNumber")
+            }
+            else
+            {
+                @Html.ActionLink("Додадти", "AddPhoneNumber")
+            }
+            ]
+        </dd>
+
+
+        @*
+                <dt>Двухфакторная проверка подлинности:</dt>
+                <dd>
+                    <p>
+                        Поставщики двухфакторной проверки подлинности не настроены. В <a href="http://go.microsoft.com/fwlink/?LinkId=403804">этой статье</a>
+                        вы можете узнать, как настроить двухфакторную проверку подлинности в этом приложении ASP.NET.
+                    </p>
+                    @if (Model.TwoFactor)
+                    {
+                        using (Html.BeginForm("DisableTwoFactorAuthentication", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            <text>Включено
+                            <input type="submit" value="Отключить" class="btn btn-link" />
+                            </text>
+                        }
+                    }
+                    else
+                    {
+                        using (Html.BeginForm("EnableTwoFactorAuthentication", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            <text>Отключено
+                            <input type="submit" value="Включить" class="btn btn-link" />
+                            </text>
+                        }
+                    }
+            </dd>*@
+    </dl>
+</div>
+
+@if (User.Identity.IsAuthenticated)
+{
+    if (User.IsInRole("Менеджер"))
+    {
+        using (Html.BeginForm("UserShopAdress", "Manage"))
+        {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(model => model.User.Id)
+            @Html.Partial("Partials/_CreateShop", Model.Shop, new ViewDataDictionary { TemplateInfo = new TemplateInfo { HtmlFieldPrefix = "Shop" } })
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Зберегти" class="btn btn-default" />
+                </div>
+            </div>
+        }
+    }
+    else if (User.IsInRole("Користувач"))
+    {
+        using (Html.BeginForm("UserAdress", "Manage"))
+        {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(model => model.User.Id)
+            <div id="createAdress" style="display: none;">
+                @Html.Partial("Partials/_CreateAdress", Model.Adress, new ViewDataDictionary {TemplateInfo = new TemplateInfo {HtmlFieldPrefix = "Adress"}})
+            </div>
+            <div id="textAdress">
+                <dl class="dl-horizontal">
+                    <dt>Адреса:</dt>
+                    <dd>
+                        @if (Model.Adress == null)
+                        {
+                            @: Нет [ <a id="showMap" href="#">Додадти</a> ]
+                        }
+                        else
+                        {
+                            @Model.Adress
+                            @: [ <a id="showMap" href="#">Змінити</a> ]
+                        }
+                    </dd>
+                </dl>
+            </div>
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Зберегти" class="btn btn-default" />
+                </div>
+            </div>
+        }
+    }
+
+}
+
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            if (!$('#textAdress').value) {
+                $('.adressSity').val("Київ");
+            }
+        });
+    </script>
+}

@@ -1,0 +1,36 @@
+﻿@model IEnumerable<Web.Models.ProductInOrderViewModel>
+
+<hr />
+<h4>Товари</h4>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Art)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Price)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.MaxCount)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Count)
+        </th>
+        @*<th>
+            @Html.DisplayNameFor(model => model.ShippingType)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PaymentType)
+        </th>*@
+        <th></th>
+    </tr>
+    @Html.EditorForModel()
+
+</table>
+@section scripts{
+
+}

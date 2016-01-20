@@ -1,0 +1,26 @@
+﻿@using Microsoft.AspNet.Identity.EntityFramework
+@model Web.Models.ApplicationUser
+
+<tr>
+    <td>
+        @Html.HiddenFor(model => model.Id)
+        @Html.DisplayFor(model => model.UserName)
+    </td>
+    <td>
+        @Html.DisplayFor(model => model.Email)
+    </td>
+    <td>
+        <div>
+            @Html.ListBoxFor(model => model.RolesIds, new MultiSelectList(ViewBag.Roles, "Id", "Name"), new
+       {
+           @class = "chzn-select srs-select search-dropdown",
+           multiple = "multiple",
+           data_placeholder = "Додайте ролі користувача"
+       })
+        </div>
+    </td>
+</tr>
+@section scripts
+{
+    
+}

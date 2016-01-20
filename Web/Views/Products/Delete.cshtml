@@ -1,0 +1,76 @@
+﻿@model Web.Models.Product
+
+@{
+    ViewBag.Title = "Видалити";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Видалити товар</h2>
+
+<h3>Ви впевнені, що хочете видалити?</h3>
+<div>
+    <h4>Товар</h4>
+    <hr/>
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Art)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Art)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Weight)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Weight)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.WCategory)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.WCategory)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Price)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Price)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Count)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Count)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Видалити" class="btn btn-default"/> 
+        </div>
+    }
+</div>
+<div>
+    @Html.ActionLink("Назад", "Index")
+</div>

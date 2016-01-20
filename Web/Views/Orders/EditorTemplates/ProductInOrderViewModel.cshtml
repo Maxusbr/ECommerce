@@ -1,0 +1,40 @@
+﻿@model Web.Models.ProductInOrderViewModel
+
+<tr>
+    <td>
+        @Html.HiddenFor(model => model.Id)
+        @Html.DisplayFor(model => model.Art, new { htmlAttributes = new { @class = "form-control"} })
+        @Html.HiddenFor(model => model.Art)
+        @Html.HiddenFor(model => model.Weight)
+        @Html.HiddenFor(model => model.WCategory)
+    </td>
+    <td>
+        @Html.DisplayFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.HiddenFor(model => model.Name)
+    </td>
+    <td>
+        @Html.DisplayFor(model => model.Price, new {htmlAttributes = new {@class = "form-control"}})
+        @Html.HiddenFor(model => model.Price)
+    </td>
+    <td>
+        @Html.DisplayFor(model => model.MaxCount, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.HiddenFor(model => model.MaxCount)
+    </td>
+    <td>
+        @if (Model.ReadOnly)
+        {
+            @Html.DisplayFor(model => model.Count, new { htmlAttributes = new { @class = "form-control" } })
+        }
+        else
+        {
+            @Html.ValidationMessageFor(model => model.Count, "", new { @class = "text-danger" })
+            @Html.EditorFor(model => model.Count, new { htmlAttributes = new { @class = "form-control" } })
+        }
+        
+
+    </td>
+    <td>
+        @*<input type="button" value="Додати" class="btn btn-primary"/>*@
+    </td>
+</tr>
+

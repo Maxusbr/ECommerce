@@ -1,0 +1,33 @@
+﻿@model Web.Models.ProfileClientViewModel
+
+@{
+    ViewBag.Title = "Профіль клієнта";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@Model.User</h2>
+
+<div class="form-horizontal">
+    @*<h4>Order</h4>*@
+    @if (Model.Products.Any())
+    {
+        <div id="productsList" class="form-group">
+            @{
+                Html.RenderPartial("_ProductsList", Model.Products, new ViewDataDictionary { TemplateInfo = new TemplateInfo { HtmlFieldPrefix = "Products" } });
+            }
+        </div>
+    }
+
+
+
+    <hr />
+    <div class="form-group">
+        @Html.LabelFor(model => model.Summ, htmlAttributes: new { @class = "control-label col-md-3" })
+        <div class="control-label col-md-1">
+            @Model.Summ
+        </div>
+    </div>
+</div>
+<div>
+    @Html.ActionLink("Назад", "Index")
+</div>

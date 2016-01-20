@@ -1,0 +1,32 @@
+﻿@model IEnumerable<Web.Models.ProductViewModel>
+
+@*<hr />*@
+<h4>Товари</h4>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Price)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Count)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.WCategory)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PaymentType)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ShippingType)
+        </th>
+    </tr>
+    @Html.EditorForModel()
+
+</table>
+@section scripts{
+
+}

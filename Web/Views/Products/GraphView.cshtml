@@ -1,0 +1,20 @@
+﻿@model Web.Models.ChartsModel
+    @{
+        ViewBag.Title = "Графіки";
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    }
+@section headerscripts
+{
+    @Scripts.Render("~/bundles/highchart")
+}
+<h2>Товари</h2>
+    @*<img src='@Url.Action("CountSalesProduct")'/>
+    <img src='@Url.Action("TotalPriceSalesProduct")'/>*@
+
+
+    @*<img src="CountSalesProduct.cshtml" alt="" />*@
+
+<div>@Model.Chart1</div>
+<div>@Model.Chart2</div>
+<div>@Model.Chart3</div>
+<div>@Model.Chart4</div>

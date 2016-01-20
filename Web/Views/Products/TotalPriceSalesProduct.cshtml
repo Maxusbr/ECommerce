@@ -1,0 +1,10 @@
+﻿@model IEnumerable<Web.Models.ProductInOrderViewModel>
+@{
+    var myChart = new Chart(width: 600, height: 400, theme: ChartTheme.Green)
+        .AddTitle("Загальна вартість")
+        .AddSeries(
+            name: "TotalPrice",
+            xValue: Model, xField: "Name",
+            yValues: Model, yFields: "TotalPrice")
+        .Write();
+}
