@@ -29,25 +29,27 @@ namespace Web
 
         public async Task<List<Product>> GetAllProducsAsync()
         {
-            var res = await _db.Products.ToListAsync();
+            await _db.WeightCategories.ToListAsync();
+            var res = await _db.Products.OrderBy(o => o.Name).ToListAsync();
             return res;
         }
 
         public async Task<List<ProductInOrderViewModel>> GetProducsAsync()
         {
-            return (from el in await _db.Products.ToListAsync() select new ProductInOrderViewModel(el)).ToList();
+            await _db.WeightCategories.ToListAsync();
+            return (from el in await _db.Products.OrderBy(o => o.Name).ToListAsync() select new ProductInOrderViewModel(el)).ToList();
         }
 
         public async Task<List<ProductInOrderViewModel>> GetSalesProducsAsync()
         {
-            await _db.Products.ToListAsync();
+            await _db.Products.ToListAsync(); await _db.WeightCategories.ToListAsync();
             var list =await _db.OrdersDetails.GroupBy(o => o.IdProduct).Select(g =>
             new ProductInOrderViewModel
             {
                 Id = g.Key,
                 Price = g.Average(p => p.Price),
                 Count = g.Sum(p => p.Count)
-            }).ToListAsync();
+            }).OrderBy(o => o.Name).ToListAsync();
             foreach (var el in list)
             {
                 var product = await FindAsync(el.Id);
@@ -63,16 +65,20 @@ namespace Web
         {
             var result = await _db.OrdersDetails.Where(o => o.IdOrder.Equals(orderId)).ToListAsync();
             if (result.Any(o => o.Product == null)) await _db.Products.ToListAsync();
-            return result.Select(el => new ProductInOrderViewModel(el.Product) { Count = el.Count, Price = el.Price }).ToList();
+            await _db.WeightCategories.ToListAsync();
+            return result.Select(el => new ProductInOrderViewModel(el.Product)
+                { Count = el.Count, Price = el.Price }).OrderBy(o => o.Name).ToList();
         }
 
         public async Task<Product> FindAsync(string id)
         {
+            await _db.WeightCategories.ToListAsync();
             return await _db.Products.FindAsync(id);
         }
 
         public async Task AddOrUpdate(Product product)
         {
+            await _db.WeightCategories.ToListAsync();
             if (string.IsNullOrEmpty(product.Id))
             {
                 product.Id = Guid.NewGuid().ToString();
@@ -88,6 +94,11 @@ namespace Web
             var product = await FindAsync(id);
             _db.Entry(product).State = EntityState.Deleted;
             await _db.SaveChangesAsync();
+        }
+
+        public async Task<List<WeightCategory>> GetWeightCategoriesAsync()
+        {
+            return await _db.WeightCategories.ToListAsync();
         }
     }
 }

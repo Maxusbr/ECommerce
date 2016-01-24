@@ -9,19 +9,28 @@ namespace Web.Models
 {
     public class Adress
     {
-        [Required]
+
         [Display(Name = "ID")]
         public string Id { get; set; }
         [Required]
         [Display(Name = "Місто")]
         public string Sity { get; set; }
-        [Required]
+
         [Display(Name = "Вулиця")]
         public string Street { get; set; }
-        [Required]
+
         [Display(Name = "Будинок")]
         public string House { get; set; }
-        public string FullAdress => !string.IsNullOrEmpty(Sity) ? $"{Sity}, {Street}, {House}": "";
+        public string FullAdress
+        {
+            get
+            {
+                var res = !string.IsNullOrEmpty(Sity) ? Sity : "";
+                if (!string.IsNullOrEmpty(Street)) res += ", " + Street;
+                if (!string.IsNullOrEmpty(House)) res += ", " + House;
+                return res;
+            }
+        }
 
         public override string ToString()
         {

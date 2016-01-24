@@ -34,7 +34,7 @@
             @Html.DisplayNameFor(model => model.Weight)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.WCategory)
+            @Html.DisplayNameFor(model => model.WCategoryId)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Price)
@@ -59,7 +59,8 @@
                 @Html.DisplayFor(modelItem => item.Weight)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.WCategory)
+                @Html.HiddenFor(modelItem => item.WCategoryId)
+                @Html.DisplayFor(modelItem => item.WCategory.Name)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Price)

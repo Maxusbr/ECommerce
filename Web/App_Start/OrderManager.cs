@@ -105,6 +105,7 @@ namespace Web
             await _db.Products.ToListAsync();
             await _db.PaymentTypes.ToListAsync();
             await _db.ShippingTypes.ToListAsync();
+            await _db.WeightCategories.ToListAsync();
             var orders = await _db.Orders.Where(o => o.UserId.Equals(id)).ToListAsync();
             var result = orders.Join(detail, e => e.Id, e => e.IdOrder, (order, orderDetail) => new ProductViewModel
             {
@@ -113,11 +114,24 @@ namespace Web
                 Id = orderDetail.Product.Id,
                 Count = orderDetail.Count,
                 Price = orderDetail.Price,
-                WCategory = orderDetail.Product.WCategory,
+                WCategoryId = orderDetail.Product.WCategory.Id,
+                WCategory = orderDetail.Product.WCategory.Name,
                 ShippingType = order.ShippingType,
                 PaymentType = order.PaymentType
             });
             return result;
+        }
+
+        public async Task<Receipt> GetReceiptAsync(string orderId)
+        {
+            await _db.Orders.ToListAsync();
+            return await _db.Receipts.FirstOrDefaultAsync(o => o.OrderId.Equals(orderId));
+        }
+
+        public async Task CreateReceipt(Receipt rec)
+        {
+            _db.Entry(rec).State = EntityState.Added;
+            await Save();
         }
 
         public async Task Save()
@@ -137,6 +151,23 @@ namespace Web
             _db.Dispose();
         }
 
+        public async Task<double> GetTariff(int wCat, int kurb)
+        {
+            var tariff = await
+                _db.TariffCoefficients.FirstOrDefaultAsync(o => o.WeightCategoryId == wCat && o.UrbanCategoryId == kurb);
+            return tariff?.ShippingCost * tariff?.Tariff ?? 0;
+        }
 
+        public async Task<Receipt> GetReceiptByIdAsync(int id)
+        {
+            await _db.Orders.ToListAsync();
+            return await _db.Receipts.FindAsync(id);
+        }
+
+        public async Task<IEnumerable<Receipt>> GetReceiptsListAsync()
+        {
+            await _db.Orders.ToListAsync();
+            return await _db.Receipts.ToListAsync();
+        }
     }
 }

@@ -79,7 +79,7 @@ namespace Web.Controllers
                 BrowserRemembered = await AuthenticationManager.TwoFactorBrowserRememberedAsync(userId),
                 Shop = await GetShop(userId),
                 User = await UserManager.FindByIdAsync(userId),
-                Adress = await AdressManager.GetAdressUserId(userId)
+                Adress = await AdressManager.GetAdressUserIdAsync(userId)
             };
             return View(model);
         }
@@ -439,10 +439,9 @@ namespace Web.Controllers
         private async Task SaveShop(Shop shop, string userId)
         {
             shop.Adress = await AdressManager.GetOrCreateAdress(shop.Adress);
-            shop.AdressId = shop.Adress.Id;
-            var userShop = await AdressManager.GetShopByUserId(userId);
-            if (!string.IsNullOrEmpty(userShop?.Id)) shop.Id = userShop.Id;
-            await AdressManager.CreateOrUpdate(shop, userId);
+            var userShop = await AdressManager.GetShopByUserId(userId) ?? shop;
+            userShop.AdressId = shop.Adress.Id;
+            await AdressManager.CreateOrUpdate(userShop, userId);
         }
 
         private async Task SaveAdress(Adress adress, string userid)

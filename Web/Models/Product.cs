@@ -26,7 +26,9 @@ namespace Web.Models
         public double Weight { get; set; }
 
         [Display(Name = "Вагова категорія")]
-        public string WCategory { get; set; }
+        public int WCategoryId { get; set; }
+        [ForeignKey("WCategoryId")]
+        public WeightCategory WCategory { get; set; }
 
         [Display(Name = "Ціна")]
         public double Price { get; set; }
@@ -45,7 +47,7 @@ namespace Web.Models
             Art = product.Art;
             Name = product.Name;
             Weight = product.Weight;
-            WCategory = product.WCategory;
+            WCategoryId = product.WCategoryId;
             Price = product.Price;
             MaxCount = product.Count;
         }
@@ -65,7 +67,8 @@ namespace Web.Models
         public double Weight { get; set; }
 
         [Display(Name = "Вагова категорія")]
-        public string WCategory { get; set; }
+        public int WCategoryId { get; set; }
+        public List<WeightCategory> WCategories { get; set; }
 
         [Display(Name = "Ціна")]
         public double Price { get; set; }

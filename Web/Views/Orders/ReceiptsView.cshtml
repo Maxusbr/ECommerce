@@ -1,0 +1,50 @@
+﻿@model IEnumerable<Web.Models.CreateOrderViewModel>
+
+@{
+    ViewBag.Title = "Квитанції";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Квитанції</h2>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Date)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.User)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ShippingCost)
+        </th>
+        <th>Сума</th>
+        <th>Разом</th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Date)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.User)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ShippingCost)
+            </td>
+            <td>
+                @item.Products.Aggregate(0.0, (current, el) => (current + el.Count*el.Price))
+            </td>
+            <td>
+                @item.Products.Aggregate(item.ShippingCost, (current, el) => (current + el.Count * el.Price))
+            </td>
+            <td>
+                @Html.ActionLink("Детальніше", "DetailReceipt", new { id = item.Id })
+            </td>
+        </tr>
+    }
+
+</table>

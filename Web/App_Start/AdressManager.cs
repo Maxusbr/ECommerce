@@ -47,10 +47,18 @@ namespace Web
             return adress ?? new Adress { Sity = "Киев" };
         }
 
-        public async Task<Adress> GetAdressUserId(string userId = "")
+        public async Task<Adress> GetAdressUserIdAsync(string userId = "")
         {
             var useradress = await _db.UserAdress.FirstOrDefaultAsync(o => o.IdUser.Equals(userId));
-            var adress = useradress != null ? await _db.Adresses.FirstOrDefaultAsync(o => o.Id.Equals(useradress.IdAdress)) : null;
+            var adress = useradress != null ? 
+                await _db.Adresses.FirstOrDefaultAsync(o => o.Id.Equals(useradress.IdAdress)) : null;
+            return adress;
+        }
+
+        public Adress GetAdressUserId(string userId = "")
+        {
+            var useradress = _db.UserAdress.FirstOrDefault(o => o.IdUser.Equals(userId));
+            var adress = useradress != null ? _db.Adresses.FirstOrDefault(o => o.Id.Equals(useradress.IdAdress)) : null;
             return adress;
         }
 
@@ -83,13 +91,13 @@ namespace Web
             adress = model;
             adress.Id = Guid.NewGuid().ToString();
             _db.Entry(adress).State = EntityState.Added;
-            await _db.SaveChangesAsync();
 
             return adress;
         }
 
         public async Task<Shop> GetShop(string id = "")
         {
+            await _db.Adresses.ToListAsync();
             if (string.IsNullOrEmpty(id))
                 return await _db.Shops.FirstOrDefaultAsync();
             return await _db.Shops.FindAsync(id);

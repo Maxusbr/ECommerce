@@ -55,8 +55,9 @@ namespace Web.Controllers
 
         // GET: Products/Create
         [Authorize(Roles = "Менеджер")]
-        public ActionResult Create()
+        public async Task<ActionResult> Create()
         {
+            ViewBag.WCategory = await ProductManager.GetWeightCategoriesAsync();
             return View();
         }
 
@@ -66,7 +67,7 @@ namespace Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Менеджер")]
-        public async Task<ActionResult> Create([Bind(Include = "Id,Art,Name,Weight,WCategory,Price,Count")] Product product)
+        public async Task<ActionResult> Create([Bind(Include = "Id,Art,Name,Weight,WCategoryId,Price,Count")] Product product)
         {
             if (ModelState.IsValid)
             {
@@ -75,7 +76,7 @@ namespace Web.Controllers
                 await ProductManager.AddOrUpdate(product);
                 return RedirectToAction("Index");
             }
-
+            ViewBag.WCategory = await ProductManager.GetWeightCategoriesAsync();
             return View(product);
         }
 
@@ -92,6 +93,7 @@ namespace Web.Controllers
             {
                 return HttpNotFound();
             }
+            ViewBag.WCategory = await ProductManager.GetWeightCategoriesAsync();
             return View(product);
         }
 
@@ -101,15 +103,14 @@ namespace Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Менеджер")]
-        public async Task<ActionResult> Edit([Bind(Include = "Id,Art,Name,Weight,WCategory,Price,Count")] Product product)
+        public async Task<ActionResult> Edit([Bind(Include = "Id,Art,Name,Weight,WCategoryId,Price,Count")] Product product)
         {
             if (ModelState.IsValid)
             {
-                //_db.Entry(product).State = EntityState.Modified;
-                //await _db.SaveChangesAsync();
                 await ProductManager.AddOrUpdate(product);
                 return RedirectToAction("Index");
             }
+            ViewBag.WCategory = await ProductManager.GetWeightCategoriesAsync();
             return View(product);
         }
 

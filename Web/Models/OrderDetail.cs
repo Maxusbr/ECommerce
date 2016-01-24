@@ -11,15 +11,17 @@ namespace Web.Models
     public class OrderDetail
     {
         [Key, Column(Order = 0)]
-        [ForeignKey("Order")]
+        [Required]       
         public string IdOrder { get; set; }
-        [Required]
+
+        [ForeignKey("IdOrder")]
         public Order Order { get; set; }
 
         [Key, Column(Order = 1)]
-        [ForeignKey("Product")]
+        [Required]        
         public string IdProduct { get; set; }
-        [Required]
+
+        [ForeignKey("IdProduct")]
         public Product Product { get; set; }
 
         [Display(Name = "Кількість")]

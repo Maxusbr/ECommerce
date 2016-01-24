@@ -1,0 +1,54 @@
+﻿@model Web.Models.RegisterViewModel
+
+@Html.ValidationSummary("", new { @class = "text-danger" })
+<div class="form-group">
+    @Html.LabelFor(m => m.UserName, new { @class = "col-md-3 control-label" })
+    <div class="col-md-9">
+        @Html.TextBoxFor(m => m.UserName, new { @class = "form-control" })
+    </div>
+</div>
+<div class="form-group">
+    @Html.LabelFor(m => m.PhoneNumber, new { @class = "col-md-3 control-label" })
+    <div class="col-md-9">
+        @Html.TextBoxFor(m => m.PhoneNumber, new { @class = "form-control" })
+    </div>
+</div>
+<div class="form-group">
+    @Html.LabelFor(m => m.Email, new { @class = "col-md-3 control-label" })
+    <div class="col-md-9">
+        @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+    </div>
+</div>
+<div class="form-group">
+    @Html.LabelFor(m => m.Password, new { @class = "col-md-3 control-label" })
+    <div class="col-md-9">
+        @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+    </div>
+</div>
+<div class="form-group">
+    @Html.LabelFor(m => m.ConfirmPassword, new { @class = "col-md-3 control-label" })
+    <div class="col-md-9">
+        @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
+    </div>
+</div>
+<h4>Особиста інформація.</h4>
+<hr />
+<div class="form-group">
+    @Html.LabelFor(m => m.Surname, new { @class = "col-md-3 control-label" })
+    <div class="col-md-9">
+        @Html.PasswordFor(m => m.Surname, new { @class = "form-control" })
+    </div>
+</div>
+<div class="form-group">
+    @Html.LabelFor(m => m.Name, new { @class = "col-md-3 control-label" })
+    <div class="col-md-9">
+        @Html.PasswordFor(m => m.Name, new { @class = "form-control" })
+    </div>
+</div>
+<div class="form-group">
+    @Html.LabelFor(m => m.MiddleName, new { @class = "col-md-3 control-label" })
+    <div class="col-md-9">
+        @Html.PasswordFor(m => m.MiddleName, new { @class = "form-control" })
+    </div>
+</div>
+

@@ -35,9 +35,9 @@ namespace Web.Controllers
             {
                 return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
             }
-            private set 
-            { 
-                _signInManager = value; 
+            private set
+            {
+                _signInManager = value;
             }
         }
 
@@ -137,7 +137,7 @@ namespace Web.Controllers
             // Если пользователь введет неправильные коды за указанное время, его учетная запись 
             // будет заблокирована на заданный период. 
             // Параметры блокирования учетных записей можно настроить в IdentityConfig
-            var result = await SignInManager.TwoFactorSignInAsync(model.Provider, model.Code, isPersistent:  model.RememberMe, rememberBrowser: model.RememberBrowser);
+            var result = await SignInManager.TwoFactorSignInAsync(model.Provider, model.Code, isPersistent: model.RememberMe, rememberBrowser: model.RememberBrowser);
             switch (result)
             {
                 case SignInStatus.Success:
@@ -154,9 +154,10 @@ namespace Web.Controllers
         //
         // GET: /Account/Register
         [AllowAnonymous]
-        public ActionResult Register()
+        public ActionResult Register(string returnUrl)
         {
-            return View(new RegisterViewModel {Adress = new Adress {Id = Guid.NewGuid().ToString()} });
+            ViewBag.ReturnUrl = returnUrl;
+            return View(new RegisterViewModel { Adress = new Adress() });
         }
 
         //
@@ -164,21 +165,37 @@ namespace Web.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Register(RegisterViewModel model)
+        public async Task<ActionResult> Register(RegisterViewModel model, string returnUrl)
         {
-            if (ModelState.IsValid)
+            var registerValidate = string.IsNullOrEmpty(model.UserName) && string.IsNullOrEmpty(model.Email) &&
+                                   string.IsNullOrEmpty(model.PhoneNumber);
+            if (ModelState.IsValid && !registerValidate)
             {
-                var user = new ApplicationUser { UserName = model.UserName, Email = model.Email};
-                var result = await UserManager.CreateAsync(user, model.Password);
-                
+                var user = new ApplicationUser
+                {
+                    UserName = model.UserName ?? model.Email ?? "user" + model.PhoneNumber,
+                    Email = model.Email,
+                    PhoneNumber = model.PhoneNumber,
+                    Name = model.Name,
+                    MiddleName = model.MiddleName,
+                    Surname = model.Surname
+                };
+                var result = model.Password == null?  await UserManager.CreateAsync(user):
+                    await UserManager.CreateAsync(user, model.Password);
+
                 if (result.Succeeded)
                 {
                     await AdressManager.UpdateAsync(user, model.Adress);
                     if (!RoleManager.RoleExists("Користувач"))
                         await RoleManager.CreateAsync(new ApplicationRole("Користувач"));
                     await UserManager.AddToRoleAsync(user.Id, "Користувач");
-                    await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
-                    
+                    if (!string.IsNullOrEmpty(returnUrl))
+                    {
+                        ViewBag.UserId = user.Id;
+                        return RedirectToLocal(returnUrl + "&userId=" + user.Id);
+                    }
+                    await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+
                     // Дополнительные сведения о том, как включить подтверждение учетной записи и сброс пароля, см. по адресу: http://go.microsoft.com/fwlink/?LinkID=320771
                     // Отправка сообщения электронной почты с этой ссылкой
                     // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
@@ -189,7 +206,7 @@ namespace Web.Controllers
                 }
                 AddErrors(result);
             }
-
+            if(registerValidate) ModelState.AddModelError("", "Необхідно вказати логін, телефон або емайл");
             // Появление этого сообщения означает наличие ошибки; повторное отображение формы
             return View(model);
         }

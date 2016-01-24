@@ -213,8 +213,10 @@
     <Compile Include="Models\Receipt.cs" />
     <Compile Include="Models\Shop.cs" />
     <Compile Include="Models\ShippingType.cs" />
+    <Compile Include="Models\TariffCoefficient.cs" />
     <Compile Include="Models\UserAdress.cs" />
     <Compile Include="Models\UserShop.cs" />
+    <Compile Include="Models\WeightCategory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -408,6 +410,10 @@
     <Content Include="Views\Products\GraphView.cshtml" />
     <Content Include="Views\Products\CountSalesProduct.cshtml" />
     <Content Include="Views\Products\TotalPriceSalesProduct.cshtml" />
+    <Content Include="Views\Shared\Partials\_RegisterUser.cshtml" />
+    <Content Include="Views\Orders\AdressView.cshtml" />
+    <Content Include="Views\Orders\ReceiptsView.cshtml" />
+    <Content Include="Views\Orders\DetailReceipt.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

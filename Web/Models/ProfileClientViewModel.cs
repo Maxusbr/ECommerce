@@ -11,8 +11,10 @@ namespace Web.Models
     {
         [Display(Name = "Ідентифікатор")]
         public string Id { get; set; }
-
         [Display(Name = "Клієнт")]
+        public string UserId { get; set; }
+
+        [ForeignKey("UserId")]
         public ApplicationUser User { get; set; }
 
         [Display(Name = "Товари")]

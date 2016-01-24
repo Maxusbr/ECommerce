@@ -14,9 +14,12 @@
         <th>
             @Html.DisplayNameFor(model => model.Price)
         </th>
-        <th>
-            @Html.DisplayNameFor(model => model.MaxCount)
-        </th>
+        @if (Model.All(o => !o.ReadOnly))
+        {
+            <th>
+                @Html.DisplayNameFor(model => model.MaxCount)
+            </th>
+        }
         <th>
             @Html.DisplayNameFor(model => model.Count)
         </th>

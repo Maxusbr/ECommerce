@@ -9,31 +9,26 @@ function init() {
             provider: 'yandex#search'
         }
     });
-    // Определяем адрес по координатам (обратное геокодирование)
-    function getAddress(coords) {
-        //myPlacemark.properties.set('iconContent', 'поиск...');
-        ymaps.geocode(coords).then(function (res) {
-            var firstGeoObject = res.geoObjects.get(0);
-            if (firstGeoObject === null) {
-                var _city = ''; // если не найден - возвращаем пустую строку
-            } else {
-                // получаем название города
-                var _city = firstGeoObject.properties.get('metaDataProperty.GeocoderMetaData.AddressDetails.Country.AdministrativeArea.Locality.LocalityName');
-                var _street = firstGeoObject.properties.get('metaDataProperty.GeocoderMetaData.AddressDetails.Country.AdministrativeArea.Locality.Thoroughfare.ThoroughfareName');
-                var _house = firstGeoObject.properties.get('metaDataProperty.GeocoderMetaData.AddressDetails.Country.AdministrativeArea.Locality.Thoroughfare.Premise.PremiseNumber');
-                $('.adressSity').val(_city);
-                $('.adressStreet').val(_street);
-                $('.adressHouse').val(_house);
-                changeAdress();
-                //myPlacemark.properties
-                //.set({
-                //    iconContent: firstGeoObject.properties.get('name'),
-                //    balloonContent: firstGeoObject.properties.get('text')
-                //});
-            }
-
+    function correctAdress(firstGeoObject) {
+        var _city = firstGeoObject.properties.get('metaDataProperty.GeocoderMetaData.AddressDetails.Country.AdministrativeArea.Locality.LocalityName');
+        var _street = firstGeoObject.properties.get('metaDataProperty.GeocoderMetaData.AddressDetails.Country.AdministrativeArea.Locality.Thoroughfare.ThoroughfareName');
+        var _house = firstGeoObject.properties.get('metaDataProperty.GeocoderMetaData.AddressDetails.Country.AdministrativeArea.Locality.Thoroughfare.Premise.PremiseNumber');
+        $('.adressSity').val(_city);
+        $('.adressStreet').val(_street);
+        $('.adressHouse').val(_house);
+    }
+    function foundCoord(adress) {
+        ymaps.geocode(adress, { results: 1 }).then(function (res) {
+            var firstGeoObject = res.geoObjects.get(0),
+                coords = firstGeoObject.geometry.getCoordinates(),
+                bounds = firstGeoObject.properties.get('boundedBy');
+            myMap.geoObjects.removeAll();
+            myMap.geoObjects.add(firstGeoObject);
+            correctAdress(firstGeoObject);
+            myMap.setCenter(coords, 15);
         });
     }
+
     function createMap() {
         myMap = new ymaps.Map('map', {
             center: [50.4481, 30.5254],
@@ -45,25 +40,44 @@ function init() {
             var coords = e.get('coords');
             getAddress(coords);
         });
-        myMap.controls.add(searchControl);
+        //myMap.controls.add(searchControl);
     }
 
-    function changeAdress() {
-        if (!myMap) createMap();
+    function getStringAdress() {
         var res = $(".adressSity")[0].value;
         if ($(".adressStreet")[0].value) res += ", " + $(".adressStreet")[0].value;
         if ($(".adressHouse")[0].value) res += ", " + $(".adressHouse")[0].value;
-        searchControl.search(res);
+        return res;
+    }
+
+    function changeAdress() {
+        //if (!myMap) createMap();
+        //searchControl.search(res);
+        foundCoord(getStringAdress());
+    }
+    // Определяем адрес по координатам (обратное геокодирование)
+    function getAddress(coords) {
+        //myPlacemark.properties.set('iconContent', 'поиск...');
+        ymaps.geocode(coords).then(function (res) {
+            var firstGeoObject = res.geoObjects.get(0);
+            if (firstGeoObject === null) {
+                var _city = ''; // если не найден - возвращаем пустую строку
+            } else {
+                correctAdress(firstGeoObject);
+                changeAdress();
+            }
+        });
     }
 
     $('#hideMap').bind({
         click: function () {
             if (myMap) {
-                myMap.destroy();// Деструктор карты
+                myMap.destroy();
                 myMap = null;
             }
             $("#textAdress").show();
             $("#createAdress").hide();
+            if ($("#FullAdress") != 'undefined') $("#FullAdress")[0].innerHTML = getStringAdress();
         }
     });
 
@@ -71,6 +85,7 @@ function init() {
         click: function () {
             if (!myMap) {
                 createMap();
+                if ($(".adressSity")[0]) $('.adressSity').val("Киів");
                 changeAdress();
             }
             $("#textAdress").hide();
@@ -78,24 +93,15 @@ function init() {
         }
     });
 
-
+    $(document).ready(function () {
+        if ($("#showMap")[0] === undefined) return;
+        if ($('#showMap')[0].innerHTML == "showMap") {
+            //createMap();
+            changeAdress();
+        }
+    });
     
-    // Создание метки
-    //function createPlacemark(coords) {
-    //    return new ymaps.Placemark(coords, {
-    //        iconContent: 'поиск...'
-    //    }, {
-    //        preset: 'islands#violetStretchyIcon',
-    //        draggable: true
-    //    });
-    //}
-
-
     
-    if ($('#showMap')[0].innerHTML == "showMap") {
-        createMap();
-        changeAdress();
-    }
     $(".adressInput").change(changeAdress);
 }
 

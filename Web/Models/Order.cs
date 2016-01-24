@@ -15,9 +15,10 @@ namespace Web.Models
         [Display(Name = "ID")]
         public string Id { get; set; }
 
-        [ForeignKey("Shop")]
-        public string ShopId { get; set; }
+
         [Required]
+        public string ShopId { get; set; }
+        [ForeignKey("ShopId")]
         public Shop Shop { get; set; }
 
         [Required]
@@ -26,31 +27,35 @@ namespace Web.Models
         [Display(Name = "Дата замовлення")]
         public DateTime Date { get; set; }
 
-        [ForeignKey("User")]
-        public string UserId { get; set; }
         [Required]
+        public string UserId { get; set; }
+
         [Display(Name = "Клієнт")]
+        [ForeignKey("UserId")]
         public ApplicationUser User { get; set; }
 
-        [ForeignKey("AdresShipping")]
         public string AdressId { get; set; }
 
         [Display(Name = "Адреса доставки")]
         [Required(ErrorMessage = "Необхідно вказати адресу")]
+        [ForeignKey("AdressId")]
         public Adress AdresShipping { get; set; }
 
-        [ForeignKey("ShippingType")]
+
         public string ShippingTypesId { get; set; }
         [Required]
         [Display(Name = "Тип доставки")]
+        [ForeignKey("ShippingTypesId")]
         public ShippingType ShippingType { get; set; }
 
-        [ForeignKey("PaymentType")]
+
         public string PaymentTypesId { get; set; }
 
         [Display(Name = "Форма оплати")]
+        [ForeignKey("PaymentTypesId")]
         public PaymentType PaymentType { get; set; }
 
+        public double Distance { get; set; }
     }
 
     public class CreateOrderViewModel
@@ -74,7 +79,7 @@ namespace Web.Models
         [Display(Name = "Клієнт")]
         public string User { get; set; }
         public string ShopId { get; set; }
-
+        public string ShopAdress { get; set; }
         [Required]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:dd'/'MM'/'yyyy}")]
@@ -82,7 +87,6 @@ namespace Web.Models
         public DateTime Date { get; set; }
 
         [Display(Name = "Адреса доставки")]
-        [Required(ErrorMessage = "Необхідно вказати адресу")]
         public Adress AdresShipping { get; set; }
 
         [Required]
@@ -99,7 +103,10 @@ namespace Web.Models
 
         public List<PaymentType> PaymentTypes { get; set; }
         public List<ProductInOrderViewModel> Products { get; set; }
-
+        [Display(Name = "Користувачі")]
+        public List<ApplicationUser> Users { get; set; }
+        public bool ReceiptExist { get; set; }
+        public double Distance { get; set; }
         public Order GetOrder => new Order
         {
             Id = Id,
@@ -107,7 +114,10 @@ namespace Web.Models
             PaymentTypesId = PaymentTypesId,
             ShippingTypesId = ShippingTypeId,
             ShopId = ShopId,
-            UserId = UserId
+            UserId = UserId,
+            Distance = Distance
         };
+        [Display(Name = "Вартість доставки")]
+        public double ShippingCost { get; set; }
     }
 }

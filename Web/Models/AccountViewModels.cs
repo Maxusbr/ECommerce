@@ -65,16 +65,16 @@ namespace Web.Models
     public class RegisterViewModel
     {
         public string Id { get; set; }
-        [Required]
+        
         [Display(Name = "Login")]
         public string UserName { get; set; }
 
-        [Required]
+        
         [EmailAddress]
         [Display(Name = "Адреса електронної пошти")]
         public string Email { get; set; }
 
-        [Required]
+        
         [StringLength(100, ErrorMessage = "Значення {0} має містити не менше {2} символів.", MinimumLength = 6)]
         [DataType(DataType.Password)]
         [Display(Name = "Пароль")]
@@ -98,6 +98,7 @@ namespace Web.Models
         public string MiddleName { get; set; }
 
         [Display(Name = "Телефон")]
+        [Required]
         public string PhoneNumber { get; set; }
         public Adress Adress { get; set; }
     }

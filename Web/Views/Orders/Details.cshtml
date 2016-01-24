@@ -36,6 +36,12 @@
 </div>
 
 <p>
-    @Html.ActionLink("Редагувати", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Редагувати", "Edit", new {id = Model.Id}) |
+    @if (!Model.ReceiptExist)
+    {
+        @Html.ActionLink("Сформувати квітанцию", "CreateReceipt", new { id = Model.Id, returnUrl = Request.RawUrl })
+        @: |
+    }
+    
     @Html.ActionLink("Назад", "Index")
 </p>

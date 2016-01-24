@@ -18,8 +18,8 @@ namespace Web.Models
         [Display(Name = "Назва магазину")]
         public string Name { get; set; }
 
-        [ForeignKey("Adress")]
         public string AdressId { get; set; }
+        [ForeignKey("AdressId")]
         public Adress Adress { get; set; }
     }
 }

@@ -10,14 +10,14 @@ namespace Web.Models
 {
     public class UserAdress
     {
-        [ForeignKey("User")]
         [Key, Column(Order = 0)]
         public string IdUser { get; set; }
+        [ForeignKey("IdUser")]
         public ApplicationUser User { get; set; }
 
-        [ForeignKey("Adress")]
         [Key, Column(Order = 1)]
         public string IdAdress { get; set; }
+        [ForeignKey("IdAdress")]
         public Adress Adress { get; set; }
     }
 }

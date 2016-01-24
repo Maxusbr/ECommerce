@@ -92,5 +92,9 @@ namespace Web.Models
         public DbSet<Adress> Adresses { get; set; }
 
         public DbSet<UserShop> UserShop { get; set; }
+
+        public DbSet<WeightCategory> WeightCategories { get; set; }
+
+        public DbSet<TariffCoefficient> TariffCoefficients { get; set; }
     }
 }

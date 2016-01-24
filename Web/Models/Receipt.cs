@@ -10,21 +10,20 @@ namespace Web.Models
 {
     public class Receipt
     {
-        public Receipt()
-        {
-            Id = Guid.NewGuid().ToString();
-        }
-
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Required]
         [Display(Name = "ID")]
-        public string Id { get; private set; }
+        public int Id { get; set; }
 
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:dd'/'MM'/'yyyy}")]
         [Display(Name = "Дата квитанції")]
         public DateTime Date { get; set; }
-
         [Required]
+        public string OrderId { get; set; }
+        [ForeignKey("OrderId")]
         public Order Order { get; set; }
+
+        public double ShippingCost { get; set; }
     }
 }
