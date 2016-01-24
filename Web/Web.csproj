@@ -214,7 +214,6 @@
     <Compile Include="Models\Shop.cs" />
     <Compile Include="Models\ShippingType.cs" />
     <Compile Include="Models\TariffCoefficient.cs" />
-    <Compile Include="Models\UserAdress.cs" />
     <Compile Include="Models\UserShop.cs" />
     <Compile Include="Models\WeightCategory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

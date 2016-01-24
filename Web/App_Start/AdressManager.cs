@@ -27,17 +27,9 @@ namespace Web
         internal async Task UpdateAsync(ApplicationUser user, Adress adress)
         {
             adress = await GetOrCreateAdress(adress);
-            var useradress = await _db.UserAdress.FirstOrDefaultAsync(o => o.IdUser.Equals(user.Id));
-            if (useradress != null)
-            {
-                useradress.IdAdress = adress.Id;
-                _db.Entry(useradress).State = EntityState.Modified;
-            }
-            else
-            {
-                useradress = new UserAdress { IdUser = user.Id, IdAdress = adress.Id };
-                _db.Entry(useradress).State = EntityState.Added;
-            }
+            user.Adress = adress;
+            user.AdressId = adress.Id;
+            _db.Entry(user).State = EntityState.Modified;
             await _db.SaveChangesAsync();
         }
 
@@ -47,19 +39,9 @@ namespace Web
             return adress ?? new Adress { Sity = "Киев" };
         }
 
-        public async Task<Adress> GetAdressUserIdAsync(string userId = "")
+        public async Task<List<Adress>> GetListAdressAsync()
         {
-            var useradress = await _db.UserAdress.FirstOrDefaultAsync(o => o.IdUser.Equals(userId));
-            var adress = useradress != null ? 
-                await _db.Adresses.FirstOrDefaultAsync(o => o.Id.Equals(useradress.IdAdress)) : null;
-            return adress;
-        }
-
-        public Adress GetAdressUserId(string userId = "")
-        {
-            var useradress = _db.UserAdress.FirstOrDefault(o => o.IdUser.Equals(userId));
-            var adress = useradress != null ? _db.Adresses.FirstOrDefault(o => o.Id.Equals(useradress.IdAdress)) : null;
-            return adress;
+            return await _db.Adresses.ToListAsync();
         }
 
         public async Task<Adress> GetOrCreateAdress(string sity, string street, string house)

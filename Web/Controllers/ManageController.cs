@@ -70,6 +70,8 @@ namespace Web.Controllers
                 : "";
 
             var userId = User.Identity.GetUserId();
+            var user = await UserManager.FindByIdAsync(userId);
+            await AdressManager.GetListAdressAsync();
             var model = new IndexViewModel
             {
                 HasPassword = HasPassword(),
@@ -78,8 +80,8 @@ namespace Web.Controllers
                 Logins = await UserManager.GetLoginsAsync(userId),
                 BrowserRemembered = await AuthenticationManager.TwoFactorBrowserRememberedAsync(userId),
                 Shop = await GetShop(userId),
-                User = await UserManager.FindByIdAsync(userId),
-                Adress = await AdressManager.GetAdressUserIdAsync(userId)
+                User = user,
+                Adress = user.Adress
             };
             return View(model);
         }

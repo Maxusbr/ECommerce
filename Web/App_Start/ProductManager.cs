@@ -49,7 +49,7 @@ namespace Web
                 Id = g.Key,
                 Price = g.Average(p => p.Price),
                 Count = g.Sum(p => p.Count)
-            }).OrderBy(o => o.Name).ToListAsync();
+            }).ToListAsync();
             foreach (var el in list)
             {
                 var product = await FindAsync(el.Id);
@@ -58,7 +58,7 @@ namespace Web
                 el.MaxCount = product.Count;
                 el.Name = product.Name;
             }
-            return list;
+            return list.OrderBy(o => o.Name).ToList();
         }
 
         public async Task<List<ProductInOrderViewModel>> GetProducsInOrderAsync(string orderId)

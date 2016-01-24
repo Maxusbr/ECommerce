@@ -8,12 +8,9 @@
 <h2>Товари</h2>
 @if (User.Identity.IsAuthenticated)
 {
-    if (User.IsInRole("Користувач"))
-    {
-        <p>
-            @Html.ActionLink("Нове замовлення", "Create", "Orders")
-        </p>
-    }
+    <p>
+        @Html.ActionLink("Нове замовлення", "Create", "Orders")
+    </p>
     if (User.IsInRole("Менеджер"))
     {
         <p>

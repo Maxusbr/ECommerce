@@ -138,7 +138,8 @@ namespace Web.Controllers
 
         private async Task<RegisterViewModel> GetRegisterModel(ApplicationUser user)
         {
-            var adress = await AdressManager.GetAdressUserIdAsync(user.Id) ?? new Adress { Sity = "Київ" };
+            await AdressManager.GetListAdressAsync();
+            var adress = user.Adress ?? new Adress { Sity = "Київ" };
             var result = new RegisterViewModel
             {
                 Id = user.Id,

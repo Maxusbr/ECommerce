@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -38,6 +39,10 @@ namespace Web.Models
 
         public IEnumerable<string> RolesNames { get; set;}
 
+        public string AdressId { get; set;}
+        [ForeignKey("AdressId")]
+        public Adress Adress { get; set;}
+
         public override string ToString()
         {
             return string.IsNullOrEmpty(Name) ? UserName: FIO;
@@ -72,8 +77,6 @@ namespace Web.Models
         public DbSet<ApplicationRole> IdentityRoles { get; set; }
 
         public DbSet<MarketEvents> MarketEvents { get; set; }
-
-        public DbSet<UserAdress> UserAdress { get; set; }
 
         public DbSet<Product> Products { get; set; }
 

@@ -180,8 +180,8 @@ namespace Web.Controllers
         public ActionResult AdressView(string userId)
         {
             var db = new ApplicationDbContext();
+            var useradress = db.Users.Find(userId);
             db.Adresses.ToList();
-            var useradress = db.UserAdress.FirstOrDefault(o => o.IdUser.Equals(userId));
             return PartialView(useradress?.Adress ?? new Adress());
         }
 
@@ -195,6 +195,8 @@ namespace Web.Controllers
         {
             order.ShippingTypes = await OrderManager.GetShippingTypesListAsync();
             order.PaymentTypes = await OrderManager.GetPaymentTypesListAsync();
+            
+            await AdressManager.GetListAdressAsync();
             var shop = await AdressManager.GetShop();
             if (shop != null)
             {
@@ -204,9 +206,9 @@ namespace Web.Controllers
             order.Products = await ProductManager.GetProducsAsync();
             if (!string.IsNullOrEmpty(userid))
             {
+                var user = await UserManager.FindByIdAsync(userid);
                 order.UserId = userid;
-                var useradress = await AdressManager.GetAdressUserIdAsync(userid);
-                order.AdresShipping = useradress ?? new Adress();
+                order.AdresShipping = user.Adress ?? new Adress();
             }
             else
                 await InitUsers(order);
