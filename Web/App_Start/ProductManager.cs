@@ -101,5 +101,9 @@ namespace Web
         {
             return await _db.WeightCategories.ToListAsync();
         }
+        public async Task<WeightCategory> GetWeightCategoriesByIdAsync(int id)
+        {
+            return await _db.WeightCategories.FindAsync(id);
+        }
     }
 }

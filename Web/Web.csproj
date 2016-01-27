@@ -201,6 +201,7 @@
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ChartsModel.cs" />
+    <Compile Include="Models\CreateOrderViewModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\LogisticViewModel.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
@@ -208,6 +209,7 @@
     <Compile Include="Models\MarketEvents.cs" />
     <Compile Include="Models\Order.cs" />
     <Compile Include="Models\OrderDetail.cs" />
+    <Compile Include="Models\OrderShippingViewModel.cs" />
     <Compile Include="Models\Product.cs" />
     <Compile Include="Models\PaymentType.cs" />
     <Compile Include="Models\ProductViewModel.cs" />
@@ -216,6 +218,7 @@
     <Compile Include="Models\Shop.cs" />
     <Compile Include="Models\ShippingType.cs" />
     <Compile Include="Models\TariffCoefficient.cs" />
+    <Compile Include="Models\TariffModel.cs" />
     <Compile Include="Models\UserShop.cs" />
     <Compile Include="Models\WeightCategory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

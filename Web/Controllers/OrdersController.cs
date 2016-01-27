@@ -306,13 +306,13 @@ namespace Web.Controllers
         public async Task<ActionResult> CreateReceipt(string id, string returnUrl)
         {
             var order = await OrderManager.FindAsync(id);
-            var shippingCost = await GetShippingCost(order);
+            var tariffModel = await GetTariffModel(order);
             var rec = new Receipt
             {
                 Date = DateTime.Now,
                 OrderId = order.Id,
                 Order = order,
-                ShippingCost = shippingCost
+                ShippingCost = tariffModel.Tariff
             };
             await CalculateProductCount(order.Id);
             if (!ModelState.IsValid)
@@ -344,7 +344,8 @@ namespace Web.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             var order = rec.Order;
-            var shippingCost = await GetShippingCost(order);
+            var tariffModel = await GetTariffModel(order);
+            var shippingCost = tariffModel.Tariff;
 
             var model = await InitOrder(order, order.UserId);
             model.Id = rec.Id.ToString("D6");
@@ -357,13 +358,17 @@ namespace Web.Controllers
             return View(model);
         }
 
-        private async Task<double> GetShippingCost(Order order)
+        private async Task<TariffModel> GetTariffModel(Order order)
         {
+            var result = new TariffModel {OrderId = order.Id};
             var products = await ProductManager.GetProducsInOrderAsync(order.Id);
-            if (!products.Any()) return 0;
+            if (!products.Any()) return result;
             var wCat = products.Max(o => o.WCategoryId);
-            var kurb = order.Distance < 19 ? 1 : order.Distance < 40 ? 2 : 3;
-            return await OrderManager.GetTariff(wCat, kurb);
+            var wCategory = await ProductManager.GetWeightCategoriesByIdAsync(wCat);
+            result.WCategory = wCategory?.Name;
+            result.UrbanCategory = order.Distance < 19 ? 1 : order.Distance < 40 ? 2 : 3;
+            result.Tariff = await OrderManager.GetTariff(wCat, result.UrbanCategory);
+            return result;
         }
 
         public async Task<ActionResult> ReceiptsView()
