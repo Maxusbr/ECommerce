@@ -11,27 +11,36 @@
         border: 1px solid black;
         margin: 0;
         padding: 0;
-        background-color:#ccc;
-        overflow:hidden;
+        background-color: #ccc;
+        overflow: hidden;
     }
-
 </style>
 <h2>Логістика</h2>
-<hr/>
-@using (Html.BeginForm("Logistic", "Orders", FormMethod.Post, new { role = "form" }))
+<hr />
+@using (Html.BeginForm())
 {
-    <div class="">
-        <div class="col-md-4" >
-            <div id="map"></div>
+    <div class="form-horizontal">
+        <div class="form-group">
+            @Html.LabelFor(model => model.ShopAdress, htmlAttributes: new {@class = "control-label col-md-2"})
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.ShopAdress, new {htmlAttributes = new {@class = "form-control", @readonly = "readonly"}})
+            </div>
         </div>
-        <div class="form-horizontal col-md-8">
-            <div class="form-group">
-                @Html.HiddenFor(model => model.ShopAdress)
+        <div class="form-group">
+            <div class="form-group col-md-4">
+                <div id="map"></div>
+            </div>
+            <div class="form-group col-md-8">
+                <div class="form-group ">
+                    
 
-                <div class="col-md-8">
+                    <div class="">
+                    </div>
                 </div>
             </div>
         </div>
+        
+
     </div>
 }
 
