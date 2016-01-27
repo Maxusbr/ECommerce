@@ -387,5 +387,13 @@ namespace Web.Controllers
             }
             return View(result);
         }
+
+        [HttpGet]
+        public async Task<ActionResult> Logistic()
+        {
+            var shop = await AdressManager.GetShop();
+            var model = new LogisticViewModel {ShopAdress = shop.Adress.FullAdress };
+            return View(model);
+        }
     }
 }

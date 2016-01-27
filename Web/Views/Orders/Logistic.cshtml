@@ -1,0 +1,68 @@
+﻿@model  Web.Models.LogisticViewModel
+
+@{
+    ViewBag.Title = "Логістика";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style type="text/css">
+    #map {
+        width: 350px;
+        height: 350px;
+        border: 1px solid black;
+        margin: 0;
+        padding: 0;
+        background-color:#ccc;
+        overflow:hidden;
+    }
+
+</style>
+<h2>Логістика</h2>
+<hr/>
+@using (Html.BeginForm("Logistic", "Orders", FormMethod.Post, new { role = "form" }))
+{
+    <div class="">
+        <div class="col-md-4" >
+            <div id="map"></div>
+        </div>
+        <div class="form-horizontal col-md-8">
+            <div class="form-group">
+                @Html.HiddenFor(model => model.ShopAdress)
+
+                <div class="col-md-8">
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+@section scripts
+{
+    <script src="//api-maps.yandex.ru/2.1/?lang=uk_UA" type="text/javascript"></script>
+    <script>
+        ymaps.ready(init);
+        function init() {
+            var shop, shopcoord, shopPoint, myMap;
+
+            function createMap() {
+                myMap = new ymaps.Map('map', {
+                    center: shopcoord,
+                    zoom: 15,
+                    type: 'yandex#map',
+                    controls: []
+                }, { searchControlResults: 1 });
+                myMap.geoObjects.add(shopPoint);
+            }
+
+            ymaps.geocode($("#ShopAdress")[0].value, { results: 1 }).then(function (res) {
+                shop = res.geoObjects.get(0);
+                shopcoord = shop.geometry.getCoordinates();
+                shopPoint = new ymaps.Placemark(shopcoord, { iconContent: 'Магазин' }, { preset: 'islands#redStretchyIcon' });
+                createMap();
+            });
+
+
+
+        }
+    </script>
+}

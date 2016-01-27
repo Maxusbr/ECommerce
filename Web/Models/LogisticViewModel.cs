@@ -8,6 +8,7 @@ namespace Web.Models
 {
     public class LogisticViewModel
     {
+        public int Id { get; set; }
         [Display(Name = "Трансакційні витрати теорія")]
         public double Amount { get; set; }
         [Display(Name = "Адреса магазину")]

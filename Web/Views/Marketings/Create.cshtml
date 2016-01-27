@@ -1,7 +1,7 @@
 ﻿@model Web.Models.MarketEvents
 
 @{
-    ViewBag.Title = "Маркетинговое мероприятие";
+    ViewBag.Title = "Маркетинговий захід";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -12,7 +12,7 @@
     @Html.AntiForgeryToken()
 
     <div class="form-horizontal">
-        <h4>маркетинговое мероприятие</h4>
+        <h4>маркетинговий захід</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="form-group">
