@@ -58,6 +58,9 @@
 
     @section Scripts{
         <script>
+            Number.prototype.round = function (places) {
+                return +(Math.round(this + "e+" + places) + "e-" + places);
+            }
             function calculate(parameters) {
 
                 var q = 0.06,
@@ -74,10 +77,10 @@
                         lr2 = Math.pow(lr, 2),
                         rr = q2 * n2 / 16 / lr2;
 
-                    $('#Le').val(le);
-                    $('#Re').val(re);
-                    $('#Lr').val(lr);
-                    $('#Rr').val(rr);
+                    $('#Le').val(le.round(4));
+                    $('#Re').val(re.round(4));
+                    $('#Lr').val(lr.round(4));
+                    $('#Rr').val(rr.round(4));
                 }
             }
 

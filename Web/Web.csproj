@@ -202,6 +202,7 @@
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ChartsModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\LogisticViewModel.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Adress.cs" />
     <Compile Include="Models\MarketEvents.cs" />

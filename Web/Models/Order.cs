@@ -6,6 +6,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNet.Identity;
 
 namespace Web.Models
 {
@@ -56,6 +57,8 @@ namespace Web.Models
         public PaymentType PaymentType { get; set; }
 
         public double Distance { get; set; }
+
+        public bool ClosedOrder { get; set; }
     }
 
     public class CreateOrderViewModel
@@ -119,5 +122,32 @@ namespace Web.Models
         };
         [Display(Name = "Вартість доставки")]
         public double ShippingCost { get; set; }
+
+        public int NumberOrder { get; set; }
+    }
+
+    public class OrderShippingViewModel
+    {
+        public OrderShippingViewModel() { }
+
+        public OrderShippingViewModel(Order order)
+        {
+            Id = order.Id;
+            UserId = order.UserId;
+            AdresShipping = order.AdresShipping.FullAdress;
+            Distance = order.Distance;
+
+        }
+
+        [Display(Name = "ID")]
+        public string Id { get; set; }
+        public string UserId { get; set; }
+        public string UserPhone { get; set; }
+
+
+        [Display(Name = "Адреса доставки")]
+        public string AdresShipping { get; set; }
+        [Display(Name = "Відстань доставки")]
+        public double Distance { get; set; }
     }
 }
