@@ -1,0 +1,87 @@
+﻿
+@{
+    ViewBag.Title = "Реклама";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<div class="form-horizontal">
+    <h4>рекламные затраты</h4>
+    <hr />
+
+    <div class="form-group">
+        <label class="control-label col-md-4">Количество потенциальных покупателей</label>
+        <div class="col-md-8">
+            <input class="form-control text-box single-line editable" id="Count" type="number" value="1000">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-md-4">Затраты на вхождение в рынок</label>
+        <div class="col-md-8">
+            <input class="form-control text-box single-line editable" id="Price" type="number" value="20000">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-md-4">Практические рекламные затраты</label>
+        <div class="col-md-8">
+            <input class="form-control text-box single-line editable" id="Practic" type="number" value="25">
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="control-label col-md-4"></label>
+        <div class="col-md-8">
+            <input class="form-control text-box single-line" readonly="readonly" id="Le" type="text" value="">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-md-4">Рекламные затраты в равновесии теория</label>
+        <div class="col-md-8">
+            <input class="form-control text-box single-line" readonly="readonly" id="Re" type="text" value="">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-md-4"></label>
+        <div class="col-md-8">
+            <input class="form-control text-box single-line" readonly="readonly" id="Lr" type="text" value="">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-md-4">Оптимальный уровень рекламных затрат</label>
+        <div class="col-md-8">
+            <input class="form-control text-box single-line" readonly="readonly" id="Rr" type="text" value="">
+        </div>
+    </div>
+</div>
+
+
+    @section Scripts{
+        <script>
+            function calculate(parameters) {
+
+                var q = 0.06,
+                    n = $('#Count')[0].value,
+                    t = $('#Practic')[0].value,
+                    c = $('#Price')[0].value;
+                if (n > 0 && t > 0 && c > 0) {
+                    var
+                        q2 = Math.pow(q, 2), n2 = Math.pow(n, 2),
+                        le = 1 / 4 * Math.sqrt((16 * n * t - q2 * n2) / c),
+                        le2 = Math.pow(le, 2),
+                        re = q2 * n2 / (16 * le2),
+                        lr = 1 / 4 * Math.sqrt((8 * n * t - q2 * n2) / c),
+                        lr2 = Math.pow(lr, 2),
+                        rr = q2 * n2 / 16 / lr2;
+
+                    $('#Le').val(le);
+                    $('#Re').val(re);
+                    $('#Lr').val(lr);
+                    $('#Rr').val(rr);
+                }
+            }
+
+            calculate();
+            $('.editable').change(calculate);
+        </script>
+    }

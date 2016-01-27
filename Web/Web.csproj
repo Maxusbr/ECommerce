@@ -190,6 +190,7 @@
     <Compile Include="Controllers\ApplicationUsersController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\MarketingsController.cs" />
     <Compile Include="Controllers\OrdersController.cs" />
     <Compile Include="Controllers\PaymentTypesController.cs" />
     <Compile Include="Controllers\ProductsController.cs" />
@@ -413,6 +414,12 @@
     <Content Include="Views\Orders\AdressView.cshtml" />
     <Content Include="Views\Orders\ReceiptsView.cshtml" />
     <Content Include="Views\Orders\DetailReceipt.cshtml" />
+    <Content Include="Views\Marketings\Create.cshtml" />
+    <Content Include="Views\Marketings\Delete.cshtml" />
+    <Content Include="Views\Marketings\Details.cshtml" />
+    <Content Include="Views\Marketings\Edit.cshtml" />
+    <Content Include="Views\Marketings\Index.cshtml" />
+    <Content Include="Views\Marketings\AdvertisingView.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -144,7 +144,8 @@ namespace Web.Controllers
         }
         public async Task<ActionResult> SalesProducts()
         {
-            return View();
+            var data = await ProductManager.GetSalesProducsAsync();
+            return View(data);
         }
 
         public async Task<ActionResult> GraphView()

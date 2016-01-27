@@ -107,7 +107,7 @@ namespace Web
             await _db.ShippingTypes.ToListAsync();
             await _db.WeightCategories.ToListAsync();
             var orders = await _db.Orders.Where(o => o.UserId.Equals(id)).ToListAsync();
-            var result = orders.Join(detail, e => e.Id, e => e.IdOrder, (order, orderDetail) => new ProductViewModel
+            var result = orders.Join(detail, o => o.Id, d => d.IdOrder, (order, orderDetail) => new ProductViewModel
             {
                 Art = orderDetail.Product.Art,
                 Name = orderDetail.Product.Name,

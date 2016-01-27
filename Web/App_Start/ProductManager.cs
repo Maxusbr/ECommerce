@@ -43,7 +43,8 @@ namespace Web
         public async Task<List<ProductInOrderViewModel>> GetSalesProducsAsync()
         {
             await _db.Products.ToListAsync(); await _db.WeightCategories.ToListAsync();
-            var list =await _db.OrdersDetails.GroupBy(o => o.IdProduct).Select(g =>
+            var list =await _db.OrdersDetails.Join(_db.Receipts, d => d.IdOrder, r => r.OrderId,
+                        (d, r) => new {Product = d.Product, Count = d.Count, Price = d.Price}).GroupBy(arg => arg.Product.Id).Select(g =>
             new ProductInOrderViewModel
             {
                 Id = g.Key,

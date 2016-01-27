@@ -36,15 +36,22 @@
                                 <ul class="dropdown-menu">
                                     <li>@Html.ActionLink("Замовлення", "Index", "Orders")</li>
                                     <li>@Html.ActionLink("Квитанції", "ReceiptsView", "Orders")</li>
+                                    <li>@Html.ActionLink("Звіт о продажах", "SalesProducts", "Products")</li>
                                 </ul>
                             </li>
-                            <li>@Html.ActionLink("Маркетинг", "Index", "Products")</li>
+                            <li>
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Маркетинг<b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    <li>@Html.ActionLink("Створити мероприятіє", "Create", "Marketings")</li>
+                                    <li>@Html.ActionLink("Список мероприятій", "Index", "Marketings")</li>
+                                    <li>@Html.ActionLink("Реклама", "AdvertisingView", "Marketings")</li>
+                                </ul>
+                            </li>
                             <li>@Html.ActionLink("Логістика", "Index", "Products")</li>
                             <li>
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Аналіз <b class="caret"></b></a>
                                 <ul class="dropdown-menu">
                                     <li>@Html.ActionLink("Клієнти", "Index", "ApplicationUsers")</li>
-                                    <li>@Html.ActionLink("Продаж товарів", "SalesProducts", "Products")</li>
                                     <li>@Html.ActionLink("Графіки", "GraphView", "Products")</li>
                                 </ul>
                             </li>
