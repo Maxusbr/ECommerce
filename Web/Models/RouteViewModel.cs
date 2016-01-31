@@ -40,8 +40,11 @@ namespace Web.Models
         [Display(Name = "Число адрес на маршруті")]
         public int CountOrders => Orders != null && Orders.Any() ? Orders.Count() : 0;
         [Display(Name = "Сума")]        
-        public double TotalTariff => Orders != null && Orders.Any() ? Orders.Sum(o => o.ShippingCost) : 0;
+        public double SummOrderTariff { get; set; }
+        public double OrderDistance { get; set; }
         [Display(Name = "Трансакційні витрати на маршруті")]
         public double RouteTariff { get; set; }
+
+
     }
 }

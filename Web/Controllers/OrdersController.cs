@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Migrations;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -11,6 +12,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Web.Models;
+using WebGrease.Css.Extensions;
 
 namespace Web.Controllers
 {
@@ -249,7 +251,7 @@ namespace Web.Controllers
             //order.NewUsers = new RegisterViewModel { Adress = new Adress() };
         }
 
-        
+
         private async Task<Order> GetOrder(Order order, CreateOrderViewModel model)
         {
             order.User = await UserManager.FindByIdAsync(model.UserId);
@@ -418,13 +420,20 @@ namespace Web.Controllers
             var model = new LogisticViewModel { ShopAdress = shop.Adress.FullAdress, Routes = new List<RouteViewModel>() };
             var routeId = 1;
             if (receipts.Any())
-                foreach (var tariffcoeff in await OrderManager.GetTariffCoefficients()) 
+                foreach (var tariffcoeff in await OrderManager.GetTariffCoefficients())
                 {
                     foreach (var shipping in await OrderManager.GetShippingTypesListAsync())
                     {
                         var recs = receipts.Where(o => o.ShippingType == shipping && o.TariffModel.TariffKoefficient == tariffcoeff);
-                        if(recs.Any())
-                            model.Routes.Add(new RouteViewModel {Id = routeId++, Orders = recs, ShippingType = shipping.Type});
+                        if (recs.Any())
+                            model.Routes.Add(new RouteViewModel
+                            {
+                                Id = routeId++,
+                                Orders = recs,
+                                ShippingType = shipping.Type,
+                                SummOrderTariff = recs.Sum(o => o.ShippingCost),
+                                OrderDistance = 2 * recs.Sum(o => o.Distance)
+                            });
                     }
                 }
             model.CountRoute = model.Routes.Count;
@@ -437,10 +446,12 @@ namespace Web.Controllers
             return View(model);
         }
 
-        public async Task<JsonResult> Calqulate(LogisticViewModel model)
+        public JsonResult Calqulate(LogisticViewModel model)
         {
-            var res = new List<double> {50, 80};
-            return new JsonResult {Data = res.ToArray() };
+            var res = (from route in model.Routes
+                       select Math.Round(route.TotalDistance * route.SummOrderTariff / route.OrderDistance, 2)).ToArray();
+
+            return new JsonResult { Data = res.Select(o => o.ToString(CultureInfo.CurrentCulture)) };
         }
     }
 }

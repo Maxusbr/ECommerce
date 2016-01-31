@@ -43,21 +43,41 @@ namespace Web
         public async Task<List<ProductInOrderViewModel>> GetSalesProducsAsync()
         {
             await _db.Products.ToListAsync(); await _db.WeightCategories.ToListAsync();
-            var list =await _db.OrdersDetails.Join(_db.Receipts, d => d.IdOrder, r => r.OrderId,
-                        (d, r) => new {Product = d.Product, Count = d.Count, Price = d.Price}).GroupBy(arg => arg.Product.Id).Select(g =>
-            new ProductInOrderViewModel
-            {
-                Id = g.Key,
-                Price = g.Average(p => p.Price),
-                Count = g.Sum(p => p.Count)
-            }).ToListAsync();
+            var list = await _db.OrdersDetails.Join(_db.Receipts, d => d.IdOrder, r => r.OrderId,
+                        (d, r) => new { Product = d.Product, Count = d.Count, Price = d.Price }).GroupBy(arg => arg.Product.Id).Select(g =>
+              new ProductInOrderViewModel
+              {
+                  Id = g.Key,
+                  Price = g.Average(p => p.Price),
+                  Count = g.Sum(p => p.Count)
+              }).ToListAsync();
             foreach (var el in list)
             {
                 var product = await FindAsync(el.Id);
-                if(product == null) continue;
+                if (product == null) continue;
                 el.Art = product.Art;
                 el.MaxCount = product.Count;
                 el.Name = product.Name;
+            }
+            return list.OrderBy(o => o.Name).ToList();
+        }
+        public async Task<List<ProductInOrderViewModel>> GetSalesProducsSummPriceAsync()
+        {
+            await _db.Products.ToListAsync(); await _db.WeightCategories.ToListAsync();
+            var list = await _db.OrdersDetails.Join(_db.Receipts, d => d.IdOrder, r => r.OrderId,
+                        (d, r) => new { Product = d.Product, Count = d.Count, Price = d.Price }).GroupBy(arg => arg.Product.Id).Select(g =>
+              new ProductInOrderViewModel
+              {
+                  Id = g.Key,
+                  Price = g.Average(p => p.Price),
+                  Count = g.Sum(p => p.Count)
+              }).ToListAsync();
+            foreach (var el in list)
+            {
+                var product = await FindAsync(el.Id);
+                if (product == null) continue;
+                el.Name = product.Name;
+                el.Price = el.Count * el.Price;
             }
             return list.OrderBy(o => o.Name).ToList();
         }
@@ -68,7 +88,7 @@ namespace Web
             if (result.Any(o => o.Product == null)) await _db.Products.ToListAsync();
             await _db.WeightCategories.ToListAsync();
             return result.Select(el => new ProductInOrderViewModel(el.Product)
-                { Count = el.Count, Price = el.Price }).OrderBy(o => o.Name).ToList();
+            { Count = el.Count, Price = el.Price }).OrderBy(o => o.Name).ToList();
         }
 
         public async Task<Product> FindAsync(string id)

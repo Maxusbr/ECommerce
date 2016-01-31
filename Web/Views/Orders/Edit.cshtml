@@ -146,7 +146,7 @@
 
                 myMap.geoObjects.add(multiRoute);
                 ymaps.route([shopcoord, coords]).then(function(router) {
-                    var distance = 2 * Math.round(router.getLength() / 1000);
+                    var distance = Math.round(router.getLength() / 1000);
                     $('#Distance').val(distance);
                 });
             }

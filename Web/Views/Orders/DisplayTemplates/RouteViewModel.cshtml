@@ -7,20 +7,20 @@
             @Html.HiddenFor(modelItem => modelItem.OrdersAdresses)
         </span>
     </td>
-<td>
-    <span class="center-block">
+    <td>
+        <span class="center-block">
         @Html.DisplayFor(modelItem => modelItem.OrdersIds)
         @Html.HiddenFor(modelItem => modelItem.OrdersIds)
     </span>
     </td>
-<td>
-    <span class="center-block">
+    <td>
+        <span class="center-block">
         @Html.DisplayFor(modelItem => modelItem.ShippingType)
         @Html.HiddenFor(modelItem => modelItem.ShippingType)
     </span>
     </td>
-<td>
-    <span class="center-block">
+    <td>
+        <span class="center-block">
         @Html.HiddenFor(modelItem => modelItem.TotalDistance)
         @*@Html.EditorFor(modelItem => modelItem.TotalDistance, new { htmlAttributes =
             new { @class = "form-control", @readonly = "readonly" } })*@
@@ -30,32 +30,36 @@
         }
     </span>
     </td>
-<td>
-    <span class="center-block">
+    <td>
+        <span class="center-block">
         @Html.DisplayFor(modelItem => modelItem.CountOrders)
         @Html.HiddenFor(modelItem => modelItem.CountOrders)
     </span>
     </td>
-<td>
-    <span class="center-block">
+    <td>
+        <span class="center-block">
         @{
             var rt = @ViewData.TemplateInfo.HtmlFieldPrefix.Replace('[', '_').Replace(']', '_') + "_RouteTariff";
             <span class="@rt"></span>
         }
         @Html.HiddenFor(modelItem => modelItem.RouteTariff)
+        @Html.HiddenFor(modelItem => modelItem.OrderDistance)
+        @Html.HiddenFor(modelItem => modelItem.SummOrderTariff)
     </span>
-</td>
-@*<td><span class=""></span></td>*@
+    </td>
+@{ var det = $"Detail_{@Model.Id}"; }
+    <td><span class="glyphicon glyphicon-chevron-down" onclick="ShowDetail(@Model.Id)"></span></td>
 </tr>
-<tr>
+
+<tr id="@det" style="display: none">
     <td />
-    <td colspan="5">
+    <td colspan="6">
         <div>
             @{
                 Html.RenderPartial("ReceiptsList", Model.Orders, new ViewDataDictionary
-                {
-                    TemplateInfo = new TemplateInfo { HtmlFieldPrefix = ViewData.TemplateInfo.HtmlFieldPrefix + ".Orders" }
-                });
+            {
+                TemplateInfo = new TemplateInfo { HtmlFieldPrefix = ViewData.TemplateInfo.HtmlFieldPrefix + ".Orders" }
+            });
             }
         </div>
     </td>

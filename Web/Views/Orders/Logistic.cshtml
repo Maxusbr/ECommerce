@@ -20,6 +20,16 @@
     .table > tbody > tr > th {
         vertical-align:middle
     }
+    .glyphicon {
+        cursor: pointer
+    }
+    .rotate{  
+    -webkit-transform: rotate(-180deg);
+	-moz-transform: rotate(-180deg);
+	-ms-transform: rotate(-180deg);
+	-o-transform: rotate(-180deg);
+	transform: rotate(-180deg);
+}
 </style>
 <h2>Логістика</h2>
 <hr />
@@ -134,8 +144,8 @@
                     }, {
                         wayPointStartVisible: false,
                         wayPointFinishVisible: false,
-                        routeActiveStrokeColor: colors[i],
-                        wayPointIconColor: colors[i],
+                        routeActiveStrokeColor: colors[i > 7 ? i - 8: i],
+                        wayPointIconColor: colors[i > 7 ? i - 8 : i],
                         boundsAutoApply: true
                     });
                     myMap.geoObjects.add(multiRoute);
@@ -145,9 +155,14 @@
             
         
         };
-        
-        $(document).ready(function () {
-            
+
+        function ShowDetail(id) {
+            $('#Detail_' + id).toggle('fast');
+        }
+        $(function () {
+            $(".glyphicon-chevron-down").click(function () {
+                $(this).toggleClass("rotate");
+            });
         });
         ymaps.ready(init);
     </script>
