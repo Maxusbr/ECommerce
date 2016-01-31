@@ -215,6 +215,8 @@
     <Compile Include="Models\ProductViewModel.cs" />
     <Compile Include="Models\ProfileClientViewModel.cs" />
     <Compile Include="Models\Receipt.cs" />
+    <Compile Include="Models\ReceiptViewModel.cs" />
+    <Compile Include="Models\RouteViewModel.cs" />
     <Compile Include="Models\Shop.cs" />
     <Compile Include="Models\ShippingType.cs" />
     <Compile Include="Models\TariffCoefficient.cs" />
@@ -335,6 +337,7 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Scripts\yandex.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -425,6 +428,10 @@
     <Content Include="Views\Marketings\Index.cshtml" />
     <Content Include="Views\Marketings\AdvertisingView.cshtml" />
     <Content Include="Views\Orders\Logistic.cshtml" />
+    <Content Include="Views\Orders\DisplayTemplates\ReceiptViewModel.cshtml" />
+    <Content Include="Views\Orders\ReceiptsList.cshtml" />
+    <Content Include="Views\Orders\RoutesList.cshtml" />
+    <Content Include="Views\Orders\DisplayTemplates\RouteViewModel.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

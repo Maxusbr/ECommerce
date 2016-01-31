@@ -20,6 +20,7 @@
         </th>
         <th>Сума</th>
         <th>Разом</th>
+        <th>Статус</th>
         <th></th>
     </tr>
 
@@ -39,7 +40,10 @@
                 @item.Products.Aggregate(0.0, (current, el) => (current + el.Count*el.Price))
             </td>
             <td>
-                @item.Products.Aggregate(item.ShippingCost, (current, el) => (current + el.Count * el.Price))
+                @item.Products.Aggregate(item.ShippingCost, (current, el) => (current + el.Count*el.Price))
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ReceiptStatus)
             </td>
             <td>
                 @Html.ActionLink("Детальніше", "DetailReceipt", new { id = item.Id })

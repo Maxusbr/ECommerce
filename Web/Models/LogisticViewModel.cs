@@ -13,8 +13,8 @@ namespace Web.Models
         public double Amount { get; set; }
         [Display(Name = "Адреса магазину")]
         public string ShopAdress { get; set; }
-        public List<ShippingWay> ShippingWays { get; set; }
-        public List<CreateOrderViewModel> Orders { get; set; }
+        public List<RouteViewModel> Routes { get; set; }
+        public int CountRoute { get; set; }
     }
 
     public class ShippingWay
@@ -29,6 +29,6 @@ namespace Web.Models
         public double Distance { get; set; }
         [Display(Name = "Трансакційні витрати на маршруті")]
         public double Amount { get; set; }
-        public List<CreateOrderViewModel> Orders { get; set; }
+        public List<ReceiptViewModel> Receipts { get; set; }
     }
 }

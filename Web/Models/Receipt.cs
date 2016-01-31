@@ -25,5 +25,14 @@ namespace Web.Models
         public Order Order { get; set; }
 
         public double ShippingCost { get; set; }
+
+        public ReceiptStatus Status { get; set; }
+    }
+
+    public enum ReceiptStatus
+    {
+        Created = 0,
+        Shipping = 1,
+        Closed = 2
     }
 }

@@ -30,7 +30,7 @@
                         <li>@Html.ActionLink("Товари", "Index", "Products")</li>
                         if (User.IsInRole("Менеджер"))
                         {
-                            <li>@Html.ActionLink("Клієнти", "Index", "ApplicationUsers")</li>
+                            @*<li>@Html.ActionLink("Клієнти", "Index", "ApplicationUsers")</li>*@
                             <li>
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Документи <b class="caret"></b></a>
                                 <ul class="dropdown-menu">

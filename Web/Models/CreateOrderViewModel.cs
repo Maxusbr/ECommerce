@@ -67,7 +67,6 @@ namespace Web.Models
         };
         [Display(Name = "Вартість доставки")]
         public double ShippingCost { get; set; }
-
-        public int NumberOrder { get; set; }
+        public string ReceiptStatus { get; set; }
     }
 }

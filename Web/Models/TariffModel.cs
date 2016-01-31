@@ -15,6 +15,8 @@ namespace Web.Models
         [Display(Name = "Вагова категорія")]
         public string WCategory { get; set; }
         [Display(Name = "Тарифний коефіціент")]
-        public double Tariff { get; set; }
+        public double Tariff => TariffKoefficient?.ShippingCost * TariffKoefficient?.Tariff ?? 0;
+
+        public TariffCoefficient TariffKoefficient { get; set; }
     }
 }

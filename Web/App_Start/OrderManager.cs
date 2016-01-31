@@ -151,11 +151,11 @@ namespace Web
             _db.Dispose();
         }
 
-        public async Task<double> GetTariff(int wCat, int kurb)
+        public async Task<TariffCoefficient> GetTariff(int wCat, int kurb)
         {
             var tariff = await
                 _db.TariffCoefficients.FirstOrDefaultAsync(o => o.WeightCategoryId == wCat && o.UrbanCategoryId == kurb);
-            return tariff?.ShippingCost * tariff?.Tariff ?? 0;
+            return tariff;
         }
 
         public async Task<Receipt> GetReceiptByIdAsync(int id)
@@ -166,8 +166,15 @@ namespace Web
 
         public async Task<IEnumerable<Receipt>> GetReceiptsListAsync()
         {
+            await _db.Users.ToListAsync();
             await _db.Orders.ToListAsync();
+            await _db.ShippingTypes.ToListAsync();
             return await _db.Receipts.ToListAsync();
+        }
+
+        public async Task<List<TariffCoefficient>> GetTariffCoefficients()
+        {
+            return await _db.TariffCoefficients.ToListAsync();
         }
     }
 }

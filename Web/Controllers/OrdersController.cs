@@ -138,8 +138,9 @@ namespace Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Менеджер")]
-        public async Task<ActionResult> Edit(CreateOrderViewModel model)
+        public async Task<ActionResult> Edit(CreateOrderViewModel model, Adress adress)
         {
+            if (model.AdresShipping == null) model.AdresShipping = adress;
             if (ModelState.IsValid)
             {
                 await ModifyOrder(model);
@@ -195,7 +196,7 @@ namespace Web.Controllers
         {
             order.ShippingTypes = await OrderManager.GetShippingTypesListAsync();
             order.PaymentTypes = await OrderManager.GetPaymentTypesListAsync();
-            
+
             await AdressManager.GetListAdressAsync();
             var shop = await AdressManager.GetShop();
             if (shop != null)
@@ -213,6 +214,28 @@ namespace Web.Controllers
             else
                 await InitUsers(order);
         }
+        private async Task<CreateOrderViewModel> InitOrder(Order model, string userid)
+        {
+            var order = new CreateOrderViewModel(model)
+            {
+                ShippingTypes = await OrderManager.GetShippingTypesListAsync(),
+                PaymentTypes = await OrderManager.GetPaymentTypesListAsync(),
+                Products = await ProductManager.GetProducsInOrderAsync(model.Id),
+                UserId = userid
+            };
+            var shop = await AdressManager.GetShop();
+            if (shop != null)
+            {
+                order.ShopId = shop.Id;
+                order.ShopAdress = shop.Adress.FullAdress;
+            }
+            var useradress = await AdressManager.GetAdress(model.AdressId);
+            if (useradress != null)
+            {
+                order.AdresShipping = useradress;
+            }
+            return order;
+        }
 
         private async Task InitUsers(CreateOrderViewModel order)
         {
@@ -226,22 +249,7 @@ namespace Web.Controllers
             //order.NewUsers = new RegisterViewModel { Adress = new Adress() };
         }
 
-        private async Task<CreateOrderViewModel> InitOrder(Order model, string userid)
-        {
-            var order = new CreateOrderViewModel(model)
-            {
-                ShippingTypes = await OrderManager.GetShippingTypesListAsync(),
-                PaymentTypes = await OrderManager.GetPaymentTypesListAsync(),
-                Products = await ProductManager.GetProducsInOrderAsync(model.Id),
-                UserId = userid
-            };
-            var useradress = await AdressManager.GetAdress(model.AdressId);
-            if (useradress != null)
-            {
-                order.AdresShipping = useradress;
-            }
-            return order;
-        }
+        
         private async Task<Order> GetOrder(Order order, CreateOrderViewModel model)
         {
             order.User = await UserManager.FindByIdAsync(model.UserId);
@@ -312,13 +320,14 @@ namespace Web.Controllers
                 Date = DateTime.Now,
                 OrderId = order.Id,
                 Order = order,
-                ShippingCost = tariffModel.Tariff
+                ShippingCost = tariffModel.Tariff,
+                Status = ReceiptStatus.Created
             };
             await CalculateProductCount(order.Id);
             if (!ModelState.IsValid)
                 return RedirectToAction("Edit", order.Id);
             await OrderManager.CreateReceipt(rec);
-            return RedirectToAction("DetailReceipt", new {id = rec.Id });
+            return RedirectToAction("DetailReceipt", new { id = rec.Id });
         }
 
         private async Task CalculateProductCount(string id)
@@ -326,7 +335,7 @@ namespace Web.Controllers
             foreach (var el in await ProductManager.GetProducsInOrderAsync(id))
             {
                 var product = await ProductManager.FindAsync(el.Id);
-                if(product.Count < el.Count)
+                if (product.Count < el.Count)
                 {
                     ModelState.AddModelError("", "Виберіть товари для замовлення");
                     return;
@@ -360,14 +369,14 @@ namespace Web.Controllers
 
         private async Task<TariffModel> GetTariffModel(Order order)
         {
-            var result = new TariffModel {OrderId = order.Id};
+            var result = new TariffModel { OrderId = order.Id };
             var products = await ProductManager.GetProducsInOrderAsync(order.Id);
             if (!products.Any()) return result;
             var wCat = products.Max(o => o.WCategoryId);
             var wCategory = await ProductManager.GetWeightCategoriesByIdAsync(wCat);
             result.WCategory = wCategory?.Name;
             result.UrbanCategory = order.Distance < 19 ? 1 : order.Distance < 40 ? 2 : 3;
-            result.Tariff = await OrderManager.GetTariff(wCat, result.UrbanCategory);
+            result.TariffKoefficient = await OrderManager.GetTariff(wCat, result.UrbanCategory);
             return result;
         }
 
@@ -378,9 +387,11 @@ namespace Web.Controllers
             {
                 var order = new CreateOrderViewModel(el.Order)
                 {
-                    Id = el.Id.ToString("D6"), ShippingCost = el.ShippingCost,
+                    Id = el.Id.ToString("D6"),
+                    ShippingCost = el.ShippingCost,
                     User = (await UserManager.FindByIdAsync(el.Order.UserId)).ToString(),
-                    Products = await ProductManager.GetProducsInOrderAsync(el.Order.Id)
+                    Products = await ProductManager.GetProducsInOrderAsync(el.Order.Id),
+                    ReceiptStatus = el.Status.ToString()
                 };
 
                 result.Add(order);
@@ -392,8 +403,44 @@ namespace Web.Controllers
         public async Task<ActionResult> Logistic()
         {
             var shop = await AdressManager.GetShop();
-            var model = new LogisticViewModel {ShopAdress = shop.Adress.FullAdress };
+            var basereceipts = (await OrderManager.GetReceiptsListAsync());
+
+            var receipts = new List<ReceiptViewModel>();
+            foreach (var rec in basereceipts.Where(o => o.Status == ReceiptStatus.Created))
+            {
+                receipts.Add(new ReceiptViewModel(rec)
+                {
+                    Products = await ProductManager.GetProducsInOrderAsync(rec.Order.Id),
+                    TariffModel = await GetTariffModel(rec.Order),
+                });
+            }
+
+            var model = new LogisticViewModel { ShopAdress = shop.Adress.FullAdress, Routes = new List<RouteViewModel>() };
+            var routeId = 1;
+            if (receipts.Any())
+                foreach (var tariffcoeff in await OrderManager.GetTariffCoefficients()) 
+                {
+                    foreach (var shipping in await OrderManager.GetShippingTypesListAsync())
+                    {
+                        var recs = receipts.Where(o => o.ShippingType == shipping && o.TariffModel.TariffKoefficient == tariffcoeff);
+                        if(recs.Any())
+                            model.Routes.Add(new RouteViewModel {Id = routeId++, Orders = recs, ShippingType = shipping.Type});
+                    }
+                }
+            model.CountRoute = model.Routes.Count;
             return View(model);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> Logistic(LogisticViewModel model)
+        {
+            return View(model);
+        }
+
+        public async Task<JsonResult> Calqulate(LogisticViewModel model)
+        {
+            var res = new List<double> {50, 80};
+            return new JsonResult {Data = res.ToArray() };
         }
     }
 }

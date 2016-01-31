@@ -1,0 +1,36 @@
+﻿@model Web.Models.ReceiptViewModel
+
+<tr>
+    <td>
+        <div class="center-block">@Html.DisplayFor(modelItem => modelItem.Id)
+            @Html.HiddenFor(modelItem => modelItem.Id)</div>
+    </td>
+    <td>
+        <div>@Html.DisplayFor(modelItem => modelItem.Adress)
+            @Html.HiddenFor(modelItem => modelItem.Adress)</div>
+    </td>
+    <td>
+        <div class="center-block">@Html.DisplayFor(modelItem => modelItem.PhoneNumber)
+            @Html.HiddenFor(modelItem => modelItem.PhoneNumber)</div>
+    </td>
+    <td>
+        <div class="center-block">@Html.DisplayFor(modelItem => modelItem.Distance)
+            @Html.HiddenFor(modelItem => modelItem.Distance)</div>
+    </td>
+    <td>
+        <div class="center-block">@Html.DisplayFor(modelItem => modelItem.TariffModel.UrbanCategory)
+            @Html.HiddenFor(modelItem => modelItem.TariffModel.UrbanCategory)</div>
+    </td>
+    <td>
+        <div class="center-block">@Html.DisplayFor(modelItem => modelItem.TariffModel.WCategory)
+            @Html.HiddenFor(modelItem => modelItem.TariffModel.WCategory)</div>
+    </td>
+    <td>
+        <div class="center-block">@Html.DisplayFor(modelItem => modelItem.TariffModel.TariffKoefficient.Tariff)
+            @Html.HiddenFor(modelItem => modelItem.TariffModel.TariffKoefficient.Tariff)</div>
+    </td>
+    <td>
+        <div class="center-block">@Html.DisplayFor(modelItem => modelItem.TariffModel.Tariff)
+            @Html.HiddenFor(modelItem => modelItem.TariffModel.Tariff)</div>
+    </td>
+</tr>

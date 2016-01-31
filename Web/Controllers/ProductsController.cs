@@ -73,6 +73,7 @@ namespace Web.Controllers
             {
                 //_db.Products.Add(product);
                 //await _db.SaveChangesAsync();
+                product.WCategoryId = product.Weight < 10 ? 1 : product.Weight < 100 ? 2 : 3;
                 await ProductManager.AddOrUpdate(product);
                 return RedirectToAction("Index");
             }

@@ -4,6 +4,7 @@
     ViewBag.Title = "Редагувати";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<script src="//api-maps.yandex.ru/2.1/?lang=uk_UA" type="text/javascript"></script>
 
 <h2>Редагувати</h2>
 
@@ -18,6 +19,8 @@
         @Html.HiddenFor(model => model.Id)
         @Html.HiddenFor(model => model.ShopId)
         @Html.HiddenFor(model => model.UserId)
+        @Html.HiddenFor(model => model.ShopAdress)
+        @Html.HiddenFor(model => model.Distance)
         <div class="form-group">
             @Html.LabelFor(model => model.Date, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
@@ -25,27 +28,34 @@
                 @Html.ValidationMessageFor(model => model.Date, "", new { @class = "text-danger" })
             </div>
         </div>
-        @Html.ValidationMessageFor(model => model.AdresShipping, "", new { @class = "text-danger" })
+        @*@Html.ValidationMessageFor(model => model.AdresShipping, "", new { @class = "text-danger" })
         <div id="createAdress" style="display: none;">
             @Html.Partial("Partials/_CreateAdress", Model.AdresShipping, new ViewDataDictionary { TemplateInfo = new TemplateInfo { HtmlFieldPrefix = "AdresShipping" } })
-            @*<input type="button" id="hideMap" value="Сховати" class="hideMap btn btn-primary" />*@
+        </div>*@
+
+        <div id="createAdress" style="display: none;">
+            <div id="AdressAct"></div>
+            <input type="button" id="hideMap" value="Сховати" class="addAdress btn btn-default" />
         </div>
+
         <div id="textAdress">
             <div class="form-group">
                 @Html.LabelFor(model => model.AdresShipping, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
                     @if (string.IsNullOrEmpty(Model.AdresShipping?.FullAdress))
                     {
-                        @: Нет <input type="button" id="showMap" value="Додадти" class="addAdress btn btn-default" />
+                        <span id="FullAdress">Нет</span>
+                        <input type="button" id="showMap" value="Додадти" class="addAdress btn btn-default" />
                     }
                     else
                     {
-                        @Model.AdresShipping
+                        <span id="FullAdress">@Model.AdresShipping.FullAdress</span>
                         <input type="button" id="showMap" value="Змінити" class="addAdress btn btn-default" />
                     }
                 </div>
             </div>
         </div>
+
         <div class="form-group">
             @Html.LabelFor(model => model.ShippingTypeId, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
@@ -77,3 +87,183 @@
 <div>
     @Html.ActionLink("Назад", "Index")
 </div>
+
+@section Scripts{
+    <script>
+        ymaps.ready(init);
+        $(document).ready(function() {
+            //$('.adressSity').val("Київ");
+            getAdress();
+        });
+
+        function getStringAdress() {
+            var res = $(".adressSity")[0].value;
+            if ($(".adressStreet")[0].value) res += ", " + $(".adressStreet")[0].value;
+            if ($(".adressHouse")[0].value) res += ", " + $(".adressHouse")[0].value;
+            return res;
+        }
+
+        function changeFullAdress() {
+            var adress = getStringAdress();
+            $("#FullAdress")[0].innerHTML = adress === "" ? "Нет" : adress;
+            return adress;
+        }
+
+        function getAdress() {
+            $.post("/Orders/AdressView", {
+                    userId: $("#UserId").val()
+                },
+                function(data) {
+                    $("#AdressAct").html(data);
+                    $(".adressInput").change(changeFullAdress);
+                    if ($("#FullAdress") === undefined) return;
+                    var adress = changeFullAdress();
+                    $("#showMap").attr('value', adress === "" ? 'Додати' : 'Змінити');
+
+                }
+            );
+        };
+
+        function init() {
+            var myMap, firstGeoObject, shop, shopcoord,
+                shopPoint, multiRoute;
+
+            function correctAdress() {
+                var city = firstGeoObject.properties.get('metaDataProperty.GeocoderMetaData.AddressDetails.Country.AdministrativeArea.Locality.LocalityName');
+                var street = firstGeoObject.properties.get('metaDataProperty.GeocoderMetaData.AddressDetails.Country.AdministrativeArea.Locality.Thoroughfare.ThoroughfareName');
+                var house = firstGeoObject.properties.get('metaDataProperty.GeocoderMetaData.AddressDetails.Country.AdministrativeArea.Locality.Thoroughfare.Premise.PremiseNumber');
+                $('.adressSity').val(city);
+                $('.adressStreet').val(street);
+                $('.adressHouse').val(house);
+                var coords = firstGeoObject.geometry.getCoordinates();
+                myMap.geoObjects.remove(multiRoute);
+                multiRoute = new ymaps.multiRouter.MultiRoute({
+                    referencePoints: [shopcoord, coords],
+                     params: { routingMode: 'auto' }
+                 }, {
+                     boundsAutoApply: true
+                 });
+
+                myMap.geoObjects.add(multiRoute);
+                ymaps.route([shopcoord, coords]).then(function(router) {
+                    var distance = 2 * Math.round(router.getLength() / 1000);
+                    $('#Distance').val(distance);
+                });
+            }
+
+            function foundCoord(adress) {
+                ymaps.geocode(adress, { results: 1 }).then(function(res) {
+                    //myMap.geoObjects.remove(firstGeoObject);
+                    firstGeoObject = res.geoObjects.get(0);
+                    //myMap.geoObjects.add(firstGeoObject);
+                    correctAdress(firstGeoObject);
+                });
+            }
+
+            function getShopCoord() {
+                ymaps.geocode($("#ShopAdress")[0].value, { results: 1 }).then(function(res) {
+                    shop = res.geoObjects.get(0);
+                    shopcoord = shop.geometry.getCoordinates();
+                    shopPoint = new ymaps.Placemark(shopcoord, { iconContent: 'Магазин' }, { preset: 'islands#redStretchyIcon' });
+                });
+
+            }
+
+            getShopCoord();
+
+            function createMap() {
+
+                myMap = new ymaps.Map('map', {
+                    center: shopcoord,
+                    zoom: 15,
+                    type: 'yandex#map',
+                    controls: []
+                },{searchControlResults: 1});
+                myMap.geoObjects.add(shopPoint);
+                myMap.events.add('click', function(e) {
+                    var coords = e.get('coords');
+                    getAddress(coords);
+                });
+                //myMap.controls.add(searchControl);
+            }
+
+            function changeAdress() {
+                var adress = getStringAdress();
+                if (adress === "") {
+                    adress = "Киів";
+                    $('.adressSity').val(adress);
+                }
+                foundCoord(adress);
+            }
+
+// Определяем адрес по координатам (обратное геокодирование)
+            function getAddress(coords) {
+                //myPlacemark.properties.set('iconContent', 'поиск...');
+                ymaps.geocode(coords).then(function(res) {
+                    //myMap.geoObjects.remove(firstGeoObject);
+                    firstGeoObject = res.geoObjects.get(0);
+                    //myMap.geoObjects.add(firstGeoObject);
+                    if (firstGeoObject === null) {
+                        var _city = ''; // если не найден - возвращаем пустую строку
+                    } else {
+                        correctAdress();
+                        changeAdress();
+                    }
+                });
+            }
+
+            $('#showMap').bind({
+                click: function() {
+                    $("#textAdress").hide();
+                    $("#createAdress").show();
+                    if (!myMap) {
+                        createMap();
+                        changeAdress();
+                    }
+                }
+            });
+
+            function destroyMap() {
+                if (myMap) {
+                    myMap.destroy();
+                    myMap = null;
+                }
+                $("#textAdress").show();
+                $("#createAdress").hide();
+            }
+
+            $('#hideMap').bind({
+                click: function() {
+                    destroyMap();
+                    var adress = getStringAdress();
+                    if ($("#FullAdress") != 'undefined') $("#FullAdress")[0].innerHTML = adress === "" ? "Нет" : adress;
+                    $("#showMap").attr('value', adress === "" ? 'Додати' : 'Змінити');
+                }
+            });
+            $("#UserId").change(function() {
+                //destroyMap();
+                $.post("/Orders/AdressView", {
+                        userId: $("#UserId").val()
+                    },
+                    function(data) {
+                        $("#AdressAct").html(data);
+                        if (myMap) {
+                            myMap.destroy();
+                            myMap = null;
+                        }
+                        createMap();
+                        changeAdress();
+                        $(".adressInput").change(changeAdress);
+                        if ($("#FullAdress") === undefined) return;
+                        var adress = getStringAdress();
+                        $("#showMap").attr('value', adress === "" ? 'Додати' : 'Змінити');
+                        $("#FullAdress")[0].innerHTML = adress === "" ? "Нет" : adress;
+
+                    }
+                );
+            });
+            $(".adressInput").change(changeAdress);
+
+        }
+    </script>
+}

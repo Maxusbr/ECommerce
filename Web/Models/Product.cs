@@ -23,6 +23,7 @@ namespace Web.Models
         public string Name { get; set; }
 
         [Display(Name = "Вага")]
+        [Required]
         public double Weight { get; set; }
 
         [Display(Name = "Вагова категорія")]

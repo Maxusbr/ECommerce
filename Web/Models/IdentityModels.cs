@@ -99,5 +99,6 @@ namespace Web.Models
         public DbSet<WeightCategory> WeightCategories { get; set; }
 
         public DbSet<TariffCoefficient> TariffCoefficients { get; set; }
+
     }
 }
