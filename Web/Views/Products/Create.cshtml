@@ -36,7 +36,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.Weight, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Weight, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(model => model.Weight, new { htmlAttributes = new { @class = "form-control doubleValue" } })
                 @Html.ValidationMessageFor(model => model.Weight, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -54,7 +54,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.Price, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Price, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(model => model.Price, new { htmlAttributes = new { @class = "form-control doubleValue" } })
                 @Html.ValidationMessageFor(model => model.Price, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -80,13 +80,16 @@
 </div>
 
 @section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
+    @*@Scripts.Render("~/bundles/jqueryval")*@
     <script>
         function changeweight() {
-            var w = $('#Weight')[0].value;
+            var w = $('#Weight')[0].value.replace(',', '.');
             var wcat = w < 10 ? 1 : w < 100 ? 2 : 3;
             $('#WCategoryId').val(wcat);
         }
         $('#Weight').change(changeweight);
+        $('.doubleValue').change(function() {
+            this.value = this.value.replace('.', ',');
+        });
     </script>
 }

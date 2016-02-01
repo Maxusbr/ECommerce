@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using Microsoft.AspNet.Identity.Owin;
 using Web.Models;
 
 namespace Web.Controllers
@@ -13,7 +14,7 @@ namespace Web.Controllers
     public class MarketingsController : Controller
     {
         private readonly ApplicationDbContext _db = new ApplicationDbContext();
-
+        public AdressManager AdressManager => HttpContext.GetOwinContext().Get<AdressManager>();
         // GET: Marketings
         public async Task<ActionResult> Index()
         {
@@ -37,6 +38,7 @@ namespace Web.Controllers
             {
                 return HttpNotFound();
             }
+            marketEvents.Adress = await AdressManager.GetAdress(marketEvents.AdressId);
             return View(marketEvents);
         }
 
@@ -44,7 +46,7 @@ namespace Web.Controllers
         public ActionResult Create()
         {
             var dt = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
-            var model = new MarketEvents {Adress = new Adress(), Date = dt};
+            var model = new MarketEvents {Id = Guid.NewGuid().ToString(), Adress = new Adress(), Date = dt};
             return View(model);
         }
 
@@ -53,10 +55,12 @@ namespace Web.Controllers
         // сведения см. в статье http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "Id,Name,Date,Price")] MarketEvents marketEvents)
+        public async Task<ActionResult> Create([Bind(Include = "Id,Name,Date,Price")] MarketEvents marketEvents, Adress adress)
         {
             if (ModelState.IsValid)
             {
+                marketEvents.Adress = await AdressManager.GetOrCreateAdress(adress);
+                marketEvents.AdressId = marketEvents.Adress.Id;
                 _db.MarketEvents.Add(marketEvents);
                 await _db.SaveChangesAsync();
                 return RedirectToAction("Index");
@@ -72,11 +76,13 @@ namespace Web.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            MarketEvents marketEvents = await _db.MarketEvents.FindAsync(id);
+            
+            var marketEvents = await _db.MarketEvents.FindAsync(id);
             if (marketEvents == null)
             {
                 return HttpNotFound();
             }
+            marketEvents.Adress = await AdressManager.GetAdress(marketEvents.AdressId);
             return View(marketEvents);
         }
 
@@ -85,11 +91,18 @@ namespace Web.Controllers
         // сведения см. в статье http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "Id,Name,Date,Price")] MarketEvents marketEvents)
+        public async Task<ActionResult> Edit([Bind(Include = "Id,Name,Date,Price")] MarketEvents marketEvents, Adress adress)
         {
             if (ModelState.IsValid)
             {
-                _db.Entry(marketEvents).State = EntityState.Modified;
+                var events = await _db.MarketEvents.FindAsync(marketEvents.Id);
+                if(events == null) return RedirectToAction("Index");
+                events.Adress = await AdressManager.GetOrCreateAdress(adress);
+                //events.AdressId = marketEvents.Adress.Id;
+                events.Name = marketEvents.Name;
+                events.Date = marketEvents.Date;
+                events.Price = marketEvents.Price;
+                _db.Entry(events).State = EntityState.Modified;
                 await _db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }

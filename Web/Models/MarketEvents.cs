@@ -10,14 +10,9 @@ namespace Web.Models
 {
     public class MarketEvents
     {
-        public MarketEvents()
-        {
-            Id = Guid.NewGuid().ToString();
-        }
-
         [Required]
         [Display(Name = "ID")]
-        public string Id { get; private set; }
+        public string Id { get; set; }
 
         [Required]
         [Display(Name = "Найменування заходу")]
