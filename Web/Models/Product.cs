@@ -11,7 +11,6 @@ namespace Web.Models
 {
     public class Product
     {
-        [Required]
         [Display(Name = "ID")]
         public string Id { get; set; }
 

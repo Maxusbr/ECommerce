@@ -59,7 +59,7 @@ namespace Web.Controllers
         public async Task<ActionResult> Create()
         {
             ViewBag.WCategory = await ProductManager.GetWeightCategoriesAsync();
-            return View(new Product {Id = Guid.NewGuid().ToString()});
+            return View(new Product());
         }
 
         // POST: Products/Create

@@ -1,5 +1,12 @@
 ﻿@model Web.Models.RouteViewModel
-<tr class="info">
+@{
+    var pref = ViewData.TemplateInfo.HtmlFieldPrefix.Replace('[', '_').Replace(']', '_');
+    var td = $"{pref}_TotalDistance";
+    var det = $"{pref}_Detail";
+    var glyp = $"{pref}_Glyphicon";
+    var rt = $"{pref}_RouteTariff";
+}
+<tr class="info" id="@pref" @*onclick="ShowDetail(@Model.Id)"*@>
     <td>
         <span class="center-block">
             @Html.DisplayFor(modelItem => modelItem.Id)
@@ -24,10 +31,7 @@
         @Html.HiddenFor(modelItem => modelItem.TotalDistance)
         @*@Html.EditorFor(modelItem => modelItem.TotalDistance, new { htmlAttributes =
             new { @class = "form-control", @readonly = "readonly" } })*@
-        @{
-            var td = @ViewData.TemplateInfo.HtmlFieldPrefix.Replace('[', '_').Replace(']', '_') + "_TotalDistance";
-            <span class="@td"></span>
-        }
+        <span class="@td"></span>
     </span>
     </td>
     <td>
@@ -38,17 +42,14 @@
     </td>
     <td>
         <span class="center-block">
-        @{
-            var rt = @ViewData.TemplateInfo.HtmlFieldPrefix.Replace('[', '_').Replace(']', '_') + "_RouteTariff";
-            <span class="@rt"></span>
-        }
+        <span class="@rt"></span>
         @Html.HiddenFor(modelItem => modelItem.RouteTariff)
         @Html.HiddenFor(modelItem => modelItem.OrderDistance)
         @Html.HiddenFor(modelItem => modelItem.SummOrderTariff)
     </span>
     </td>
-@{ var det = $"Detail_{@Model.Id}"; }
-    <td><span class="glyphicon glyphicon-chevron-down" onclick="ShowDetail(@Model.Id)"></span></td>
+
+    <td><span class="glyphicon glyphicon-chevron-down" id="@glyp"></span></td>
 </tr>
 
 <tr id="@det" style="display: none">

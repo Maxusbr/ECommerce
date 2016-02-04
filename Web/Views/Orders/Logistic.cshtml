@@ -20,7 +20,10 @@
     .table > tbody > tr > th {
         vertical-align:middle
     }
-    .glyphicon {
+    /*.glyphicon {
+        cursor: pointer
+    }*/
+    .info {
         cursor: pointer
     }
     .rotate{  
@@ -89,9 +92,10 @@
     <script>
         var colors = ["#359789", "#E12412", "#355412", "#A12551", "#EE9086", "#7b7cf7", "#E83E92", "#1515f7"],
             counter;
+        var count = $('#CountRoute').val();
         function init() {
             var shop, shopcoord, shopPoint, myMap, multiRoute;
-            var count = $('#CountRoute').val();
+            
 
             function createMap() {
                 myMap = new ymaps.Map('map', {
@@ -138,31 +142,77 @@
                             }, "json");
                         }
                     });
-                    multiRoute = new ymaps.multiRouter.MultiRoute({
-                        referencePoints: adress,
-                        params: { routingMode: 'auto' }
-                    }, {
-                        wayPointStartVisible: false,
-                        wayPointFinishVisible: false,
-                        routeActiveStrokeColor: colors[i > 7 ? i - 8: i],
-                        wayPointIconColor: colors[i > 7 ? i - 8 : i],
-                        boundsAutoApply: true
-                    });
-                    myMap.geoObjects.add(multiRoute);
+                    //multiRoute = new ymaps.multiRouter.MultiRoute({
+                    //    referencePoints: adress,
+                    //    params: { routingMode: 'auto' }
+                    //}, {
+                    //    wayPointStartVisible: false,
+                    //    wayPointFinishVisible: false,
+                    //    routeActiveStrokeColor: colors[i > 7 ? i - 8: i],
+                    //    wayPointIconColor: colors[i > 7 ? i - 8 : i],
+                    //    boundsAutoApply: true
+                    //});
+                    //myMap.geoObjects.add(multiRoute);
                 }
                 
             }
-            
-        
+
+            function addRoute(id) {
+                var adr = $(id + '_OrdersAdresses').val().split(';'),
+                        shopadress = $("#ShopAdress").val(),
+                        adress = [shopadress];
+                adress.push.apply(adress, adr);
+                adress.push(shopadress);
+
+                multiRoute = new ymaps.multiRouter.MultiRoute({
+                    referencePoints: adress,
+                    params: { routingMode: 'auto' }
+                }, {
+                    wayPointStartVisible: false,
+                    wayPointFinishVisible: false,
+                    routeActiveStrokeColor: colors[id > 7 ? id - 8 : id],
+                    wayPointIconColor: colors[id > 7 ? id - 8 : id],
+                    boundsAutoApply: true
+                });
+                myMap.geoObjects.add(multiRoute);
+            }
+
+            function closeAll(id) {
+                for (var i = 0; i <= count; i++) {
+                    var route = "#Routes_" + i + "_";
+                    if (id != route) {
+                        $(route + '_Detail').hide();
+                        $(route + '_Glyphicon').removeClass("rotate");
+                    }
+                }
+            }
+            function showDetail(id) {
+                closeAll(id);
+                var detail = $(id + '_Detail');
+                detail.toggle('fast', function() {
+                    if (detail[0].style.display != 'none') {
+                        addRoute(id);
+                    }
+                });
+                
+                $(id + '_Glyphicon').toggleClass("rotate");
+            }
+            $('.info').each(function (index, elem) {
+                $(elem).bind("click", function (e) {
+                    var id = '#' + e.currentTarget.id;
+                    showDetail(id);
+                    e.preventDefault();
+                    myMap.geoObjects.remove(multiRoute);
+                    
+                });
+            });
         };
 
-        function ShowDetail(id) {
-            $('#Detail_' + id).toggle('fast');
-        }
+        
         $(function () {
-            $(".glyphicon-chevron-down").click(function () {
-                $(this).toggleClass("rotate");
-            });
+            //$(".glyphicon-chevron-down").click(function () {
+            //    $(this).toggleClass("rotate");
+            //});
         });
         ymaps.ready(init);
     </script>
