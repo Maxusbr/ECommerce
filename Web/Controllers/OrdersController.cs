@@ -260,6 +260,7 @@ namespace Web.Controllers
             order.Shop = await AdressManager.GetShop(model.ShopId);
             order.AdresShipping = await AdressManager.GetOrCreateAdress(model.AdresShipping);
             order.AdressId = order.AdresShipping.Id;
+            order.Distance = model.Distance;
             return order;
         }
 
@@ -422,18 +423,31 @@ namespace Web.Controllers
             if (receipts.Any())
                 foreach (var tariffcoeff in await OrderManager.GetTariffCoefficients())
                 {
-                    foreach (var shipping in await OrderManager.GetShippingTypesListAsync())
+                    var recs = receipts.Where(o => o.ShippingType.SortId < 2 && o.TariffModel.TariffKoefficient == tariffcoeff);
+                    if (recs.Any())
                     {
-                        var recs = receipts.Where(o => o.ShippingType == shipping && o.TariffModel.TariffKoefficient == tariffcoeff);
-                        if (recs.Any())
-                            model.Routes.Add(new RouteViewModel
-                            {
-                                Id = routeId++,
-                                Orders = recs,
-                                ShippingType = shipping.Type,
-                                SummOrderTariff = recs.Sum(o => o.ShippingCost),
-                                OrderDistance = 2 * recs.Sum(o => o.Distance)
-                            });
+                        model.Routes.Add(new RouteViewModel
+                        {
+                            Id = routeId++,
+                            UrbanId = tariffcoeff.UrbanCategoryId,
+                            Orders = recs,
+                            ShippingType = "за адресою",
+                            SummOrderTariff = recs.Sum(o => o.ShippingCost),
+                            OrderDistance = 2 * recs.Sum(o => o.Distance)
+                        });
+                    }
+                    recs = receipts.Where(o => o.ShippingType.SortId == 2 && o.TariffModel.TariffKoefficient == tariffcoeff);
+                    if (recs.Any())
+                    {
+                        model.Routes.Add(new RouteViewModel
+                        {
+                            Id = routeId++,
+                            UrbanId = tariffcoeff.UrbanCategoryId,
+                            Orders = recs,
+                            ShippingType = "до пункту видачі",
+                            SummOrderTariff = recs.Sum(o => o.ShippingCost),
+                            OrderDistance = 2 * recs.Sum(o => o.Distance)
+                        });
                     }
                 }
             model.CountRoute = model.Routes.Count;
@@ -446,12 +460,17 @@ namespace Web.Controllers
             return View(model);
         }
 
-        public JsonResult Calqulate(LogisticViewModel model)
+        public async Task<JsonResult> Calqulate(LogisticViewModel model)
         {
-            var res = (from route in model.Routes
-                       select Math.Round(route.TotalDistance * route.SummOrderTariff / route.OrderDistance, 2)).ToArray();
-
-            return new JsonResult { Data = res.Select(o => o.ToString(CultureInfo.CurrentCulture)) };
+            return await OrderManager.CalqulateTariff(model.Routes);
+            //return new JsonResult
+            //{
+            //    Data = new
+            //    {
+            //        data = res.Select(o => o.ToString(CultureInfo.CurrentCulture)),
+            //        result = (345.8).ToString(CultureInfo.CurrentCulture)
+            //    }
+            //};
         }
     }
 }

@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
+using System.Web.Mvc;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using Web.Models;
@@ -175,6 +177,25 @@ namespace Web
         public async Task<List<TariffCoefficient>> GetTariffCoefficients()
         {
             return await _db.TariffCoefficients.ToListAsync();
+        }
+
+        public async Task<JsonResult> CalqulateTariff(List<RouteViewModel> routes)
+        {
+            var res = (from route in routes
+                       select Math.Round(route.TotalDistance * route.SummOrderTariff / route.OrderDistance, 2)).ToArray();
+            foreach (var route in routes)
+            {
+                var calc = await _db.AverangeValues.FindAsync(route.UrbanId);
+
+            }
+            return new JsonResult
+            {
+                Data = new
+                {
+                    data = res.Select(o => o.ToString(CultureInfo.CurrentCulture)),
+                    result = (345.8).ToString(CultureInfo.CurrentCulture)
+                }
+            };
         }
     }
 }

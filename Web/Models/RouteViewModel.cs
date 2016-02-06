@@ -45,6 +45,6 @@ namespace Web.Models
         [Display(Name = "Трансакційні витрати на маршруті")]
         public double RouteTariff { get; set; }
 
-
+        public int UrbanId { get; set; }
     }
 }

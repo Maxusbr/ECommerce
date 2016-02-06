@@ -14,25 +14,28 @@
         background-color: #ccc;
         overflow: hidden;
     }
+
     .center-block {
-        text-align: center
+        text-align: center;
     }
+
     .table > tbody > tr > th {
-        vertical-align:middle
+        vertical-align: middle;
     }
     /*.glyphicon {
         cursor: pointer
     }*/
     .info {
-        cursor: pointer
+        cursor: pointer;
     }
-    .rotate{  
-    -webkit-transform: rotate(-180deg);
-	-moz-transform: rotate(-180deg);
-	-ms-transform: rotate(-180deg);
-	-o-transform: rotate(-180deg);
-	transform: rotate(-180deg);
-}
+
+    .rotate {
+        -webkit-transform: rotate(-180deg);
+        -moz-transform: rotate(-180deg);
+        -ms-transform: rotate(-180deg);
+        -o-transform: rotate(-180deg);
+        transform: rotate(-180deg);
+    }
 </style>
 <h2>Логістика</h2>
 <hr />
@@ -43,13 +46,13 @@
             @Html.LabelFor(model => model.ShopAdress, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.EditorFor(model => model.ShopAdress, new
-           {
-               htmlAttributes = new
-               {
-                   @class = "form-control",
-                   @readonly = "readonly"
-               }
-           })
+                   {
+                       htmlAttributes = new
+                       {
+                           @class = "form-control",
+                           @readonly = "readonly"
+                       }
+                   })
             </div>
         </div>
         <div class="form-group">
@@ -74,6 +77,19 @@
                 }
             </div>
         </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.Amount, htmlAttributes: new { @class = "control-label col-md-3" })
+            <div class="col-md-9">
+                @Html.EditorFor(model => model.Amount, new
+                   {
+                       htmlAttributes = new
+                       {
+                           @class = "form-control doubleValue",
+                           @readonly = "readonly"
+                       }
+                   })
+            </div>
+        </div>
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
@@ -82,7 +98,7 @@
         </div>
     </div>
 
-}
+                    }
 
 
 @section scripts
@@ -95,7 +111,7 @@
         var count = $('#CountRoute').val();
         function init() {
             var shop, shopcoord, shopPoint, myMap, multiRoute;
-            
+
 
             function createMap() {
                 myMap = new ymaps.Map('map', {
@@ -132,13 +148,14 @@
                         $('.Routes_' + counter + '__TotalDistance').text(distance);
                         counter++;
                         if (counter == count) {
-                            $.post("Calqulate", $('form').serialize(), function (data) {
-                                var res = data;
+                            $.post("Calqulate", $('form').serialize(), function (returndata) {
+                                var data = returndata.data;
+                                var result = returndata.result;
                                 for (var i = 0; i < count; i++) {
                                     $('#Routes_' + i + '__RouteTariff').val(data[i]);
                                     $('.Routes_' + i + '__RouteTariff').text(data[i]);
                                 }
-                                
+                                $('#Amount').val(result);
                             }, "json");
                         }
                     });
@@ -154,7 +171,7 @@
                     //});
                     //myMap.geoObjects.add(multiRoute);
                 }
-                
+
             }
 
             function addRoute(id) {
@@ -189,12 +206,12 @@
             function showDetail(id) {
                 closeAll(id);
                 var detail = $(id + '_Detail');
-                detail.toggle('fast', function() {
+                detail.toggle('fast', function () {
                     if (detail[0].style.display != 'none') {
                         addRoute(id);
                     }
                 });
-                
+
                 $(id + '_Glyphicon').toggleClass("rotate");
             }
             $('.info').each(function (index, elem) {
@@ -203,16 +220,19 @@
                     showDetail(id);
                     e.preventDefault();
                     myMap.geoObjects.remove(multiRoute);
-                    
+
                 });
             });
         };
 
-        
+
         $(function () {
             //$(".glyphicon-chevron-down").click(function () {
             //    $(this).toggleClass("rotate");
             //});
+        });
+        $('.doubleValue').change(function () {
+            this.value = this.value.replace('.', ',');
         });
         ymaps.ready(init);
     </script>

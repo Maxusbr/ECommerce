@@ -66,6 +66,12 @@ namespace Web.Migrations
             //      new Person { FullName = "Rowan Miller" }
             //    );
             //
+            //context.AverangeValues.AddOrUpdate(
+            //p => p.UrbanCategoryId,
+            //      new AverangeValue { UrbanCategoryId = 1, Dhd = 21, Drp = 15, Cshd = 84, Csrp = 16, Tw = 35},
+            //      new AverangeValue { UrbanCategoryId = 2, Dhd = 45, Drp = 35, Cshd = 52, Csrp = 48, Tw = 50 },
+            //      new AverangeValue { UrbanCategoryId = 3, Dhd = 79, Drp = 79, Cshd = 36, Csrp = 64, Tw = 55 }
+            //    );
         }
     }
 }
