@@ -431,6 +431,7 @@ namespace Web.Controllers
                             Id = routeId++,
                             UrbanId = tariffcoeff.UrbanCategoryId,
                             Orders = recs,
+                            ShippingTypeId = 1,
                             ShippingType = "за адресою",
                             SummOrderTariff = recs.Sum(o => o.ShippingCost),
                             OrderDistance = 2 * recs.Sum(o => o.Distance)
@@ -444,6 +445,7 @@ namespace Web.Controllers
                             Id = routeId++,
                             UrbanId = tariffcoeff.UrbanCategoryId,
                             Orders = recs,
+                            ShippingTypeId = 2,
                             ShippingType = "до пункту видачі",
                             SummOrderTariff = recs.Sum(o => o.ShippingCost),
                             OrderDistance = 2 * recs.Sum(o => o.Distance)

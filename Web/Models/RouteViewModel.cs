@@ -46,5 +46,6 @@ namespace Web.Models
         public double RouteTariff { get; set; }
 
         public int UrbanId { get; set; }
+        public int ShippingTypeId { get; set; }
     }
 }

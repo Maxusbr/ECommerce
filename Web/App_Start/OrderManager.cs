@@ -183,17 +183,33 @@ namespace Web
         {
             var res = (from route in routes
                        select Math.Round(route.TotalDistance * route.SummOrderTariff / route.OrderDistance, 2)).ToArray();
-            foreach (var route in routes)
-            {
-                var calc = await _db.AverangeValues.FindAsync(route.UrbanId);
+            //var summ = 0.0;
+            //foreach (var urban in await _db.AverangeValues.ToListAsync())
+            //{
+            //    var hds = routes.Where(o => o.ShippingTypeId == 1 && o.UrbanId == urban.UrbanCategoryId).ToList();
+            //    var rps = routes.Where(o => o.ShippingTypeId == 2 && o.UrbanId == urban.UrbanCategoryId).ToList();
+            //    var mhd = hds.Aggregate(0, (cnt, model) => cnt + model.Orders.Count());
+            //    var mrp = rps.Aggregate(0, (cnt, model) => cnt + model.Orders.Count());
+            //    var dhd = hds.Aggregate(0.0, (dist, model) => dist + model.TotalDistance);
+            //    var drp = rps.Aggregate(0.0, (dist, model) => dist + model.TotalDistance);
+            //    var cshd = 100.0 * mhd / (mhd + mrp);
+            //    var csrp = 100.0 * mrp / (mhd + mrp);
+            //    var k = (mhd * dhd * cshd + mrp * drp * csrp) / ((cshd != 0 ? cshd : 1) * (csrp != 0 ? csrp : 1) * 3.0);
+            //    summ += (double)urban.Tw * k / 4;
+            //}
 
-            }
+            var dhd = 21;
+            var drp = 15;
+            var cshd = .84;
+            var csrp = .16;
+            var k = (7 * dhd * cshd + 6 * drp * csrp) / (cshd * csrp * 3.0);
+            var summ = Math.Round(35 * Math.Pow(k / 4, 2), 2);
             return new JsonResult
             {
                 Data = new
                 {
                     data = res.Select(o => o.ToString(CultureInfo.CurrentCulture)),
-                    result = (345.8).ToString(CultureInfo.CurrentCulture)
+                    result = summ.ToString(CultureInfo.CurrentCulture)
                 }
             };
         }
