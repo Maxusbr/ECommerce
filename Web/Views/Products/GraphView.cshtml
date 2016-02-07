@@ -13,7 +13,7 @@
         }
     </style>
 }
-<h2>Товари</h2>
+<h2>@ViewBag.Title</h2>
 @*<img src='@Url.Action("CountSalesProduct")'/>
     <img src='@Url.Action("TotalPriceSalesProduct")'/>*@
 
@@ -29,8 +29,8 @@
     <ul>
         <li><a href="#tab1">Кількість проданих товарів</a>
         <li><a href="#tab2">Загальна вартість проданих товарів</a>
-        <li><a href="#tab3">Кількість проданих товарів по типу доставки</a>
-        <li><a href="#tab4">Кількість проданих товарів по формi оплати</a>
+        <li><a href="#tab3">Кількість товарів по типу доставки</a>
+        <li><a href="#tab4">Кількість товарів по формi оплати</a>
     </ul>
     <div id="tab1">
         <div class="col-md-12">@Model.Chart1</div>

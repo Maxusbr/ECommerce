@@ -12,8 +12,77 @@
     @Scripts.Render("~/bundles/jqueryval")
     @Scripts.Render("~/bundles/jqueryui")
     @RenderSection("headerscripts", required: false)
+    <style type="text/css">
+        body {
+            background: url('/Content/background.jpg') no-repeat 0 100%;
+            background-size: 110% auto;
+            background-position: -50px 0;
+            padding-bottom: 0;
+        }
+
+        img.background {
+            position: absolute; /* теперь мы можем управлять рисунком как слоем */
+            left: 0%;
+            top: 0px;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: #ffffff;
+            background: rgba(255, 255, 255, 0.75);
+        }
+
+        html, body {
+            margin: 0px;
+            height: 100%;
+        }
+
+        #background {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        #body {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .body-content {
+            box-sizing: border-box;
+            min-height: 100%;
+            padding-bottom: 50px;
+            background: #ffffff;
+            background: rgba(255, 255, 255, 0.85);
+        }
+
+        footer {
+            background-color: #eee;
+            height: 50px;
+            margin-top: -50px;
+        }
+
+            footer p {
+                text-align: center;
+                padding-top: 10px;
+                font-size: 21px;
+                font-weight: 200;
+            }
+            .jumbotron {
+                margin-left: -15px;
+                margin-right: -15px;
+                margin-bottom: 0;
+                height: 100%;
+                background-color: #fff;
+            }
+            .container.body-content:after {
+    clear: both;
+}
+    </style>
 </head>
 <body>
+    <img class="background" >
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
@@ -68,15 +137,15 @@
         </div>
     </div>
     <div class="container body-content">
-        @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year – MACStudio</p>
-        </footer>
+        <div class="jumbotron">@RenderBody()</div>
+        @*<hr />*@
+
     </div>
 
-    
-    
+    <footer>
+        <p>&copy; @DateTime.Now.Year – MACStudio</p>
+    </footer>
+
 
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
@@ -94,10 +163,14 @@
                 prevText: 'Пред',
                 nextText: 'След',
                 currentText: 'Сегодня',
-                monthNames: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь',
-                'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'],
-                monthNamesShort: ['Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн',
-                'Июл', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек'],
+                monthNames: [
+                    'Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь',
+                    'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'
+                ],
+                monthNamesShort: [
+                    'Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн',
+                    'Июл', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек'
+                ],
                 dayNames: ['воскресенье', 'понедельник', 'вторник', 'среда', 'четверг', 'пятница', 'суббота'],
                 dayNamesShort: ['вск', 'пнд', 'втр', 'срд', 'чтв', 'птн', 'сбт'],
                 dayNamesMin: ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'],
