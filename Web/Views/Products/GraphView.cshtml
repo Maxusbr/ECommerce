@@ -1,20 +1,71 @@
 ﻿@model Web.Models.ChartsModel
-    @{
-        ViewBag.Title = "Графіки";
-        Layout = "~/Views/Shared/_Layout.cshtml";
-    }
+@{
+    ViewBag.Title = "Графіки";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
 @section headerscripts
 {
     @Scripts.Render("~/bundles/highchart")
+    <link rel="stylesheet" href="/Content/themes/custom/jquery-ui.css">
+    <style type="text/css">
+        .ui-tabs .ui-tabs-panel {
+            display: flex;
+        }
+    </style>
 }
 <h2>Товари</h2>
-    @*<img src='@Url.Action("CountSalesProduct")'/>
+@*<img src='@Url.Action("CountSalesProduct")'/>
     <img src='@Url.Action("TotalPriceSalesProduct")'/>*@
 
 
-    @*<img src="CountSalesProduct.cshtml" alt="" />*@
+@*<img src="CountSalesProduct.cshtml" alt="" />*@
 
-<div class="col-md-6">@Model.Chart1</div>
-<div class="col-md-6">@Model.Chart2</div>
-<div class="col-md-6">@Model.Chart3</div>
-<div class="col-md-6">@Model.Chart4</div>
+
+
+
+
+
+<div id="tabs">
+    <ul>
+        <li><a href="#tab1">Кількість проданих товарів</a>
+        <li><a href="#tab2">Загальна вартість проданих товарів</a>
+        <li><a href="#tab3">Кількість проданих товарів по типу доставки</a>
+        <li><a href="#tab4">Кількість проданих товарів по формi оплати</a>
+    </ul>
+    <div id="tab1">
+        <div class="col-md-12">@Model.Chart1</div>
+    </div>
+    <div id="tab2">
+        <div class="col-md-12">@Model.Chart2</div>
+    </div>
+    <div id="tab3">
+        <div class="col-md-12">@Model.Chart3</div>
+    </div>
+    <div id="tab4">
+        <div class="col-md-12">@Model.Chart4</div>
+    </div>
+</div>
+
+@section scripts
+{
+    <script>
+        
+        $(function () {
+            $('#tabs').tabs({
+                show: function (event, ui) {
+                    var $activeTab = $('#tabs').tabs('option', 'active');
+                    if ($activeTab == 1) {
+
+                    }
+                    if ($activeTab == 2) {
+
+                    }
+                    if ($activeTab == 3) {
+
+                    }
+
+                }
+            });
+        });
+    </script>
+}

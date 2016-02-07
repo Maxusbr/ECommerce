@@ -82,6 +82,38 @@ namespace Web
             return list.OrderBy(o => o.Name).ToList();
         }
 
+        public async Task<List<ChartDataViewModel>> GetSalesProducsShippingTypeAsync()
+        {
+            await _db.ShippingTypes.ToListAsync(); await _db.Orders.ToListAsync();
+            var list = await _db.OrdersDetails.Join(_db.Receipts, d => d.IdOrder, r => r.OrderId,
+                        (d, r) => new { Product = d.Product, Count = d.Count, Price = d.Price, Order = d.Order })
+                        .GroupBy(arg => arg.Order.ShippingType).Select(g =>
+              new ChartDataViewModel
+              {
+                  Id = g.Key.Id,
+                  Name = g.Key.Type,
+                  Count = g.Sum(p => p.Count)
+              }).ToListAsync();
+
+            return list.OrderBy(o => o.Id).ToList();
+        }
+
+        public async Task<List<ChartDataViewModel>> GetSalesProducsPaymentTypeAsync()
+        {
+            await _db.PaymentTypes.ToListAsync(); await _db.Orders.ToListAsync();
+            var list = await _db.OrdersDetails.Join(_db.Receipts, d => d.IdOrder, r => r.OrderId,
+                        (d, r) => new { Product = d.Product, Count = d.Count, Price = d.Price, Order = d.Order })
+                        .GroupBy(arg => arg.Order.PaymentType).Select(g =>
+              new ChartDataViewModel
+              {
+                  Id = g.Key.Id,
+                  Name = g.Key.Type,
+                  Count = g.Sum(p => p.Count)
+              }).ToListAsync();
+
+            return list.OrderBy(o => o.Id).ToList();
+        }
+
         public async Task<List<ProductInOrderViewModel>> GetProducsInOrderAsync(string orderId)
         {
             var result = await _db.OrdersDetails.Where(o => o.IdOrder.Equals(orderId)).ToListAsync();
@@ -125,5 +157,12 @@ namespace Web
         {
             return await _db.WeightCategories.FindAsync(id);
         }
+    }
+
+    public class ChartDataViewModel
+    {
+        public string Id { get; set; }
+        public string Name { get; set; }
+        public int Count { get; set; }
     }
 }

@@ -1,31 +1,38 @@
 ﻿@{
-    ViewBag.Title = "Home Page";
+    ViewBag.Title = "Web-система управління взаємодією з клієнтами в електронній торгівлі";
 }
 
 <div class="jumbotron">
-    <h1>ASP.NET</h1>
-    <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
-    <p><a href="http://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
+    <h2 style="text-align: center"><strong>@ViewBag.Title</strong></h2>
+    <p class="lead text-justify" >
+        має трирівневу архітектуру технічних засобів і призначена для автоматизації процесів взаємодії між інтернет-магазином і он-лайн споживачами. Специфічні вимоги до Web-системи управління взаємодією з клієнтами в електронній торгівлі визначають особливості її архітектури та структури інтерактивних елементів програмного інтерфейсу в контексті тих конкретних задач і процесів, для атоматизації яких вона створюється.
+    </p>
+    <p class="lead text-justify">
+        Web-система управління забезпечує автоматизацію таких функцій: облік товарної продукції; створення клієнтської бази; формування клієнтського замовлення і розрахунок його вартості та вартості доставки товару; формування звітної документації і квитанцій на оплату товарів і послуг; управління маркетинговими заходами та витратами на рекламу; управління логістикою доставки товарів покупцям з можливістю вибору оптимального маршруту доставки товарів і визначенням трансакційних витрат споживачів; аналіз процесів взаємодії в електронній торгівлі з формуванням профіля клієнта в контексті його споживчих пріоритетів та формуванням підсумкової звітності продажів товарної продукції з побудовую різного роду виборок, графіків і діаграм, які дозволяють проводити аналітичне дослідження показників торговельної діяльності.
+    </p>
+    <p class="lead text-justify">
+        Web-додаток розрахований на роботу із трьома групами користувачів (адміністратори, менеджери і користувачі) та забезпечує доступ до елементів управління взаємодією залежно від рівня доступу конкретного користувача. Для кожної групи користувачів Web-системи управління взаємодією з клієнтами в електронній торгівлі, реалізуються заходи щодо забезпечення безпеки та надійності процедур проведення торговельних операцій, незалежно від їхнього територіального розподілу.
+    </p>
+    <hr/>
+    @Html.ActionLink("Технологія використання", "About", null, new {@class= "btn btn-default" })
 </div>
-
-<div class="row">
+@*
+    <div class="row">
+        <div class="col-md-12">
+            <h2>Web-система управління взаємодією з клієнтами в електронній торгівлі</h2>
+            <p>
+                має трирівневу архітектуру технічних засобів і призначена для автоматизації процесів взаємодії між інтернет-магазином і он-лайн споживачами. Специфічні вимоги до Web-системи управління взаємодією з клієнтами в електронній торгівлі визначають особливості її архітектури та структури інтерактивних елементів програмного інтерфейсу в контексті тих конкретних задач і процесів, для атоматизації яких вона створюється. Web-система управління забезпечує автоматизацію таких функцій: облік товарної продукції; створення клієнтської бази; формування клієнтського замовлення і розрахунок його вартості та вартості доставки товару; формування звітної документації і квитанцій на оплату товарів і послуг; управління маркетинговими заходами та витратами на рекламу; управління логістикою доставки товарів покупцям з можливістю вибору оптимального маршруту доставки товарів і визначенням трансакційних витрат споживачів; аналіз процесів взаємодії в електронній торгівлі з формуванням профіля клієнта в контексті його споживчих пріоритетів та формуванням підсумкової звітності продажів товарної продукції з побудовую різного роду виборок, графіків і діаграм, які дозволяють проводити аналітичне дослідження показників торговельної діяльності. Web-додаток розрахований на роботу із трьома групами користувачів (адміністратори, менеджери і користувачі) та забезпечує доступ до елементів управління взаємодією залежно від рівня доступу конкретного користувача. Для кожної групи користувачів Web-системи управління взаємодією з клієнтами в електронній торгівлі, реалізуються заходи щодо забезпечення безпеки та надійності процедур проведення торговельних операцій, незалежно від їхнього територіального розподілу.
+            </p>
+            <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
+        </div>
     <div class="col-md-4">
-        <h2>Getting started</h2>
-        <p>
-            ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that
-            enables a clean separation of concerns and gives you full control over markup
-            for enjoyable, agile development.
-        </p>
-        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Get more libraries</h2>
-        <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
-        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301866">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Web Hosting</h2>
-        <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
-        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
-    </div>
-</div>
+                <h2>Get more libraries</h2>
+                <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
+                <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301866">Learn more &raquo;</a></p>
+            </div>
+            <div class="col-md-4">
+                <h2>Web Hosting</h2>
+                <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
+                <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
+            </div>
+        </div>*@

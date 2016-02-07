@@ -153,18 +153,22 @@ namespace Web.Controllers
         public async Task<ActionResult> GraphView()
         {
             var data = await ProductManager.GetSalesProducsAsync();
-            data.AddRange(await ProductManager.GetSalesProducsAsync());
-            data.AddRange(await ProductManager.GetSalesProducsAsync());
+
             var prices = await ProductManager.GetSalesProducsSummPriceAsync();
+            var shipping = await ProductManager.GetSalesProducsShippingTypeAsync();
+            var payment = await ProductManager.GetSalesProducsPaymentTypeAsync();
             var model = new ChartsModel
             {
                 Chart1 = GetChartCount(data, "count"),
                 Chart2 = GetChartPrice(prices, "price"),
-                //Chart3 = GetChart(data, "shipping"),
-                //Chart4 = GetChart(data, "payment")
+                Chart3 = GetChartShipping(shipping, "shipping"),
+                Chart4 = GetChartPayment(payment, "payment")
             };
             return View(model);
         }
+
+        
+
         public ActionResult CountSalesProduct()
         {
             return View();
@@ -205,13 +209,13 @@ namespace Web.Controllers
 
             var chart = new Highcharts("cart_" + name)
                         //define the type of chart 
-                        .InitChart(new Chart { DefaultSeriesType = ChartTypes.Bar })
+                        .InitChart(new Chart { DefaultSeriesType = ChartTypes.Bar, Height = null, Width = null})
                         //overall Title of the chart 
                         .SetTitle(new Title { Text = "Кількість проданих товарів" })
                         //small label below the main Title
                         //.SetSubtitle(new Subtitle { Text = "Accounting" })
                         //load the X values
-                        .SetXAxis(new XAxis { Categories = data.Select(o => o.Name).ToArray()})
+                        .SetXAxis(new XAxis { Categories = data.Select(o => o.Name.Replace('\'', '`')).ToArray()})
                         //set the Y title
                         .SetYAxis(new YAxis { Title = new YAxisTitle { Text = "" }, TickInterval = 1})
                         .SetTooltip(new Tooltip
@@ -245,9 +249,9 @@ namespace Web.Controllers
         {
 
             var chart = new Highcharts("cart_" + name)
-                        .InitChart(new Chart { DefaultSeriesType = ChartTypes.Bar })
+                        .InitChart(new Chart { DefaultSeriesType = ChartTypes.Bar, Height = null, Width = null })
                         .SetTitle(new Title { Text = "Загальна вартість проданих товарів" })
-                        .SetXAxis(new XAxis { Categories = data.Select(o => o.Name).ToArray() })
+                        .SetXAxis(new XAxis { Categories = data.Select(o => o.Name.Replace('\'', '`')).ToArray() })
                         .SetYAxis(new YAxis { Title = new YAxisTitle { Text = "" } })
                         .SetTooltip(new Tooltip
                         {
@@ -273,6 +277,69 @@ namespace Web.Controllers
                     });
             return chart;
         }
+        private Highcharts GetChartShipping(List<ChartDataViewModel> data, string name)
+        {
+            var chart = new Highcharts("cart_" + name)
+                        .InitChart(new Chart { DefaultSeriesType = ChartTypes.Bar, Height = null, Width = null })
+                        .SetTitle(new Title { Text = "Кількість проданих товарів по типу доставки" })
+                        .SetXAxis(new XAxis { Categories = data.Select(o => o.Name.Replace('\'', '`')).ToArray() })
+                        .SetYAxis(new YAxis { Title = new YAxisTitle { Text = "" } })
+                        .SetTooltip(new Tooltip
+                        {
+                            Enabled = true,
+                            Formatter = @"function() { return '<b>'+ this.series.name +'</b><br/>'+ this.x +': '+ this.y; }"
+                        })
+                        .SetPlotOptions(new PlotOptions
+                        {
+                            Line = new PlotOptionsLine
+                            {
+                                DataLabels = new PlotOptionsLineDataLabels
+                                {
+                                    Enabled = true
+                                },
+                                EnableMouseTracking = false
+                            }
+                        })
+                        .SetLegend(new Legend { Enabled = false })
+                        .SetSeries(new[]
+                    {
+                        new Series {Name = "Кількість проданих товарів", Data =
+                            new Data(data: data.Select(o => new object[] { o.Count }).ToArray()), Color =Color.DodgerBlue  },
+                    });
+            return chart;
+        }
+        private Highcharts GetChartPayment(List<ChartDataViewModel> data, string name)
+        {
+            var chart = new Highcharts("cart_" + name)
+                        .InitChart(new Chart { DefaultSeriesType = ChartTypes.Bar, Height = null, Width = null })
+                        .SetTitle(new Title { Text = "Кількість проданих товарів по формi оплати" })
+                        .SetXAxis(new XAxis { Categories = data.Select(o => o.Name.Replace('\'', '`')).ToArray() })
+                        .SetYAxis(new YAxis { Title = new YAxisTitle { Text = "" } })
+                        .SetTooltip(new Tooltip
+                        {
+                            Enabled = true,
+                            Formatter = @"function() { return '<b>'+ this.series.name +'</b><br/>'+ this.x +': '+ this.y; }"
+                        })
+                        .SetPlotOptions(new PlotOptions
+                        {
+                            Line = new PlotOptionsLine
+                            {
+                                DataLabels = new PlotOptionsLineDataLabels
+                                {
+                                    Enabled = true
+                                },
+                                EnableMouseTracking = false
+                            }
+                        })
+                        .SetLegend(new Legend { Enabled = false })
+                        .SetSeries(new[]
+                    {
+                        new Series {Name = "Кількість проданих товарів", Data =
+                            new Data(data: data.Select(o => new object[] { o.Count }).ToArray()), Color =Color.Coral  },
+                    });
+            return chart;
+        }
+
     }
 
 
