@@ -15,15 +15,16 @@
     <style type="text/css">
         body {
             background: url('/Content/background.jpg') no-repeat 0 100%;
-            background-size: 110% auto;
+            background-size: 100% auto;
             background-position: -50px 0;
             padding-bottom: 0;
+                
         }
 
         img.background {
             position: absolute; /* теперь мы можем управлять рисунком как слоем */
-            left: 0%;
-            top: 0px;
+            left: 0;
+            top: 0;
             width: 100%;
             height: 100%;
             z-index: -1;
@@ -34,6 +35,7 @@
         html, body {
             margin: 0px;
             height: 100%;
+            overflow: auto;
         }
 
         #background {
@@ -82,8 +84,8 @@
     </style>
 </head>
 <body>
-    <img class="background" >
-    <div class="navbar navbar-inverse navbar-fixed-top">
+<img class="background" alt=""/>
+<div class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -137,7 +139,7 @@
         </div>
     </div>
     <div class="container body-content">
-        <div class="jumbotron">@RenderBody()</div>
+        @RenderBody()
         @*<hr />*@
 
     </div>
