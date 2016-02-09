@@ -26,20 +26,21 @@ namespace Web.Models
         }
         [Display(Name = "Загальна дистанція маршруту")]
         public double TotalDistance { get; set; }
-
+        public List<string> ListAdress { get; set; }
         public string OrdersAdresses
         {
             get
             {
-                var res = Orders != null && Orders.Any() ? Orders.Aggregate("", (current, el) => 
-                    string.IsNullOrEmpty(current) ? current + el.Adress : current + ";" + el.Adress) : "";
+                
+                var res =ListAdress != null && ListAdress.Any() ? ListAdress.Aggregate("", (current, el) =>
+                    string.IsNullOrEmpty(current) ? current + el : current + ";" + el) : "";
                 return res;
             }
         }
 
         [Display(Name = "Число адрес на маршруті")]
         public int CountOrders => Orders != null && Orders.Any() ? Orders.Count() : 0;
-        [Display(Name = "Сума")]        
+        [Display(Name = "Сума")]
         public double SummOrderTariff { get; set; }
         public double OrderDistance { get; set; }
         [Display(Name = "Трансакційні витрати на маршруті")]

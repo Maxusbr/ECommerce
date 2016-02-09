@@ -1,12 +1,61 @@
 ﻿body {
+    padding: 20px;
     padding-top: 50px;
     padding-bottom: 20px;
+    font-size: 16px;
+    background: url('/Content/background.jpg') no-repeat 0 100%;
+    background-size: 100% auto;
+    background-position: 0 0;
+    padding-bottom: 0;
+}
+
+img.background {
+    position: absolute; /* теперь мы можем управлять рисунком как слоем */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    background: #ffffff;
+    background: rgba(255, 255, 255, 0.75);
+}
+
+html, body {
+    margin: 0px;
+    height: 100%;
+    overflow: auto;
+}
+
+footer {
+    background-color: #eee;
+    height: 50px;
+    margin-top: -50px;
+}
+
+    footer p {
+        text-align: center;
+        padding-top: 10px;
+        font-size: 21px;
+        font-weight: 200;
+    }
+
+.jumbotron {
+    margin-left: -15px;
+    margin-right: -15px;
+    margin-bottom: 0;
+    height: 100%;
+    background-color: #fff;
 }
 
 /* Set padding to keep content from hitting the edges */
 .body-content {
-    padding-left: 15px;
-    padding-right: 15px;
+    padding-left: 30px;
+    padding-right: 30px;
+    box-sizing: border-box;
+    min-height: 100%;
+    padding-bottom: 50px;
+    background: #ffffff;
+    background: rgba(255, 255, 255, 0.85);
 }
 
 /* Override the default bootstrap behavior where horizontal description lists 
@@ -26,8 +75,9 @@ textarea {
 .table tbody > tr > th {
     border-top: none;
 }
+
 .table tbody > tr > td {
-   vertical-align: middle;
+    vertical-align: middle;
 }
 
 .stretch {

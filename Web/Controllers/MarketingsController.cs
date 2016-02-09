@@ -97,8 +97,8 @@ namespace Web.Controllers
             {
                 var events = await _db.MarketEvents.FindAsync(marketEvents.Id);
                 if(events == null) return RedirectToAction("Index");
-                events.Adress = await AdressManager.GetOrCreateAdress(adress);
-                //events.AdressId = marketEvents.Adress.Id;
+                adress = await AdressManager.GetOrCreateAdress(adress);
+                events.AdressId = adress.Id;
                 events.Name = marketEvents.Name;
                 events.Date = marketEvents.Date;
                 events.Price = marketEvents.Price;

@@ -36,7 +36,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.Price, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Price, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(model => model.Price, new { htmlAttributes = new { @class = "form-control doubleValue" } })
                 @Html.ValidationMessageFor(model => model.Price, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -74,3 +74,15 @@
 <div>
     @Html.ActionLink("Назад", "Index")
 </div>
+
+@section Scripts {
+    <script>
+        //$(document).ready(function () {
+        //    $('.adressSity').val("Київ");
+
+        //});
+        $('.doubleValue').change(function () {
+            this.value = this.value.replace('.', ',');
+        });
+    </script>
+}

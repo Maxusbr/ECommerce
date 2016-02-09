@@ -54,6 +54,7 @@ namespace Web.Models
         [Display(Name = "Користувачі")]
         public List<ApplicationUser> Users { get; set; }
         public bool ReceiptExist { get; set; }
+        [Display(Name = "Дистанція доставки")]
         public double Distance { get; set; }
         public Order GetOrder => new Order
         {

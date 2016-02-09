@@ -68,12 +68,15 @@ namespace Web
             if (adress != null)
             {
                 _db.Entry(adress).State = EntityState.Unchanged;
-                return adress;
             }
-            adress = model;
-            adress.Id = Guid.NewGuid().ToString();
-            _db.Entry(adress).State = EntityState.Added;
-
+            else
+            {
+                adress = model;
+                adress.Id = Guid.NewGuid().ToString();
+                _db.Entry(adress).State = EntityState.Added;
+            }
+            
+            await _db.SaveChangesAsync();
             return adress;
         }
 

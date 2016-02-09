@@ -1,11 +1,11 @@
 ﻿@model IEnumerable<Web.Models.ProductInOrderViewModel>
 
 @{
-    ViewBag.Title = "Товари";
+    ViewBag.Title = "Звіт продажiв";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Товари</h2>
+<h2>@ViewBag.Title</h2>
 
 <table class="table">
     <tr>
@@ -16,16 +16,16 @@
             @Html.DisplayNameFor(model => model.Name)
         </th>
         <th>
-            Середня ціна
+            Середня ціна, грн.
         </th>
         <th>
-            Кількість проданих
+            Кількість проданих, шт.
         </th>
         <th>
             @Html.DisplayNameFor(model => model.TotalPrice)
         </th>
         <th>
-            Залишок на складі
+            Залишок на складі, шт.
         </th>
         <th></th>
     </tr>

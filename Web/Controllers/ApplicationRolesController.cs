@@ -102,7 +102,7 @@ namespace Web.Controllers
         public async Task<ActionResult> Edit(string id)
         {
             ViewBag.Roles = await RoleManager.Roles.ToListAsync();
-            var users = string.IsNullOrEmpty(id) ? await UserManager.Users.ToListAsync():
+            var users = string.IsNullOrEmpty(id) ? await UserManager.Users.ToListAsync() :
                 await UserManager.Users.Where(o => o.Id.Equals(id)).ToListAsync();
             foreach (var user in users)
                 user.RolesIds = user.Roles.Select(o => o.RoleId).ToArray();
@@ -120,16 +120,22 @@ namespace Web.Controllers
         {
             if (ModelState.IsValid)
             {
+                var roles = await RoleManager.Roles.ToArrayAsync();
                 foreach (var user in applicationUsers)
                 {
-                    await UserManager.RemoveFromRolesAsync(user.Id, await RoleManager.Roles.Select(o => o.Name).ToArrayAsync());
-                    if (user.RolesIds.Any())
-                        foreach (var roleId in user.RolesIds)
-                        {
-                            var role = await RoleManager.FindByIdAsync(roleId);
-                            if (role != null)
-                                await UserManager.AddToRoleAsync(user.Id, role.Name);
-                        }
+                    if (user.RolesIds == null || !user.RolesIds.Any())
+                    {
+                        await UserManager.RemoveFromRolesAsync(user.Id, roles.Select(o => o.Name).ToArray());
+                        continue;
+                    }
+                    foreach (var role in roles)
+                    {
+                        var exist = user.RolesIds.FirstOrDefault(x => x == role.Id);
+                        if (exist != null)
+                            await UserManager.AddToRoleAsync(user.Id, role.Name);
+                        else
+                            await UserManager.RemoveFromRolesAsync(user.Id, role.Name);
+                    }
                 }
             }
             return RedirectToAction("Edit");

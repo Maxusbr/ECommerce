@@ -43,7 +43,7 @@
         else
         {
             @Html.HiddenFor(model => model.UserId)
-        }<div id="createAdress" style="display: none;">
+        }<div id="createAdress">
             @*@Html.HiddenFor(model => model.Distance)*@
              <div class="form-group">
                  @Html.LabelFor(model => model.Distance, htmlAttributes: new { @class = "control-label col-md-2" })
@@ -60,10 +60,11 @@
              </div>
 
             <div id="AdressAct"></div>
-            <input type="button" id="hideMap" value="Сховати" class="addAdress btn btn-default" />
+            <input type="button" id="hideMap" value="Сховати" class="addAdress btn btn-default"/>
+        <hr/>
         </div>
 
-        <div id="textAdress">
+        <div id="textAdress" style="display: none;">
             <div class="form-group">
                 @Html.LabelFor(model => model.AdresShipping, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
@@ -114,7 +115,7 @@
 </div>
 @section Scripts{
     <script>
-        ymaps.ready(init);
+        
         $(document).ready(function() {
             //$('.adressSity').val("Київ");
             getAdress();
@@ -143,7 +144,7 @@
                     if ($("#FullAdress") === undefined) return;
                     var adress = changeFullAdress();
                     $("#showMap").attr('value', adress === "" ? 'Додати' : 'Змінити');
-
+                    ymaps.ready(init);
                 }
             );
         };
@@ -195,6 +196,8 @@
                     shop = res.geoObjects.get(0);
                     shopcoord = shop.geometry.getCoordinates();
                     shopPoint = new ymaps.Placemark(shopcoord, { iconContent: 'Магазин' }, { preset: 'islands#redStretchyIcon' });
+                    createMap();
+                    changeAdress();
                 });
                 
             }

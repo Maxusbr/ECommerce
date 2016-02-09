@@ -194,16 +194,19 @@ namespace Web
             //    var drp = rps.Aggregate(0.0, (dist, model) => dist + model.TotalDistance);
             //    var cshd = 100.0 * mhd / (mhd + mrp);
             //    var csrp = 100.0 * mrp / (mhd + mrp);
-            //    var k = (mhd * dhd * cshd + mrp * drp * csrp) / ((cshd != 0 ? cshd : 1) * (csrp != 0 ? csrp : 1) * 3.0);
+            //    var k = (mhd * dhd * csrp + mrp * drp * cshd) / ((cshd != 0 ? cshd : 1) * (csrp != 0 ? csrp : 1) * 3.0);
             //    summ += (double)urban.Tw * k / 4;
             //}
-
+            var tw = 35;
+            var mhd = 7;
+            var mrp = 6;
             var dhd = 21;
             var drp = 15;
-            var cshd = .84;
-            var csrp = .16;
-            var k = (7 * dhd * cshd + 6 * drp * csrp) / (cshd * csrp * 3.0);
-            var summ = Math.Round(35 * Math.Pow(k / 4, 2), 2);
+            var cshd = 84;
+            var csrp = 16;
+            var t = 3.0;
+            var k = .25 * (mhd * dhd * csrp + mrp * drp * cshd) / (cshd * csrp * t);
+            var summ = Math.Round(tw * Math.Pow(k, 2), 2);
             return new JsonResult
             {
                 Data = new

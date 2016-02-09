@@ -426,7 +426,7 @@ namespace Web.Controllers
                     var recs = receipts.Where(o => o.ShippingType.SortId < 2 && o.TariffModel.TariffKoefficient == tariffcoeff);
                     if (recs.Any())
                     {
-                        model.Routes.Add(new RouteViewModel
+                        var routeHouse = new RouteViewModel
                         {
                             Id = routeId++,
                             UrbanId = tariffcoeff.UrbanCategoryId,
@@ -434,13 +434,20 @@ namespace Web.Controllers
                             ShippingTypeId = 1,
                             ShippingType = "за адресою",
                             SummOrderTariff = recs.Sum(o => o.ShippingCost),
-                            OrderDistance = 2 * recs.Sum(o => o.Distance)
-                        });
+                            OrderDistance = 2 * recs.Sum(o => o.Distance),
+                            ListAdress = new List<string>()
+                        };
+                        if (routeHouse.Orders != null)
+                            foreach (var order in routeHouse.Orders)
+                            {
+                                if (!routeHouse.ListAdress.Contains(order.Adress)) routeHouse.ListAdress.Add(order.Adress);
+                            }
+                        model.Routes.Add(routeHouse);
                     }
                     recs = receipts.Where(o => o.ShippingType.SortId == 2 && o.TariffModel.TariffKoefficient == tariffcoeff);
                     if (recs.Any())
                     {
-                        model.Routes.Add(new RouteViewModel
+                        var routePost = new RouteViewModel
                         {
                             Id = routeId++,
                             UrbanId = tariffcoeff.UrbanCategoryId,
@@ -448,8 +455,15 @@ namespace Web.Controllers
                             ShippingTypeId = 2,
                             ShippingType = "до пункту видачі",
                             SummOrderTariff = recs.Sum(o => o.ShippingCost),
-                            OrderDistance = 2 * recs.Sum(o => o.Distance)
-                        });
+                            OrderDistance = 2 * recs.Sum(o => o.Distance),
+                            ListAdress = new List<string>()
+                        };
+                        if (routePost.Orders != null)
+                            foreach (var order in routePost.Orders)
+                            {
+                                if (!routePost.ListAdress.Contains(order.Adress)) routePost.ListAdress.Add(order.Adress);
+                            }
+                        model.Routes.Add(routePost);
                     }
                 }
             model.CountRoute = model.Routes.Count;

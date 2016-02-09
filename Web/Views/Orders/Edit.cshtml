@@ -33,7 +33,7 @@
             @Html.Partial("Partials/_CreateAdress", Model.AdresShipping, new ViewDataDictionary { TemplateInfo = new TemplateInfo { HtmlFieldPrefix = "AdresShipping" } })
         </div>*@
 
-        <div id="createAdress" style="display: none;">
+        <div id="createAdress">
             <div class="form-group">
                 @Html.LabelFor(model => model.Distance, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
@@ -50,9 +50,10 @@
 
             <div id="AdressAct"></div>
             <input type="button" id="hideMap" value="Сховати" class="addAdress btn btn-default"/>
+            <hr/>
         </div>
 
-        <div id="textAdress">
+        <div id="textAdress" style="display: none;">
             <div class="form-group">
                 @Html.LabelFor(model => model.AdresShipping, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
@@ -104,7 +105,7 @@
 
 @section Scripts{
     <script>
-        ymaps.ready(init);
+        
         $(document).ready(function() {
             //$('.adressSity').val("Київ");
             getAdress();
@@ -129,11 +130,12 @@
                 },
                 function(data) {
                     $("#AdressAct").html(data);
+                    ymaps.ready(init);
                     $(".adressInput").change(changeFullAdress);
                     if ($("#FullAdress") === undefined) return;
                     var adress = changeFullAdress();
                     $("#showMap").attr('value', adress === "" ? 'Додати' : 'Змінити');
-
+                    
                 }
             );
         };
@@ -175,15 +177,16 @@
             }
 
             function getShopCoord() {
-                ymaps.geocode($("#ShopAdress")[0].value, { results: 1 }).then(function(res) {
+                ymaps.geocode($("#ShopAdress")[0].value, { results: 1 }).then(function (res) {
+                    
                     shop = res.geoObjects.get(0);
                     shopcoord = shop.geometry.getCoordinates();
                     shopPoint = new ymaps.Placemark(shopcoord, { iconContent: 'Магазин' }, { preset: 'islands#redStretchyIcon' });
+                    createMap();
+                    changeAdress();
                 });
 
             }
-
-            getShopCoord();
 
             function createMap() {
 
@@ -277,7 +280,9 @@
                 );
             });
             $(".adressInput").change(changeAdress);
-
+            
+            getShopCoord();
+            
         }
     </script>
 }

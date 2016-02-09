@@ -21,7 +21,7 @@ namespace Web.Models
         [Display(Name = "Найменування товару")]
         public string Name { get; set; }
 
-        [Display(Name = "Вага")]
+        [Display(Name = "Вага, кг.")]
         [Required]
         public double Weight { get; set; }
 
@@ -30,10 +30,10 @@ namespace Web.Models
         [ForeignKey("WCategoryId")]
         public WeightCategory WCategory { get; set; }
 
-        [Display(Name = "Ціна")]
+        [Display(Name = "Ціна, грн.")]
         public double Price { get; set; }
 
-        [Display(Name = "Кількість на складі")]
+        [Display(Name = "Кількість на складі, шт.")]
         public int Count { get; set; }
     }
 
@@ -63,24 +63,24 @@ namespace Web.Models
         [Display(Name = "Найменування товару")]
         public string Name { get; set; }
 
-        [Display(Name = "Вага")]
+        [Display(Name = "Вага, кг.")]
         public double Weight { get; set; }
 
         [Display(Name = "Вагова категорія")]
         public int WCategoryId { get; set; }
         public List<WeightCategory> WCategories { get; set; }
 
-        [Display(Name = "Ціна")]
+        [Display(Name = "Ціна, грн.")]
         public double Price { get; set; }
 
-        [Display(Name = "Кількість")]
+        [Display(Name = "Кількість, шт.")]
         [NumericLessThan("MaxCount", "має бути меньше ніж Кількість на складі", AllowEquality = true)]
         public int Count { get; set; }
 
-        [Display(Name = "Кількість на складі")]
+        [Display(Name = "Кількість на складі, шт.")]
         public int MaxCount { get; set; }
 
-        [Display(Name = "Загальна вартість")]
+        [Display(Name = "Загальна вартість, грн.")]
         public double TotalPrice => Price * Count;
         public bool ReadOnly { get; set; }
     }
