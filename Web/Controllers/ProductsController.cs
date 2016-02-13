@@ -395,9 +395,9 @@ namespace Web.Controllers
                         .SetSeries(new[]
                     {
                         new Series {Name = "Трансакційні витрати індівідуальні", Data =
-                            new Data(data: data.Select(o => new object[] { o.Value }).ToArray()), Color =Color.Coral  },
+                            new Data(data: data.Select(o => new object[] { o.Value2 }).ToArray()), Color =Color.Coral  },
                         new Series {Name = "Трансакційні витрати колективні", Data =
-                            new Data(data: data.Select(o => new object[] { o.Value2 }).ToArray()), Color =Color.DodgerBlue  }
+                            new Data(data: data.Select(o => new object[] { o.Value }).ToArray()), Color =Color.DodgerBlue  }
                     });
             return chart;
         }
