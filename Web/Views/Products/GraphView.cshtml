@@ -15,7 +15,7 @@
             font-size: medium;
         }*/
         #tab1, #tab2, #tab3, #tab4 {
-             padding: 10px;
+            padding: 10px;
         }
     </style>
 }
@@ -33,29 +33,45 @@
 
 <div id="tabs">
     <ul>
-        <li><a href="#tab1">Кількість проданих товарів</a>
-        <li><a href="#tab2">Вартість проданих товарів</a>
-        <li><a href="#tab3">Кількість товарів по типу доставки</a>
-        <li><a href="#tab4">Кількість товарів по формi оплати</a>
-    </ul>
+        <li><a href="#tab1">Кількість товарів</a>
+        <li><a href="#tab2">Вартість товарів</a>
+        <li><a href="#tab3">По типу доставки</a>
+        <li><a href="#tab4">По формi оплати</a>
+        <li><a href="#tab5">Трансакційні витрати</a>
+</ul>
     <div id="tab1">
-        <div class="col-md-12">@Model.Chart1</div>
+        @if (Model.Chart1 != null)
+        {<div class="col-md-12">@Model.Chart1</div>}
+        else {<h2>Немає данних</h2>}
     </div>
     <div id="tab2">
-        <div class="col-md-12">@Model.Chart2</div>
+        @if (Model.Chart2 != null)
+        {<div class="col-md-12">@Model.Chart2</div>}
+        else {<h2>Немає данних</h2>}
     </div>
     <div id="tab3">
-        <div class="col-md-12">@Model.Chart3</div>
+        @if (Model.Chart3 != null)
+        {<div class="col-md-12">@Model.Chart3</div>}
+        else {<h2>Немає данних</h2>}
     </div>
     <div id="tab4">
-        <div class="col-md-12">@Model.Chart4</div>
+        @if (Model.Chart4 != null)
+        {<div class="col-md-12">@Model.Chart4</div>}
+        else
+        {<h2>Немає данних</h2>}
+    </div>
+    <div id="tab5">
+        @if (Model.Chart5 != null)
+        {<div class="col-md-12">@Model.Chart5</div>}
+        else
+        {<h2>Немає данних</h2>}
     </div>
 </div>
 
 @section scripts
 {
     <script>
-        
+
         $(function () {
             $('#tabs').tabs({
                 show: function (event, ui) {

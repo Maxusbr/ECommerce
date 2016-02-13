@@ -217,15 +217,27 @@ namespace Web
             };
         }
 
-        public async Task SetOrderShipping(ReceiptViewModel order)
+        public async Task SetOrderShipping(LogisticViewModel model)
         {
-            var receipt = await _db.Receipts.FindAsync(order.Id);
-            if (receipt != null)
+            foreach (var route in model.Routes)
             {
-                receipt.Status= ReceiptStatus.Shipping;
-                _db.Entry(receipt).State = EntityState.Modified;
+                var transRoute = new TransactRoute {Date = DateTime.Now, TransactValue = (decimal)route.RouteTariff };
+                _db.Entry(transRoute).State = EntityState.Added;
                 await _db.SaveChangesAsync();
+                foreach (var order in route.Orders)
+                {
+                    var receipt = await _db.Receipts.FindAsync(order.Id);
+                    if (receipt == null) continue;
+                    receipt.Status = ReceiptStatus.Shipping;
+                    _db.Entry(receipt).State = EntityState.Modified;
+                    var recRoute = new TransactRouteReceipt {ReceiptId = receipt.Id, RouteId = transRoute.Id};
+                    _db.Entry(recRoute).State = EntityState.Added;
+                    await _db.SaveChangesAsync();
+                }
             }
+
+            
+            
         }
     }
 }

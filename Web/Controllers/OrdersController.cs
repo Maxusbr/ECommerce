@@ -474,13 +474,8 @@ namespace Web.Controllers
         [HttpPost]
         public async Task<ActionResult> Logistic(LogisticViewModel model)
         {
-            foreach (var route in model.Routes)
-            {
-                foreach (var order in route.Orders)
-                {
-                    await OrderManager.SetOrderShipping(order);
-                }
-            }
+            await OrderManager.SetOrderShipping(model);
+
             return RedirectToAction("ReceiptsView");
         }
 

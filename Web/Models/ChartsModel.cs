@@ -12,5 +12,6 @@ namespace Web.Models
         public Highcharts Chart2 { get; set; }
         public Highcharts Chart3 { get; set; }
         public Highcharts Chart4 { get; set; }
+        public Highcharts Chart5 { get; set; }
     }
 }

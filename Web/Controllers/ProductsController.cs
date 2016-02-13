@@ -157,12 +157,14 @@ namespace Web.Controllers
             var prices = await ProductManager.GetSalesProducsSummPriceAsync();
             var shipping = await ProductManager.GetSalesProducsShippingTypeAsync();
             var payment = await ProductManager.GetSalesProducsPaymentTypeAsync();
+            var transact = await ProductManager.GetTransactRouteAsync();
             var model = new ChartsModel
             {
                 Chart1 = GetChartCount(data, "count"),
                 Chart2 = GetChartPrice(prices, "price"),
                 Chart3 = GetChartShipping(shipping, "shipping"),
-                Chart4 = GetChartPayment(payment, "payment")
+                Chart4 = GetChartPayment(payment, "payment"),
+                Chart5 = GetChartTransact(transact, "transact")
             };
             return View(model);
         }
@@ -206,6 +208,7 @@ namespace Web.Controllers
 
         private Highcharts GetChartCount(List<ProductInOrderViewModel> data, string name)
         {
+            if (!data.Any()) return null;
             var height = Math.Max(400, data.Count * 50);
             var chart = new Highcharts("cart_" + name)
                         //define the type of chart 
@@ -251,6 +254,7 @@ namespace Web.Controllers
 
         private Highcharts GetChartPrice(List<ProductInOrderViewModel> data, string name)
         {
+            if (!data.Any()) return null;
             var height = Math.Max(400, data.Count * 50);
             var chart = new Highcharts("cart_" + name)
                         .InitChart(new Chart { DefaultSeriesType = ChartTypes.Bar, Height = height, Width = null })
@@ -287,6 +291,7 @@ namespace Web.Controllers
         }
         private Highcharts GetChartShipping(List<ChartDataViewModel> data, string name)
         {
+            if (!data.Any()) return null;
             var chart = new Highcharts("cart_" + name)
                         .InitChart(new Chart { DefaultSeriesType = ChartTypes.Bar, Height = null, Width = null })
                         .SetTitle(new Title { Text = "Кількість проданих товарів по типу доставки, шт." })
@@ -322,6 +327,7 @@ namespace Web.Controllers
         }
         private Highcharts GetChartPayment(List<ChartDataViewModel> data, string name)
         {
+            if (!data.Any()) return null;
             var chart = new Highcharts("cart_" + name)
                         .InitChart(new Chart { DefaultSeriesType = ChartTypes.Bar, Height = null, Width = null })
                         .SetTitle(new Title { Text = "Кількість проданих товарів по формi оплати, шт." })
@@ -330,7 +336,7 @@ namespace Web.Controllers
                             Categories = data.Select(o => o.Name.Replace('\'', '`')).ToArray(),
                             Labels = new XAxisLabels { Style = " fontSize: '15px'" }
                         })
-                        .SetYAxis(new YAxis { Title = new YAxisTitle { Text = "" }, AllowDecimals = false})
+                        .SetYAxis(new YAxis { Title = new YAxisTitle { Text = "" }, AllowDecimals = false })
                         .SetTooltip(new Tooltip
                         {
                             Enabled = true,
@@ -355,7 +361,46 @@ namespace Web.Controllers
                     });
             return chart;
         }
-
+        private Highcharts GetChartTransact(List<ChartDataViewModel> data, string name)
+        {
+            if (!data.Any()) return null;
+            var chart = new Highcharts("cart_" + name)
+                        .InitChart(new Chart { DefaultSeriesType = ChartTypes.Spline, Height = null, Width = null })
+                        .SetTitle(new Title { Text = "Загальні трансакційні витрати покупців, грн." })
+                        .SetXAxis(new XAxis
+                        {
+                            Categories = data.Select(o => o.Count.ToString()).ToArray(),
+                            Labels = new XAxisLabels { Style = " fontSize: '18px'" },
+                            AllowDecimals = false,
+                            Title = new XAxisTitle { Text = "Номер маршруту" }
+                        })
+                        .SetYAxis(new YAxis { Title = new YAxisTitle { Text = "" }, AllowDecimals = true })
+                        .SetTooltip(new Tooltip
+                        {
+                            Enabled = true,
+                            Formatter = @"function() { return '<b>'+ this.series.name +'</b><br/>'+ this.x +': <b>'+ this.y + '</b> грн.'; }"
+                        })
+                        .SetPlotOptions(new PlotOptions
+                        {
+                            Line = new PlotOptionsLine
+                            {
+                                DataLabels = new PlotOptionsLineDataLabels
+                                {
+                                    Enabled = true
+                                },
+                                EnableMouseTracking = false
+                            }
+                        })
+                        .SetLegend(new Legend { Enabled = false })
+                        .SetSeries(new[]
+                    {
+                        new Series {Name = "Трансакційні витрати індівідуальні", Data =
+                            new Data(data: data.Select(o => new object[] { o.Value }).ToArray()), Color =Color.Coral  },
+                        new Series {Name = "Трансакційні витрати колективні", Data =
+                            new Data(data: data.Select(o => new object[] { o.Value2 }).ToArray()), Color =Color.DodgerBlue  }
+                    });
+            return chart;
+        }
     }
 
 

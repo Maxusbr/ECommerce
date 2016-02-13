@@ -157,6 +157,29 @@ namespace Web
         {
             return await _db.WeightCategories.FindAsync(id);
         }
+
+        public async Task<List<ChartDataViewModel>> GetTransactRouteAsync()
+        {
+            await _db.TransactRoutes.ToListAsync();
+            await _db.Receipts.ToListAsync();
+            var routeRec = await _db.TransactRouteReceipts.ToListAsync();
+            var list = routeRec.GroupBy(g => g.Route).Select(o => new ChartDataViewModel
+            {
+                Count = o.Key.Id,
+                Value = o.Key.TransactValue,
+                Value2 = o.Sum(p => (decimal)p.Receipt.ShippingCost)
+            }).ToList();
+            var val1 = 0m; var val2 = 0m;
+            foreach (var el in list)
+            {
+                val1 += el.Value;
+                el.Value = val1;
+                val2 += el.Value2;
+                el.Value2 = val2;
+            }
+            return list;
+        }
+
     }
 
     public class ChartDataViewModel
@@ -164,5 +187,7 @@ namespace Web
         public string Id { get; set; }
         public string Name { get; set; }
         public int Count { get; set; }
+        public decimal Value { get; set; }
+        public decimal Value2 { get; set; }
     }
 }

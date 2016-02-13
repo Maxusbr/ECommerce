@@ -226,6 +226,8 @@
     <Compile Include="Models\ShippingType.cs" />
     <Compile Include="Models\TariffCoefficient.cs" />
     <Compile Include="Models\TariffModel.cs" />
+    <Compile Include="Models\TransactRoute.cs" />
+    <Compile Include="Models\TransactRouteReceipt.cs" />
     <Compile Include="Models\UserShop.cs" />
     <Compile Include="Models\WeightCategory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

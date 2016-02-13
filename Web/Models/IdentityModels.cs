@@ -101,5 +101,8 @@ namespace Web.Models
         public DbSet<TariffCoefficient> TariffCoefficients { get; set; }
 
         public DbSet<AverangeValue> AverangeValues { get; set; }
+
+        public DbSet<TransactRoute> TransactRoutes { get; set; }
+        public DbSet<TransactRouteReceipt> TransactRouteReceipts { get; set; }
     }
 }
