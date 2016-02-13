@@ -7,12 +7,12 @@
 
 <h2>@ViewBag.Title</h2>
 
-<table class="table">
+<table class="table table-striped">
     <tr>
         <th>
             @Html.DisplayNameFor(model => model.Art)
         </th>
-        <th>
+        <th class="text-left">
             @Html.DisplayNameFor(model => model.Name)
         </th>
         <th>
@@ -27,7 +27,6 @@
         <th>
             Залишок на складі, шт.
         </th>
-        <th></th>
     </tr>
 
     @foreach (var item in Model)
@@ -40,19 +39,18 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
-            <td>
+            <td class="text-center">
                 @Html.DisplayFor(modelItem => item.Price)
             </td>
-            <td>
+            <td class="text-center">
                 @Html.DisplayFor(modelItem => item.Count)
             </td>
-            <td>
+            <td class="text-center">
                 @Html.DisplayFor(modelItem => item.TotalPrice)
             </td>
-            <td>
+            <td class="text-center">
                 @Html.DisplayFor(modelItem => item.MaxCount)
             </td>
-            <td></td>
         </tr>
     }
 

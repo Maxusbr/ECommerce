@@ -19,12 +19,12 @@
     }
 }
 
-<table class="table">
+<table class="table table-striped">
     <tr>
         <th>
             @Html.DisplayNameFor(model => model.Art)
         </th>
-        <th>
+        <th class="text-left ">
             @Html.DisplayNameFor(model => model.Name)
         </th>
         <th>
@@ -52,27 +52,30 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
-            <td>
+            <td class="text-center">
                 @Html.DisplayFor(modelItem => item.Weight)
             </td>
-            <td>
+            <td class="text-center">
                 @Html.HiddenFor(modelItem => item.WCategoryId)
                 @Html.DisplayFor(modelItem => item.WCategory.Name)
             </td>
-            <td>
+            <td class="text-center">
                 @Html.DisplayFor(modelItem => item.Price)
             </td>
-            <td>
+            <td class="text-center">
                 @Html.DisplayFor(modelItem => item.Count)
             </td>
-            <td>
-                @Html.ActionLink("Детальніше", "Details", new { id = item.Id })
+            <td class="text-center" style="min-width: 95px">
+                @Html.ActionLink(" ", "Details", new { id = item.Id },
+               new { @class = "glyphicon glyphicon-info-sign", title = "Детальніше" })
                 @if (User.Identity.IsAuthenticated && User.IsInRole("Менеджер"))
                 {
                     @: | 
-                    @Html.ActionLink("Редагувати", "Edit", new { id = item.Id })
+                    @Html.ActionLink(" ", "Edit", new { id = item.Id },
+               new { @class = "glyphicon glyphicon-edit", title = "Редагувати" })
                     @: | 
-                    @Html.ActionLink("Видалити", "Delete", new { id = item.Id })
+                    @Html.ActionLink(" ", "Delete", new { id = item.Id },
+               new { @class = "glyphicon glyphicon-trash", title = "Видаліти" })
                 }
             </td>
         </tr>

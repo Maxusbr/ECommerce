@@ -30,6 +30,14 @@ footer {
     background-color: #eee;
     height: 50px;
     margin-top: -50px;
+    -webkit-box-shadow: 0 0 9px black;
+    -ms-box-shadow: 0 0 9px black;
+    box-shadow: 0 0 9px black;
+}
+.navbar {
+    -webkit-box-shadow: 0 0 9px black;
+    -ms-box-shadow: 0 0 9px black;
+    box-shadow: 0 0 9px black;
 }
 
     footer p {
@@ -56,8 +64,17 @@ footer {
     padding-bottom: 50px;
     background: #ffffff;
     background: rgba(255, 255, 255, 0.85);
+    -webkit-box-shadow: 0 0 9px black;
+    -ms-box-shadow: 0 0 9px black;
+    box-shadow: 0 0 9px black;
 }
-
+th {
+    text-align: center;
+    vertical-align: middle;
+}
+.table tbody > tr > th {
+    vertical-align: middle;
+}
 /* Override the default bootstrap behavior where horizontal description lists 
    will truncate terms that are too long to fit in the left column 
 */
@@ -208,7 +225,6 @@ textarea {
     .body-content {
         max-width: 600px;
     }
-    
 }
 
 @media all {
@@ -220,3 +236,13 @@ textarea {
         display: none;
     }*/
 }
+
+.navbar-inverse .navbar-nav > li > a,
+.navbar-inverse .navbar-brand {
+    color: #FFFFFF;
+}
+
+    .navbar-inverse .navbar-nav > li > a:hover, .navbar-inverse .navbar-nav > li > a:focus .navbar > .container .navbar-brand:hover, .navbar > .container-fluid .navbar-brand:hover,
+    .navbar-inverse .navbar-brand:focus {
+        color: #337ab7;
+    }

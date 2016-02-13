@@ -209,7 +209,7 @@ namespace Web.Controllers
         private Highcharts GetChartCount(List<ProductInOrderViewModel> data, string name)
         {
             if (!data.Any()) return null;
-            var height = Math.Max(400, data.Count * 50);
+            var height = Math.Max(400, data.Count * 60);
             var chart = new Highcharts("cart_" + name)
                         //define the type of chart 
                         .InitChart(new Chart { DefaultSeriesType = ChartTypes.Bar, Height = height, Width = null })
@@ -220,11 +220,18 @@ namespace Web.Controllers
                         //load the X values
                         .SetXAxis(new XAxis
                         {
-                            Categories = data.Select(o => o.Name.Replace('\'', '`')).ToArray(),
-                            Labels = new XAxisLabels { Style = " fontSize: '15px'" }
+                            Categories = data.Select(o => o.Name.Length > 34 ?
+                            o.Name.Replace('\'', '`').Remove(34)+"...": o.Name.Replace('\'', '`')).ToArray(),
+                            Labels = new XAxisLabels { Style = " fontSize: '16px'" },
+                            Title = new XAxisTitle { Text = "" }
                         })
                         //set the Y title
-                        .SetYAxis(new YAxis { Title = new YAxisTitle { Text = "" }, AllowDecimals = false })
+                        .SetYAxis(new YAxis
+                        {
+                            Title = new YAxisTitle { Text = "Кількість товарів, шт.", Style = " fontSize: '18px'" },
+                            Labels = new YAxisLabels { Style = " fontSize: '18px', fontWeight: 'bold'" },
+                            AllowDecimals = false
+                        })
                         .SetTooltip(new Tooltip
                         {
                             Enabled = true,
@@ -255,16 +262,22 @@ namespace Web.Controllers
         private Highcharts GetChartPrice(List<ProductInOrderViewModel> data, string name)
         {
             if (!data.Any()) return null;
-            var height = Math.Max(400, data.Count * 50);
+            var height = Math.Max(400, data.Count * 60);
             var chart = new Highcharts("cart_" + name)
                         .InitChart(new Chart { DefaultSeriesType = ChartTypes.Bar, Height = height, Width = null })
                         .SetTitle(new Title { Text = "Загальна вартість проданих товарів, грн." })
                         .SetXAxis(new XAxis
                         {
-                            Categories = data.Select(o => o.Name.Replace('\'', '`')).ToArray(),
-                            Labels = new XAxisLabels { Style = " fontSize: '15px'" }
+                            Categories = data.Select(o => o.Name.Length > 34 ?
+                            o.Name.Replace('\'', '`').Remove(34) + "..." : o.Name.Replace('\'', '`')).ToArray(),
+                            Labels = new XAxisLabels { Style = " fontSize: '16px'" },
+                            Title = new XAxisTitle { Text = "" }
                         })
-                        .SetYAxis(new YAxis { Title = new YAxisTitle { Text = "" } })
+                        .SetYAxis(new YAxis
+                        {
+                            Title = new YAxisTitle { Text = "Вартість товарів, грн.", Style = " fontSize: '18px'" },
+                            Labels = new YAxisLabels { Style = " fontSize: '18px', fontWeight: 'bold'" }
+                        })
                         .SetTooltip(new Tooltip
                         {
                             Enabled = true,
@@ -298,9 +311,15 @@ namespace Web.Controllers
                         .SetXAxis(new XAxis
                         {
                             Categories = data.Select(o => o.Name.Replace('\'', '`')).ToArray(),
-                            Labels = new XAxisLabels { Style = " fontSize: '15px'" }
+                            Labels = new XAxisLabels { Style = " fontSize: '16px'" },
+                            Title = new XAxisTitle { Text = "" }
                         })
-                        .SetYAxis(new YAxis { Title = new YAxisTitle { Text = "" }, AllowDecimals = false })
+                        .SetYAxis(new YAxis
+                        {
+                            Title = new YAxisTitle { Text = "Кількість товарів, шт.", Style = " fontSize: '18px'" },
+                            AllowDecimals = false,
+                            Labels = new YAxisLabels { Style = " fontSize: '18px', fontWeight: 'bold'" }
+                        })
                         .SetTooltip(new Tooltip
                         {
                             Enabled = true,
@@ -334,9 +353,15 @@ namespace Web.Controllers
                         .SetXAxis(new XAxis
                         {
                             Categories = data.Select(o => o.Name.Replace('\'', '`')).ToArray(),
-                            Labels = new XAxisLabels { Style = " fontSize: '15px'" }
+                            Labels = new XAxisLabels { Style = " fontSize: '16px'" },
+                            Title = new XAxisTitle { Text = "" }
                         })
-                        .SetYAxis(new YAxis { Title = new YAxisTitle { Text = "" }, AllowDecimals = false })
+                        .SetYAxis(new YAxis
+                        {
+                            Title = new YAxisTitle { Text = "Кількість товарів, шт.", Style = " fontSize: '18px'" },
+                            AllowDecimals = false,
+                            Labels = new YAxisLabels { Style = " fontSize: '18px', fontWeight: 'bold'" }
+                        })
                         .SetTooltip(new Tooltip
                         {
                             Enabled = true,
@@ -370,9 +395,9 @@ namespace Web.Controllers
                         .SetXAxis(new XAxis
                         {
                             Categories = data.Select(o => o.Count.ToString()).ToArray(),
-                            Labels = new XAxisLabels { Style = " fontSize: '18px'" },
+                            Labels = new XAxisLabels { Style = " fontSize: '18px', fontWeight: 'bold'" },
                             AllowDecimals = false,
-                            Title = new XAxisTitle { Text = "Номер маршруту" }
+                            Title = new XAxisTitle { Text = "Номер маршруту", Style = " fontSize: '18px'" }
                         })
                         .SetYAxis(new YAxis { Title = new YAxisTitle { Text = "" }, AllowDecimals = true })
                         .SetTooltip(new Tooltip

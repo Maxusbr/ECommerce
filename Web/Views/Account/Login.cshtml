@@ -3,10 +3,33 @@
 @{
     ViewBag.Title = "Виконати вхід";
 }
+@section headerscripts
+{
+    <style>
+        img.background {
+            background: none;
+        }
+        .body-content {
+            min-height: 0;
+            width: 680px;
+        }
 
+        footer {
+            -ms-opacity: 0;
+            opacity: 0;
+        }
+        .navbar > .container .navbar-brand, .navbar > .container-fluid .navbar-brand {
+                margin-left: 244px;
+        }
+        .navbar-right {
+            -ms-opacity: 0;
+            opacity: 0;
+        }
+    </style>
+}
 <h2>@ViewBag.Title.</h2>
 <div class="row">
-    <div class="col-md-8">
+    <div class="col-md-12">
         <section id="loginForm">
             @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
             {
