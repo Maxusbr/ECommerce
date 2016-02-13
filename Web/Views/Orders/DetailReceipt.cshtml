@@ -40,10 +40,14 @@
                 Html.RenderPartial("_ProductsList", Model.Products, new ViewDataDictionary { TemplateInfo = new TemplateInfo { HtmlFieldPrefix = "Products" } });
             }
         </div>
-
     </div>
 </div>
-<p>
-    @Html.ActionLink("Список квитанцій", "ReceiptsView") | 
-    @Html.ActionLink("Список замовлень", "Index")
-</p>
+
+<div class="hidden-print">
+    <input type="button" value="Друк" class="btn btn-primary" onclick="javascript:window.print();" />
+    <hr />
+    <p>
+        @Html.ActionLink("Список квитанцій", "ReceiptsView") |
+        @Html.ActionLink("Список замовлень", "Index")
+    </p>
+</div>

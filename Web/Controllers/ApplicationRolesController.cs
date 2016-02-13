@@ -102,7 +102,7 @@ namespace Web.Controllers
         public async Task<ActionResult> Edit(string id)
         {
             ViewBag.Roles = await RoleManager.Roles.ToListAsync();
-            var users = string.IsNullOrEmpty(id) ? await UserManager.Users.ToListAsync() :
+            var users = string.IsNullOrEmpty(id) ? await UserManager.Users.Where(o => o.UserName != "Admin").ToListAsync() :
                 await UserManager.Users.Where(o => o.Id.Equals(id)).ToListAsync();
             foreach (var user in users)
                 user.RolesIds = user.Roles.Select(o => o.RoleId).ToArray();

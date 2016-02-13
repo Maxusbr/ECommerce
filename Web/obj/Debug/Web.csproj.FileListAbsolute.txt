@@ -103,3 +103,4 @@ H:\Projects\WorkAtHome\ECommerce\Web\Web\bin\ru\Microsoft.Owin.Security.Microsof
 H:\Projects\WorkAtHome\ECommerce\Web\Web\obj\Debug\Web.csprojResolveAssemblyReference.cache
 H:\Projects\WorkAtHome\ECommerce\Web\Web\obj\Debug\Web.dll
 H:\Projects\WorkAtHome\ECommerce\Web\Web\obj\Debug\Web.pdb
+H:\Projects\WorkAtHome\ECommerce\Web\Web\bin\Rotativa.dll

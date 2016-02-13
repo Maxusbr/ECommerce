@@ -11,6 +11,7 @@ using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
+using Rotativa;
 using Web.Models;
 using WebGrease.Css.Extensions;
 
@@ -473,20 +474,20 @@ namespace Web.Controllers
         [HttpPost]
         public async Task<ActionResult> Logistic(LogisticViewModel model)
         {
-            return View(model);
+            foreach (var route in model.Routes)
+            {
+                foreach (var order in route.Orders)
+                {
+                    await OrderManager.SetOrderShipping(order);
+                }
+            }
+            return RedirectToAction("ReceiptsView");
         }
 
         public async Task<JsonResult> Calqulate(LogisticViewModel model)
         {
             return await OrderManager.CalqulateTariff(model.Routes);
-            //return new JsonResult
-            //{
-            //    Data = new
-            //    {
-            //        data = res.Select(o => o.ToString(CultureInfo.CurrentCulture)),
-            //        result = (345.8).ToString(CultureInfo.CurrentCulture)
-            //    }
-            //};
         }
+
     }
 }

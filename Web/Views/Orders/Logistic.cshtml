@@ -36,69 +36,143 @@
         -o-transform: rotate(-180deg);
         transform: rotate(-180deg);
     }
+    .white {
+        -ms-opacity: 0;
+        opacity: 0;
+    }
 </style>
-<h2>Логістика</h2>
-<hr />
-@using (Html.BeginForm())
+@if (Model.CountRoute != 0)
 {
-    <div class="form-horizontal">
-        <div class="form-group">
-            @Html.LabelFor(model => model.ShopAdress, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.ShopAdress, new
-                   {
-                       htmlAttributes = new
-                       {
-                           @class = "form-control",
-                           @readonly = "readonly"
-                       }
-                   })
+    using (Html.BeginForm())
+    {
+        <div class="hidden-print">
+            <div>
+                <h2>Логістика</h2>
+                <hr/>
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.ShopAdress, htmlAttributes: new {@class = "control-label col-md-2"})
+                        <div class="col-md-4">
+                            @Html.EditorFor(model => model.ShopAdress, new
+                            {
+                                htmlAttributes = new
+                                {
+                                    @class = "form-control",
+                                    @readonly = "readonly"
+                                }
+                            })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <div id="map"></div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <h4>Маршрути доставки</h4>
+                            @Html.HiddenFor(model => model.CountRoute)
+                        </div>
+                        <div class="col-md-12">
+
+                            @{
+
+                                Html.RenderPartial("RoutesList", Model.Routes, new ViewDataDictionary
+                                {
+                                    TemplateInfo = new TemplateInfo {HtmlFieldPrefix = "Routes"}
+                                });
+                            }
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Amount, htmlAttributes: new {@class = "control-label col-md-3"})
+                        <div class="col-md-9">
+                            @Html.EditorFor(model => model.Amount, new
+                            {
+                                htmlAttributes = new
+                                {
+                                    @class = "form-control doubleValue",
+                                    @readonly = "readonly"
+                                }
+                            })
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
-        <div class="form-group">
-            <div class="col-md-12">
-                <div id="map"></div>
+            <hr/>
+            <div class="form-group section">
+                <div class="col-md-offset-1 col-md-10">
+                    <input type="submit" value="Прийняти маршрути" class="btn btn-primary" onclick="window.print()" disabled="disabled" style="width: 160px"/>
+
+                    @*<input type="button" value="Друк" class="btn btn-primary" disabled="disabled" style="width: 160px" onclick="window.print()"/>*@
+                </div>
             </div>
         </div>
 
-        <div class="form-group">
-            <div class="col-md-12">
-                <h4>Маршрути доставки</h4>
-                @Html.HiddenFor(model => model.CountRoute)
-            </div>
-            <div class="col-md-12">
+    }
 
-                @{
+    <div id="printDiv" class="white" style="width: 600px; position: relative">
+        <h2>@*Маршрути доставки*@</h2>
+        @for (var i = 0; i < Model.CountRoute; i++)
+        {
+            <div class="form-group" style="">
+                <h4>Маршрут: @Model.Routes[i].Id</h4>
+                <div class="col-md-12">
+                    <div id="map_@i" class="staticMap" style="height: 250px"></div>
+                </div>
+                <div class="col-md-12">
+                    <table class="table table-striped visible-print">
+                        <tr class="active visible-print">
+                            <th><span class="center-block">Номер</span></th>
+                            <th><span class="center-block">Адреса доставки</span></th>
+                            <th><span class="center-block">Контактний телефон</span></th>
+                            <th><span class="center-block">Відстань доставки</span></th>
+                        </tr>
+                        @foreach (var order in Model.Routes[i].Orders)
+                        {
+                            <tr class="visible-print">
+                                <td class="visible-print">
+                                    <div class="center-block">
+                                        @Html.DisplayFor(modelItem => order.Id)
+                                    </div>
+                                </td>
+                                <td class="visible-print">
+                                    <div>
+                                        @Html.DisplayFor(modelItem => order.Adress)
+                                    </div>
+                                </td>
+                                <td class="visible-print">
+                                    <div class="center-block">
+                                        @Html.DisplayFor(modelItem => order.PhoneNumber)
+                                    </div>
+                                </td>
+                                <td class="visible-print">
+                                    <div class="center-block">
+                                        @Html.DisplayFor(modelItem => order.Distance)
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </table>
+                </div>
 
-                    Html.RenderPartial("RoutesList", Model.Routes, new ViewDataDictionary
-                    {
-                        TemplateInfo = new TemplateInfo { HtmlFieldPrefix = "Routes" }
-                    });
-                }
             </div>
-        </div>
-        <div class="form-group">
-            @Html.LabelFor(model => model.Amount, htmlAttributes: new { @class = "control-label col-md-3" })
-            <div class="col-md-9">
-                @Html.EditorFor(model => model.Amount, new
-                   {
-                       htmlAttributes = new
-                       {
-                           @class = "form-control doubleValue",
-                           @readonly = "readonly"
-                       }
-                   })
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Прийняти маршрути" class="btn btn-primary" />
-            </div>
-        </div>
+            if (i + 1 < Model.CountRoute)
+            {
+                <div style="page-break-after: always;"></div>
+            }
+        }
     </div>
+}
+else
+{
+    <div style="padding: 42px;">
+        <h2>Замовлень для доставки немає </h2>
+    </div>
+    
+}
 
-                    }
 
 
 @section scripts
@@ -107,10 +181,12 @@
     @*<script src="~/Scripts/yandex.js" type="text/javascript"></script>*@
     <script>
         var colors = ["#359789", "#E12412", "#355412", "#A12551", "#EE9086", "#7b7cf7", "#E83E92", "#1515f7"],
-            counter;
-        var count = $('#CountRoute').val();
+            counter,
+            listadress;
+        var count = $('#CountRoute').val(), shopcoord;
+
         function init() {
-            var shop, shopcoord, shopPoint, myMap, multiRoute;
+            var shop, shopPoint, myMap, multiRoute;
 
 
             function createMap() {
@@ -121,119 +197,117 @@
                     controls: []
                 }, { searchControlResults: 1 });
                 myMap.geoObjects.add(shopPoint);
-                Calc();
+                Calc(0);
             }
 
-            ymaps.geocode($("#ShopAdress").val(), { results: 1 }).then(function (res) {
+            ymaps.geocode($("#ShopAdress").val(), { results: 1 }).then(function(res) {
                 shop = res.geoObjects.get(0);
                 shopcoord = shop.geometry.getCoordinates();
                 shopPoint = new ymaps.Placemark(shopcoord, { iconContent: 'Магазин' }, { preset: 'islands#redStretchyIcon' });
                 createMap();
             });
 
-            function Calc() {
+            function Calc(cnt) {
                 var distance;
-                counter = 0;
-                //myMap.geoObjects.remove(multiRoute);
-                for (var i = 0; i < count; i++) {
-                    var adr = $('#Routes_' + i + '__OrdersAdresses').val().split(';'),
-                        shopadress = $("#ShopAdress").val(),
-                        adress = [shopadress];
-                    adress.push.apply(adress, adr);
-                    adress.push(shopadress);
-
-                    ymaps.route(adress).then(function (router) {
-                        distance = Math.round(router.getLength() / 1000);
-                        $('#Routes_' + counter + '__TotalDistance').val(distance);
-                        $('.Routes_' + counter + '__TotalDistance').text(distance);
-                        counter++;
-                        if (counter == count) {
-                            $.post("Calqulate", $('form').serialize(), function (returndata) {
-                                var data = returndata.data;
-                                var result = returndata.result;
-                                for (var i = 0; i < count; i++) {
-                                    $('#Routes_' + i + '__RouteTariff').val(data[i]);
-                                    $('.Routes_' + i + '__RouteTariff').text(data[i]);
-                                }
-                                $('#Amount').val(result);
-                            }, "json");
+                counter = cnt;
+                if (counter == count) {
+                    $('#printDiv').addClass("visible-print").removeClass("white");
+                    
+                    $.post("Calqulate", $('form').serialize(), function(returndata) {
+                        var data = returndata.data;
+                        var result = returndata.result;
+                        for (var i = 0; i < count; i++) {
+                            $('#Routes_' + i + '__RouteTariff').val(data[i]);
+                            $('.Routes_' + i + '__RouteTariff').text(data[i]);
                         }
-                    });
-                    //multiRoute = new ymaps.multiRouter.MultiRoute({
-                    //    referencePoints: adress,
-                    //    params: { routingMode: 'auto' }
-                    //}, {
-                    //    wayPointStartVisible: false,
-                    //    wayPointFinishVisible: false,
-                    //    routeActiveStrokeColor: colors[i > 7 ? i - 8: i],
-                    //    wayPointIconColor: colors[i > 7 ? i - 8 : i],
-                    //    boundsAutoApply: true
-                    //});
-                    //myMap.geoObjects.add(multiRoute);
+                        $('#Amount').val(result);
+                        $('input[type="submit"]').prop('disabled', false);
+                        //$('input[type="button"]').prop('disabled', false);
+                    }, "json");
+                    return;
                 }
-
-            }
-
-            function addRoute(id) {
-                var adr = $(id + '_OrdersAdresses').val().split(';'),
-                        shopadress = $("#ShopAdress").val(),
-                        adress = [shopadress];
+                var adr = $('#Routes_' + cnt + '__OrdersAdresses').val().split(';'),
+                    shopadress = $("#ShopAdress").val(),
+                    adress = [shopadress];
                 adress.push.apply(adress, adr);
                 adress.push(shopadress);
+                if (listadress === undefined) listadress = [adress];
+                else listadress.push(adress);
+                var prntMap = new ymaps.Map('map_' + counter, {
+                    center: shopcoord,
+                    zoom: 15,
+                    type: 'yandex#map',
+                    controls: []
+                }, { searchControlResults: 1 });
 
-                multiRoute = new ymaps.multiRouter.MultiRoute({
-                    referencePoints: adress,
-                    params: { routingMode: 'auto' }
-                }, {
-                    wayPointStartVisible: false,
-                    wayPointFinishVisible: false,
-                    routeActiveStrokeColor: colors[id > 7 ? id - 8 : id],
-                    wayPointIconColor: colors[id > 7 ? id - 8 : id],
-                    boundsAutoApply: true
-                });
-                myMap.geoObjects.add(multiRoute);
-            }
+                ymaps.route(adress, { mapStateAutoApply: true, routingMode: 'auto' },
+                    { wayPointStartVisible: false, wayPointFinishVisible: false}).then(function(router) {
+            prntMap.geoObjects.add(router);
+            distance = Math.round(router.getLength() / 1000);
+            $('#Routes_' + counter + '__TotalDistance').val(distance);
+            $('.Routes_' + counter + '__TotalDistance').text(distance);
+            if (counter < count) Calc(++cnt);
+        });
+        }
 
-            function closeAll(id) {
-                for (var i = 0; i <= count; i++) {
-                    var route = "#Routes_" + i + "_";
-                    if (id != route) {
-                        $(route + '_Detail').hide();
-                        $(route + '_Glyphicon').removeClass("rotate");
-                    }
+        function addRoute(id) {
+            var adr = $(id + '_OrdersAdresses').val().split(';'),
+                shopadress = $("#ShopAdress").val(),
+                adress = [shopadress];
+            adress.push.apply(adress, adr);
+            adress.push(shopadress);
+
+            multiRoute = new ymaps.multiRouter.MultiRoute({
+                referencePoints: adress,
+                params: { routingMode: 'auto' }
+            }, {
+                wayPointStartVisible: false,
+                wayPointFinishVisible: false,
+                routeActiveStrokeColor: colors[id > 7 ? id - 8 : id],
+                wayPointIconColor: colors[id > 7 ? id - 8 : id],
+                boundsAutoApply: true
+            });
+            myMap.geoObjects.add(multiRoute);
+        }
+
+        function closeAll(id) {
+            for (var i = 0; i <= count; i++) {
+                var route = "#Routes_" + i + "_";
+                if (id != route) {
+                    $(route + '_Detail').hide();
+                    $(route + '_Glyphicon').removeClass("rotate");
                 }
             }
-            function showDetail(id) {
-                closeAll(id);
-                var detail = $(id + '_Detail');
-                detail.toggle('fast', function () {
-                    if (detail[0].style.display != 'none') {
-                        addRoute(id);
-                    }
-                });
+        }
 
-                $(id + '_Glyphicon').toggleClass("rotate");
-            }
-            $('.info').each(function (index, elem) {
-                $(elem).bind("click", function (e) {
-                    var id = '#' + e.currentTarget.id;
-                    showDetail(id);
-                    e.preventDefault();
-                    myMap.geoObjects.remove(multiRoute);
-
-                });
+        function showDetail(id) {
+            closeAll(id);
+            var detail = $(id + '_Detail');
+            detail.toggle('fast', function() {
+                if (detail[0].style.display != 'none') {
+                    addRoute(id);
+                }
             });
-        };
 
+            $(id + '_Glyphicon').toggleClass("rotate");
+        }
 
-        $(function () {
-            //$(".glyphicon-chevron-down").click(function () {
-            //    $(this).toggleClass("rotate");
-            //});
+        $('.info').each(function(index, elem) {
+            $(elem).bind("click", function(e) {
+                var id = '#' + e.currentTarget.id;
+                showDetail(id);
+                e.preventDefault();
+                myMap.geoObjects.remove(multiRoute);
+
+            });
         });
+    };
+
         $('.doubleValue').change(function () {
             this.value = this.value.replace('.', ',');
         });
         ymaps.ready(init);
+
     </script>
 }
+

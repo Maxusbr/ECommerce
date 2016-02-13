@@ -52,14 +52,15 @@
             <td>
                 @Html.DisplayFor(modelItem => item.MaxCount)
             </td>
-            <td>
-
-            </td>
+            <td></td>
         </tr>
     }
 
 </table>
-
-<div>
-    @Html.ActionLink("Назад", "Index")
+<div class="non-printable">
+    <input type="button" value="Друк" class="btn btn-primary" onclick="javascript:window.print();" />
+    <hr />
+    <div>
+        @Html.ActionLink("Назад", "Index")
+    </div>
 </div>

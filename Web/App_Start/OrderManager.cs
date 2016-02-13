@@ -216,5 +216,16 @@ namespace Web
                 }
             };
         }
+
+        public async Task SetOrderShipping(ReceiptViewModel order)
+        {
+            var receipt = await _db.Receipts.FindAsync(order.Id);
+            if (receipt != null)
+            {
+                receipt.Status= ReceiptStatus.Shipping;
+                _db.Entry(receipt).State = EntityState.Modified;
+                await _db.SaveChangesAsync();
+            }
+        }
     }
 }

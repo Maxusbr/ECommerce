@@ -1,5 +1,5 @@
 ﻿body {
-    padding: 20px;
+    /*padding: 20px;*/
     padding-top: 50px;
     padding-bottom: 20px;
     font-size: 16px;
@@ -10,7 +10,7 @@
 }
 
 img.background {
-    position: absolute; /* теперь мы можем управлять рисунком как слоем */
+    position: absolute;
     left: 0;
     top: 0;
     width: 100%;
@@ -82,4 +82,141 @@ textarea {
 
 .stretch {
     max-width: none;
+}
+
+
+@media print {
+    * {
+        color: #000 !important;
+        text-shadow: none !important;
+        background: transparent !important;
+        box-shadow: none !important;
+        font-size: 11px;
+    }
+
+    a,
+    a:visited {
+        text-decoration: underline;
+    }
+
+        a[href]:after {
+            content: " (" attr(href) ")";
+        }
+
+    abbr[title]:after {
+        content: " (" attr(title) ")";
+    }
+
+    a[href^="javascript:"]:after,
+    a[href^="#"]:after {
+        content: "";
+    }
+
+    pre,
+    blockquote {
+        /*border: 1px solid #999;*/
+        page-break-inside: avoid;
+    }
+
+    thead {
+        display: table-header-group;
+    }
+
+    tr,
+    img {
+        page-break-inside: avoid;
+    }
+
+    img {
+        max-width: 100% !important;
+    }
+
+    p,
+    h2,
+    h3 {
+        orphans: 3;
+        widows: 3;
+    }
+
+    h2,
+    h3 {
+        page-break-after: avoid;
+    }
+
+    select {
+        background: #fff !important;
+    }
+
+    .navbar {
+        display: none;
+    }
+
+    .table td,
+    .table th {
+        background-color: #fff !important;
+    }
+
+    .btn > .caret,
+    .dropup > .btn > .caret {
+        border-top-color: #000 !important;
+    }
+
+    .label {
+        border: 1px solid #000;
+    }
+
+    .table {
+        border-collapse: collapse !important;
+    }
+
+    .table-bordered th,
+    .table-bordered td {
+        /*border: 1px solid #ddd !important;*/
+    }
+}
+
+@media print {
+    .visible-print {
+        display: block !important;
+    }
+
+    table.visible-print {
+        display: table;
+    }
+
+    tr.visible-print {
+        display: table-row !important;
+    }
+
+    th.visible-print,
+    td.visible-print {
+        display: table-cell !important;
+    }
+}
+
+@media print {
+    .hidden-print {
+        display: none !important;
+    }
+
+    html, body {
+        height: auto;
+        padding-top: 0;
+        max-width: 600px;
+    }
+
+    .body-content {
+        max-width: 600px;
+    }
+    
+}
+
+@media all {
+    .page-break {
+        display: none;
+    }
+
+    /*.onlyprintable {
+        display: none;
+    }*/
 }
