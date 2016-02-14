@@ -14,6 +14,7 @@ using DotNet.Highcharts.Helpers;
 using DotNet.Highcharts.Options;
 using Microsoft.AspNet.Identity.Owin;
 using Web.Models;
+using Lang = DotNet.Highcharts.Helpers.Lang;
 
 namespace Web.Controllers
 {
@@ -214,14 +215,14 @@ namespace Web.Controllers
                         //define the type of chart 
                         .InitChart(new Chart { DefaultSeriesType = ChartTypes.Bar, Height = height, Width = null })
                         //overall Title of the chart 
-                        .SetTitle(new Title { Text = "Кількість проданих товарів, шт." })
+                        .SetTitle(new Title { Text = "Кількість проданих товарів" })
                         //small label below the main Title
                         //.SetSubtitle(new Subtitle { Text = "Accounting" })
                         //load the X values
                         .SetXAxis(new XAxis
                         {
                             Categories = data.Select(o => o.Name.Length > 34 ?
-                            o.Name.Replace('\'', '`').Remove(34)+"...": o.Name.Replace('\'', '`')).ToArray(),
+                            o.Name.Replace('\'', '`').Remove(34) + "..." : o.Name.Replace('\'', '`')).ToArray(),
                             Labels = new XAxisLabels { Style = " fontSize: '16px'" },
                             Title = new XAxisTitle { Text = "" }
                         })
@@ -262,10 +263,10 @@ namespace Web.Controllers
         private Highcharts GetChartPrice(List<ProductInOrderViewModel> data, string name)
         {
             if (!data.Any()) return null;
-            var height = Math.Max(400, data.Count * 60);
+            var height = Math.Max(400, data.Count * 70);
             var chart = new Highcharts("cart_" + name)
                         .InitChart(new Chart { DefaultSeriesType = ChartTypes.Bar, Height = height, Width = null })
-                        .SetTitle(new Title { Text = "Загальна вартість проданих товарів, грн." })
+                        .SetTitle(new Title { Text = "Загальна вартість проданих товарів" })
                         .SetXAxis(new XAxis
                         {
                             Categories = data.Select(o => o.Name.Length > 34 ?
@@ -276,7 +277,14 @@ namespace Web.Controllers
                         .SetYAxis(new YAxis
                         {
                             Title = new YAxisTitle { Text = "Вартість товарів, грн.", Style = " fontSize: '18px'" },
-                            Labels = new YAxisLabels { Style = " fontSize: '18px', fontWeight: 'bold'" }
+                            Labels = new YAxisLabels
+                            {
+                                Style = " fontSize: '18px', fontWeight: 'bold'",
+                                Rotation = 45,
+                                //Format = "{value.format(0,3,' ')}"
+                            },
+                            ShowFirstLabel = false,
+                            ShowLastLabel = false
                         })
                         .SetTooltip(new Tooltip
                         {
@@ -300,6 +308,7 @@ namespace Web.Controllers
                         new Series {Name = "Загальна вартість", Data =
                             new Data(data: data.Select(o => new object[] { o.Price }).ToArray()), Color =Color.Coral  },
                     });
+
             return chart;
         }
         private Highcharts GetChartShipping(List<ChartDataViewModel> data, string name)
@@ -307,7 +316,7 @@ namespace Web.Controllers
             if (!data.Any()) return null;
             var chart = new Highcharts("cart_" + name)
                         .InitChart(new Chart { DefaultSeriesType = ChartTypes.Bar, Height = null, Width = null })
-                        .SetTitle(new Title { Text = "Кількість проданих товарів по типу доставки, шт." })
+                        .SetTitle(new Title { Text = "Кількість проданих товарів по типу доставки" })
                         .SetXAxis(new XAxis
                         {
                             Categories = data.Select(o => o.Name.Replace('\'', '`')).ToArray(),
@@ -349,7 +358,7 @@ namespace Web.Controllers
             if (!data.Any()) return null;
             var chart = new Highcharts("cart_" + name)
                         .InitChart(new Chart { DefaultSeriesType = ChartTypes.Bar, Height = null, Width = null })
-                        .SetTitle(new Title { Text = "Кількість проданих товарів по формi оплати, шт." })
+                        .SetTitle(new Title { Text = "Кількість проданих товарів по формi оплати" })
                         .SetXAxis(new XAxis
                         {
                             Categories = data.Select(o => o.Name.Replace('\'', '`')).ToArray(),
@@ -391,7 +400,7 @@ namespace Web.Controllers
             if (!data.Any()) return null;
             var chart = new Highcharts("cart_" + name)
                         .InitChart(new Chart { DefaultSeriesType = ChartTypes.Spline, Height = null, Width = null })
-                        .SetTitle(new Title { Text = "Загальні трансакційні витрати покупців, грн." })
+                        .SetTitle(new Title { Text = "Загальні трансакційні витрати покупців" })
                         .SetXAxis(new XAxis
                         {
                             Categories = data.Select(o => o.Count.ToString()).ToArray(),
@@ -399,11 +408,21 @@ namespace Web.Controllers
                             AllowDecimals = false,
                             Title = new XAxisTitle { Text = "Номер маршруту", Style = " fontSize: '18px'" }
                         })
-                        .SetYAxis(new YAxis { Title = new YAxisTitle { Text = "" }, AllowDecimals = true })
+                        .SetYAxis(new YAxis
+                        {
+                            Labels = new YAxisLabels { Style = " fontSize: '18px', fontWeight: 'bold'" },
+                            Title = new YAxisTitle
+                            {
+                                Text = "Трансакційні витрати, грн.",
+                                Style = " fontSize: '16px'"
+                            },
+                            AllowDecimals = true
+
+                        })
                         .SetTooltip(new Tooltip
                         {
                             Enabled = true,
-                            Formatter = @"function() { return '<b>'+ this.series.name +'</b><br/>'+ this.x +': <b>'+ this.y + '</b> грн.'; }"
+                            Formatter = @"function() { return '<b>'+ this.series.name +'</b><br/>маршрут '+ this.x +': <b>'+ this.y + '</b> грн.'; }"
                         })
                         .SetPlotOptions(new PlotOptions
                         {

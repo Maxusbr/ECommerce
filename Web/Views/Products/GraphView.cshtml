@@ -71,8 +71,13 @@
 @section scripts
 {
     <script>
-
+        Highcharts.setOptions({
+            lang: {
+                numericSymbols: [' 000', ' 000 000', 'Г', 'T', 'P', 'E']
+            }
+        });
         $(function () {
+            
             $('#tabs').tabs({
                 show: function (event, ui) {
                     var $activeTab = $('#tabs').tabs('option', 'active');
