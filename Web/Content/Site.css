@@ -110,7 +110,7 @@ textarea {
         box-shadow: none !important;
         font-size: 11px;
     }
-
+    
     a,
     a:visited {
         text-decoration: underline;
@@ -221,7 +221,12 @@ textarea {
         padding-top: 0;
         max-width: 600px;
     }
-
+    .dl-horizontal {
+        max-width: 600px;
+    }
+    .dl-horizontal dt {
+        padding-right: 20px;
+     }
     .body-content {
         max-width: 600px;
     }

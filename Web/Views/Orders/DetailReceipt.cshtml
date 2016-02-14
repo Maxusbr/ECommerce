@@ -1,10 +1,26 @@
-﻿@model Web.Models.CreateOrderViewModel
+﻿@using WebGrease.Css.Ast.MediaQuery
+@model Web.Models.CreateOrderViewModel
 
 @{
     ViewBag.Title = "Квитанція: " + Model.Id;
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
+@section headerscripts
+{
+    <style>
+        .dl-horizontal dt {
+            width: 220px;
+            text-align: right;
+            float: left;
+        }
+        .dl-horizontal dd {
+            padding-left: 60px;
+            max-width: 350px;
+            /*float: left;*/
+        }
+        
+    </style>
+}
 <h2>Квитанція</h2>
 
 <div>
@@ -31,7 +47,7 @@
             <dd>@Html.DisplayFor(model => model.PaymentType)</dd>
             <dt>@Html.LabelFor(model => model.ShippingCost)</dt>
             <dd>@Html.DisplayFor(model => model.ShippingCost)</dd>
-            <dt>Сумма заммовлення</dt>
+            <dt>Сумма заммовлення, грн.</dt>
             <dd>@Model.Products.Aggregate(Model.ShippingCost, (current, el) => (current + el.Count * el.Price))</dd>
         </dl>
 
