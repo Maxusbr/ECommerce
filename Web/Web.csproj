@@ -311,6 +311,8 @@
     <None Include=".bin\git.cmd" />
     <None Include=".bin\node.cmd" />
     <Content Include="App_Browsers\qt.browser" />
+    <None Include="Properties\PublishProfiles\ecom-test %282%29.pubxml" />
+    <None Include="Properties\PublishProfiles\ecom-test.pubxml" />
     <None Include="Scripts\jquery-2.2.0.intellisense.js" />
     <Content Include="Scripts\Highcharts-4.0.1\js\adapters\standalone-framework.js" />
     <Content Include="Scripts\Highcharts-4.0.1\js\adapters\standalone-framework.src.js" />

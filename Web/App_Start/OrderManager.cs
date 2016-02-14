@@ -171,7 +171,9 @@ namespace Web
             await _db.Users.ToListAsync();
             await _db.Orders.ToListAsync();
             await _db.ShippingTypes.ToListAsync();
-            return await _db.Receipts.ToListAsync();
+            var list = await _db.Receipts.ToListAsync();
+            list.ForEach(o => o.Order = _db.Orders.Find(o.OrderId));
+            return list;
         }
 
         public async Task<List<TariffCoefficient>> GetTariffCoefficients()
