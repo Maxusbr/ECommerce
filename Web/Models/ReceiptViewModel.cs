@@ -11,7 +11,7 @@ namespace Web.Models
 
         public ReceiptViewModel(Receipt rec)
         {
-            Id = rec.Id;
+            Id = rec.Id.ToString("D6"); 
             Adress = rec.Order.AdresShipping.FullAdress;
             Distance = rec.Order.Distance;
             PhoneNumber = rec.Order.User.PhoneNumber;
@@ -22,7 +22,7 @@ namespace Web.Models
 
         public ShippingType ShippingType { get; set; }
 
-        public int Id { get; set; }
+        public string Id { get; set; }
 
         public double ShippingCost { get; set; }
 

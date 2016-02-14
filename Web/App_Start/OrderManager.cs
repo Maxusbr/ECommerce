@@ -228,7 +228,7 @@ namespace Web
                 await _db.SaveChangesAsync();
                 foreach (var order in route.Orders)
                 {
-                    var receipt = await _db.Receipts.FindAsync(order.Id);
+                    var receipt = await _db.Receipts.FindAsync(int.Parse(order.Id));
                     if (receipt == null) continue;
                     receipt.Status = ReceiptStatus.Shipping;
                     _db.Entry(receipt).State = EntityState.Modified;
