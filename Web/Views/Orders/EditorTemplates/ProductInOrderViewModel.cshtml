@@ -1,6 +1,6 @@
 ﻿@model Web.Models.ProductInOrderViewModel
 
-<tr>
+<tr class="text-center">
     <td>
         @Html.HiddenFor(model => model.Id)
         @Html.DisplayFor(model => model.Art, new { htmlAttributes = new { @class = "form-control" } })
@@ -8,7 +8,7 @@
         @Html.HiddenFor(model => model.Weight)
         @Html.HiddenFor(model => model.WCategoryId)
     </td>
-    <td>
+    <td class="text-left">
         @Html.DisplayFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
         @Html.HiddenFor(model => model.Name)
     </td>

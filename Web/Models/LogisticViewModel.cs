@@ -9,7 +9,7 @@ namespace Web.Models
     public class LogisticViewModel
     {
         public int Id { get; set; }
-        [Display(Name = "Трансакційні витрати теорія")]
+        [Display(Name = "Трансакційні витрати теорія, грн.")]
         public double Amount { get; set; }
         [Display(Name = "Адреса магазину")]
         public string ShopAdress { get; set; }
@@ -25,9 +25,9 @@ namespace Web.Models
         public string NumbersOrders { get; set; }
         [Display(Name = "Тип доставки")]
         public string ShippingType { get; set; }
-        [Display(Name = "Загальна дистанція маршруту")]
+        [Display(Name = "Загальна дистанція маршруту, км")]
         public double Distance { get; set; }
-        [Display(Name = "Трансакційні витрати на маршруті")]
+        [Display(Name = "Трансакційні витрати на маршруті, грн.")]
         public double Amount { get; set; }
         public List<ReceiptViewModel> Receipts { get; set; }
     }

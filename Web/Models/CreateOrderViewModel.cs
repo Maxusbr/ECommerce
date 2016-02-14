@@ -54,7 +54,7 @@ namespace Web.Models
         [Display(Name = "Користувачі")]
         public List<ApplicationUser> Users { get; set; }
         public bool ReceiptExist { get; set; }
-        [Display(Name = "Дистанція доставки")]
+        [Display(Name = "Дистанція доставки, км.")]
         public double Distance { get; set; }
         public Order GetOrder => new Order
         {
@@ -66,7 +66,7 @@ namespace Web.Models
             UserId = UserId,
             Distance = Distance
         };
-        [Display(Name = "Вартість доставки")]
+        [Display(Name = "Вартість доставки, грн.")]
         public double ShippingCost { get; set; }
         public string ReceiptStatus { get; set; }
     }

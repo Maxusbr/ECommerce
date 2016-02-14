@@ -28,7 +28,7 @@ namespace Web.Models
         [Display(Name = "Дата проведення")]
         public DateTime Date { get; set; }
 
-        [Display(Name = "Вартість")]
+        [Display(Name = "Вартість, грн.")]
         public double Price { get; set; }
     }
 }

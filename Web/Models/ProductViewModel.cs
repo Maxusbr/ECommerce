@@ -23,10 +23,10 @@ namespace Web.Models
         public string WCategory { get; set; }
         public int WCategoryId { get; set; }
 
-        [Display(Name = "Кількість")]
+        [Display(Name = "Кількість, шт.")]
         public int Count { get; set; }
 
-        [Display(Name = "Ціна")]
+        [Display(Name = "Ціна, грн.")]
         public double Price { get; set; }
         public string ShippingTypeId { get; set; }
         [Display(Name = "Тип доставки")]
