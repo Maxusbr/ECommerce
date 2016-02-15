@@ -20,6 +20,7 @@ namespace Web.Models
 
         public string AdressId { get; set; }
         [ForeignKey("AdressId")]
+        [Display(Name = "Адреса")]
         public Adress Adress { get; set; }
     }
 }
