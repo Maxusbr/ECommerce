@@ -40,6 +40,16 @@
         -ms-opacity: 0;
         opacity: 0;
     }
+    .dl-horizontal dt {
+            width: 220px;
+            text-align: right;
+            float: left;
+        }
+        .dl-horizontal dd {
+            padding-left: 60px;
+            max-width: 350px;
+            /*float: left;*/
+        }
 </style>
 @if (Model.CountRoute != 0)
 {
@@ -159,10 +169,46 @@
                 </div>
 
             </div>
-            if (i + 1 < Model.CountRoute)
+            <div style="page-break-after: always;"></div>
+            for (var j=0; j < Model.Routes[i].Orders.Count(); j++)
             {
-                <div style="page-break-after: always;"></div>
-            }
+                var order = Model.Routes[i].Orders[j];
+                <h2>Квитанція</h2>
+                <div class="form-horizontal">
+                    <dl class="dl-horizontal">
+                        <dt>Маршрут</dt>
+                        <dd>@Model.Routes[i].Id</dd>
+                        <dt>Код квітанції</dt>
+                        <dd>@Html.DisplayFor(model => order.Id)</dd>
+                        <dt>@Html.LabelFor(model => order.User)</dt>
+                        <dd>@Html.DisplayFor(model => order.User)</dd>
+
+                        <dt>@Html.LabelFor(model => order.Date)</dt>
+                        <dd>@Html.DisplayFor(model => order.Date)</dd>
+
+                        <dt>@Html.LabelFor(model => order.Adress)</dt>
+                        <dd>@order.Adress</dd>
+
+                        <dt>@Html.LabelFor(model => order.ShippingType)</dt>
+                        <dd>@Html.DisplayFor(model => order.ShippingType.Type)</dd>
+
+                        <dt>@Html.LabelFor(model => order.PaymentType)</dt>
+                        <dd>@Html.DisplayFor(model => order.PaymentType.Type)</dd>
+                        <dt>@Html.LabelFor(model => order.ShippingCost)</dt>
+                        <dd>@Html.DisplayFor(model => order.ShippingCost)</dd>
+                        <dt>Сумма заммовлення, грн.</dt>
+                        <dd>@order.Products.Aggregate(order.ShippingCost, (current, el) => (current + el.Count*el.Price))</dd>
+                    </dl>
+
+                    <div id="productsList">
+                        @{
+                            Html.RenderPartial("_ProductsList", order.Products);
+                        }
+                    </div>
+                </div>
+                if (j + 1 <  Model.Routes[i].Orders.Count()){<div style="page-break-after: always;"></div>}        
+                }
+                if (i + 1 < Model.CountRoute){<div style="page-break-after: always;"></div>}
         }
     </div>
 }

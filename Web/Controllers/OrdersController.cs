@@ -412,11 +412,16 @@ namespace Web.Controllers
             var receipts = new List<ReceiptViewModel>();
             foreach (var rec in basereceipts.Where(o => o.Status == ReceiptStatus.Created))
             {
-                receipts.Add(new ReceiptViewModel(rec)
+                var recModel = new ReceiptViewModel(rec)
                 {
                     Products = await ProductManager.GetProducsInOrderAsync(rec.Order.Id),
+                    User = rec.Order.User.ToString(),
+                    Date = rec.Date,
+                    PaymentType = rec.Order.PaymentType,
                     TariffModel = await GetTariffModel(rec.Order),
-                });
+                };
+                recModel.Products.ForEach(o => o.ReadOnly = true);
+                receipts.Add(recModel);
             }
 
             var model = new LogisticViewModel { ShopAdress = shop.Adress.FullAdress, Routes = new List<RouteViewModel>() };
@@ -431,7 +436,7 @@ namespace Web.Controllers
                         {
                             Id = routeId++,
                             UrbanId = tariffcoeff.UrbanCategoryId,
-                            Orders = recs,
+                            Orders = recs.ToList(),
                             ShippingTypeId = 1,
                             ShippingType = "за адресою",
                             SummOrderTariff = recs.Sum(o => o.ShippingCost),
@@ -452,7 +457,7 @@ namespace Web.Controllers
                         {
                             Id = routeId++,
                             UrbanId = tariffcoeff.UrbanCategoryId,
-                            Orders = recs,
+                            Orders = recs.ToList(),
                             ShippingTypeId = 2,
                             ShippingType = "до пункту видачі",
                             SummOrderTariff = recs.Sum(o => o.ShippingCost),

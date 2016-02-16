@@ -16,7 +16,7 @@ namespace Web.Models
         public int Id { get; set; }
 
         [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:dd'/'MM'/'yyyy}")]
+        [DisplayFormat(DataFormatString = "{0:dd'.'MM'.'yyyy}")]
         [Display(Name = "Дата квитанції")]
         public DateTime Date { get; set; }
         [Required]

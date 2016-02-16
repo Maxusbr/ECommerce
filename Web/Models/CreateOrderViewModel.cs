@@ -30,7 +30,7 @@ namespace Web.Models
         public string ShopAdress { get; set; }
         [Required]
         [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:dd'/'MM'/'yyyy}")]
+        [DisplayFormat(DataFormatString = "{0:dd'.'MM'.'yyyy}")]
         [Display(Name = "Дата замовлення")]
         public DateTime Date { get; set; }
 

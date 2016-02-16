@@ -171,6 +171,8 @@ namespace Web
             await _db.Users.ToListAsync();
             await _db.Orders.ToListAsync();
             await _db.ShippingTypes.ToListAsync();
+            await _db.PaymentTypes.ToListAsync();
+            await _db.Users.ToListAsync();
             var list = await _db.Receipts.ToListAsync();
             list.ForEach(o => o.Order = _db.Orders.Find(o.OrderId));
             return list;

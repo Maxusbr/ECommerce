@@ -11,7 +11,7 @@ namespace Web.Models
         [Display(Name = "Маршрут")]
         public int Id { get; set; }
 
-        public IEnumerable<ReceiptViewModel> Orders { get; set; }
+        public List<ReceiptViewModel> Orders { get; set; }
         [Display(Name = "Тип доставки")]
         public string ShippingType { get; set; }
         [Display(Name = "Номери замовлень")]
